@@ -1,0 +1,58 @@
+@charset "UTF-8";
+
+/* ======================사이드 내비게이션바=========================== */
+/*사이드 내비게이션바*/
+.snb{
+    min-width: 220px;
+    max-width: 220px;
+    padding: 10px 0px 10px 0px;
+    margin-right: 10px;
+}
+/* --------------------------- */
+/* snb - 나의정보칸*/
+.snb-myinfo{
+    border: 2px solid #222;
+    padding: 0 15px;
+    margin-bottom: 30px;
+}
+
+
+/* 프로필 사진 설정 */
+.my-photo{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 10px;
+
+}
+/* my-info 설정 */
+.my-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+}   
+
+
+/* snb 텍스트 설정*/
+.snb-title{
+    margin: 10px 0;
+}
+.snb-text{
+    padding: 0;
+    margin: 0;  
+}
+
+/* --------------------------- */
+
+/* snb - 카테고리 칸*/
+.snb-category{
+    border: 2px solid #222;
+    padding: 0px 15px;
+}
+
+/* 카테고리  목록  리스트 스타일 설정*/
+ul{
+    list-style-type: circle;
+}
+/* ======================사이드 내비게이션바=========================== */

@@ -1,0 +1,89 @@
+@charset "UTF-8";
+
+/* =====================컨텐츠 설정============================ */
+
+/* 컨텐츠 설정 */
+.contents{
+    display: flex;
+    padding: 0px 0px 10px 0px;
+
+}
+/* =====================컨텐츠 설정============================ */
+
+
+
+/* =============================메인================================== */
+
+.main{
+    flex-grow: 1;
+    padding: 10px 0px 10px 10px;
+}
+
+/*게시판 메인 임시대문 */
+.banner-area1{
+    margin-bottom: 30px;
+}
+.banner-area2{
+    margin-bottom: 30px;
+}
+.bbs-area{
+    margin-bottom: 10px;
+}
+
+.main-banner-frame{
+    margin: 0px;
+    padding: 0px;
+}
+.main-banner-image{
+    width: 100%;
+    height: 100%;
+}
+
+.main-banner-text{
+    position: absolute;
+    transform: translateY(-200px) translateX(400px);
+    font-size: 3em;  
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+
+    margin: 0;padding: 0;
+}
+
+.site-link{
+    width: 450px;
+    margin-bottom: 1px;
+
+}
+
+.site-link-image{
+    width: 100%;
+}
+
+.banner-link{
+    width: 100%;
+    height: 60px;
+    border: 1px solid #222;
+
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 스웨거 !important;
+    font-size: 30px;
+
+    margin-bottom: 1px;
+}
+
+
+
+/* 게시판 프리뷰 */
+
+.bbs-preview{
+    flex-grow: 0;
+    width: 550px;
+    height: 100px;
+
+}
+
+.bbs-preview>:not(caption)>*>* {
+    padding:0.15rem 0.5rem;
+}

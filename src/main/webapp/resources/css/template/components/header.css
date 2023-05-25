@@ -1,0 +1,74 @@
+@charset "UTF-8";
+
+header{
+    font-family: twayair;
+}
+
+.gnb{
+    display: flex;
+    justify-content: space-between ;
+
+    min-width: 100%;
+}
+
+.gnb-left,.gnb-right{
+    display: flex;
+}
+
+.gnb-item{
+    display: flex;
+}
+
+.gnb-link{
+    padding: 6px;
+}
+
+
+/* 드롭다운 아이콘 숨김*/
+.dropdown-toggle::after {
+    display: none;
+}
+
+/*드롭다운 외곽라인 제거*/
+.btn-check:focus+.btn, .btn:focus{
+    box-shadow: none;
+}
+
+/* 드롭다운 토글와 아이템 크기 같게 */
+.dropdown-menu.show{
+    /*드롭다운 메뉴 보일때도 크기 동일하게 하는 옵션*/
+    min-width: 100%;
+    /*메뉴의 border-radius 제거*/
+    border-radius: 0;
+    transform: translate3d(0px, 39.5px, 0px) !important;
+
+}
+
+/* 드롭다운 버튼 호버*/
+.dropdown:hover .dropdown-menu {
+    /*호버시 메뉴표시*/
+    display: block;
+    /*메뉴 위치조정*/
+    transform: translateY(39.5px);
+    /*메뉴 크기 버튼과 동일하게 설정*/
+    min-width: 100px;
+    /*메뉴의 border-radius 제거*/
+    border-radius: 0;
+}
+
+
+
+/* 배너 */
+.header-banner{
+    margin-bottom: 50px;
+}
+
+.header-banner-frame{
+    height: 300px;
+    overflow: hidden;
+}
+
+.header-banner-image{
+    min-width: 100%;
+    object-fit: cover;
+}

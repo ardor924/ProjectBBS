@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ardor.mapper.FileMapper">
+
+
+	<!-- 파일정보 DB에 저장 -->
+	<insert id="insertFileToDB">
+		insert into file(fileName,fileRealName,filePath,fileSize,fileType,fileExtention,fileDescription,fileRegDate)
+		values(#{fileName},#{fileRealName},#{filePath},#{fileSize},#{fileType},#{fileExtention},#{fileDescription},#{fileRegDate},)
+	</insert>
+
+	<!-- 파일이름으로 파일정보 가져오기 -->	
+	<select id="getFileInfoFromDB" parameterType="String" resultType="fileDTO">
+		select * from file where fileName = #{fileName}
+	</select>
+
+
+</mapper>
