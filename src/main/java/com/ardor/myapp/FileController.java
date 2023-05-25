@@ -28,16 +28,15 @@ public class FileController {
 		System.out.println("진입성공!");
 		
 		
-		// 파일 업로드 및 성공메세지
-		boolean successMessage = fileService.uploadFile(memberPhoto);
-		
-		
-		// 이미지 URL생성 및 가져오기
+		// 파일 업로드 및 이미지 URL생성
+		String imageUrl = fileService.uploadFile(memberPhoto);
 		
 		
 		
-		Map<String, Object> response = new HashMap<>();
-		response.put("OK","컨트롤러 연결성공!");
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "이미지 업로드 완료");
+        response.put("url", imageUrl); // 업로드된 파일 경로를 응답에 포함할 수 있습니다.
+        
 		return ResponseEntity.ok(response);
 	}
 	

@@ -21,7 +21,12 @@ public class FileServiceImpl implements FileService{
 	
 	// 파일 업로드
 	@Override
-	public boolean uploadFile(MultipartFile file) {
+	public String uploadFile(MultipartFile file) {
+		
+		
+        String errorMessage = "이미지 업로드 중 오류가 발생했습니다.";
+
+		
 		// 이미지 업로드 로직 수행
 		try {
 			// 필수 파라미터 생성
@@ -54,13 +59,29 @@ public class FileServiceImpl implements FileService{
 	        fileDTO.setFilePath(filePath);
 	        fileDTO.setFileRegdate(fileRegdate);
 	        
-	        fileMapper.insertFileToDB(fileDTO);
+	        System.out.println(fileDTO.toString());
+	        
+	        
+	        int success = fileMapper.insertFileToDB(fileDTO);
+	                
+	        if(success == 0) {
+	        		System.out.println("DB등록 실패");
+	        }
+	        
+	        	System.out.println("DB등록 성공");
+	        // 이미지 업로드 성공 응답 데이터 생성
+	        String responseMessage = "이미지가 업로드되었습니다.";
+	        
+	        
+	        String imageUrl = "http://localhost:8080/myapp/member/profilePhoto/" + fileRegdate + "/" + fileName;
+	        
+	        
 	        
 			
-	        return true;
+	        return imageUrl;
 	        
 		} catch (Exception e) {
-			return false;
+			return errorMessage;
 		}
 		
 		

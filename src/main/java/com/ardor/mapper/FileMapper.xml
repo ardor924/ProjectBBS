@@ -11,8 +11,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 파일정보 DB에 저장 -->
 	<insert id="insertFileToDB">
-		insert into file(fileName,fileRealName,filePath,fileSize,fileType,fileExtention,fileDescription,fileRegDate)
-		values(#{fileName},#{fileRealName},#{filePath},#{fileSize},#{fileType},#{fileExtention},#{fileDescription},#{fileRegDate},)
+		insert into file(fileName,fileRealName,filePath,fileRegdate)
+		values(#{fileName},#{fileRealName},#{filePath},#{fileRegdate})
 	</insert>
 
 	<!-- 파일이름으로 파일정보 가져오기 -->	

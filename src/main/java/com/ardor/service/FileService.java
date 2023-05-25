@@ -9,7 +9,7 @@ public interface FileService {
 	
 	
 	// 파일업로드
-	public boolean uploadFile(MultipartFile file);
+	public String uploadFile(MultipartFile file);
 	
 
 }
