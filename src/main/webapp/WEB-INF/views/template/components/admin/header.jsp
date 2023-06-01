@@ -3,7 +3,7 @@
 <!-- -----------------------헤더 : START--------------------------- -->
 <header>
     <div class="header-title">
-        <a href="../../home/home_page.html">
+        <a href="${ctx}/admin">
             <h3>-관리자 페이지-</h3>
         </a>
     </div>

@@ -10,28 +10,28 @@
     </div>
     <div class="admin-links-list">
         <div class="row-center">
-            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/admin/membership">홈페이지</a>
+            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/">홈페이지</a>
         </div>
         <div class="row-center">
-            <a class="admin-link-item btn btn-dark" href="${ctx}/admin/membership">메인설정</a>
+            <a class="admin-link-item btn btn-dark" href="${ctx}/admin">메인설정</a>
         </div>
         <div class="row-center">
             <a class="admin-link-item btn btn-outline-dark" href="${ctx}/admin/membership">회원관리</a>
         </div>
         <div class="row-center">
-            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/admin/membership">카테고리등록</a>
+            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/admin/category/reg">카테고리등록</a>
         </div>
         <div class="row-center">
-            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/admin/membership">카테고리관리</a>
+            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/admin/category">카테고리관리</a>
         </div>
         <div class="row-center">
-            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/admin/membership">게시판등록</a>
+            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/admin/bbs/reg">게시판등록</a>
         </div>
         <div class="row-center">
-            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/admin/membership">게시판관리</a>
+            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/admin/bbs">게시판관리</a>
         </div>
         <div class="row-center">
-            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/admin/membership">테스트페이지</a>
+            <a class="admin-link-item btn btn-outline-dark" href="${ctx}/test">테스트페이지</a>
         </div>
     </div>
 </div>
