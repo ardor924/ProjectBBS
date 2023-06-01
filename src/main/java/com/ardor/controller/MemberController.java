@@ -232,7 +232,7 @@ public class MemberController {
 
 	
 	// 로그아웃
-	@RequestMapping("/member/logout")
+	@RequestMapping("/members/logout")
 	public String memberLogout(HttpSession session,HttpServletRequest request) {
 		
 		session.removeAttribute("memberID");

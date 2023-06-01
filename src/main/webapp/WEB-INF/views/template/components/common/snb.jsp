@@ -70,78 +70,18 @@
             <h5 class="snb-title">전체 글 보기</h5>
         </div>
         <!-- 반복문 적용 -->
-        <hr>
-        <div class="row-none">
-            <h6 class="snb-title text-center">웹개발</h6>
+        	<c:forEach var="cLi" items="${catList}">
+        <div class="row-none border-top border-bottom">
+            <h6 class="snb-title text-center">${cLi.catName}</h6>
         </div>
-        <hr>    
         <ul class="row-none ps-4">
-            <li class="snb-text"><a href="../bbs_page/bbs_101.html">Java-Spring</a></li>
-            <li class="snb-text"><a href="#">JS / Jquery</a></li>
-            <li class="snb-text"><a href="#">Angura.js</a></li>
-            <li class="snb-text"><a href="#">CSS / Bootstrap</a></li>
+            	<c:forEach var="bLi" items="${boardList}">
+    			<c:if test="${cLi.catNo eq bLi.catNo}">
+            <li class="snb-text"><a href="../bbs_page/bbs_101.html">${bLi.bbsName}</a></li>
+            </c:if>
+    			</c:forEach>
         </ul>
-        <!-- 반복문 적용 -->
-        <!-- 반복문 적용 -->
-        <hr>
-        <div class="row-none">
-            <h6 class="snb-title text-center">언어&문법</h6>
-        </div>
-        <hr>    
-        <ul class="row-none ps-4">
-            <li class="snb-text"><a href="#">Java</a></li>
-            <li class="snb-text"><a href="#">C#</a></li>
-            <li class="snb-text"><a href="#">Python</a></li>
-            <li class="snb-text"><a href="#">JavaScript</a></li>
-            <li class="snb-text"><a href="#">Ruby</a></li>
-        </ul>
-        <!-- 반복문 적용 -->
-        <!-- 반복문 적용 -->
-        <hr>
-        <div class="row-none">
-            <h6 class="snb-title text-center">빅데이터,AI,크롤링</h6>
-        </div>
-        <hr>    
-        <ul class="row-none ps-4">
-            <li class="snb-text"><a href="#">Python 크롤링</a></li>
-            <li class="snb-text"><a href="#">데이터 마이닝</a></li>
-            <li class="snb-text"><a href="#">머신러닝 / 딥러닝</a></li>
-        </ul>
-        <!-- 반복문 적용 -->
-        <!-- 반복문 적용 -->
-        <hr> 
-        <div class="row-none">
-            <h6 class="snb-title text-center">게임개발</h6>
-        </div>
-        <hr>    
-        <ul class="row-none ps-4">
-            <li class="snb-text"><a href="#">유니티</a></li>
-            <li class="snb-text"><a href="#">언리얼엔진</a></li>
-        </ul>
-        <!-- 반복문 적용 -->
-        <!-- 반복문 적용 -->
-        <hr>
-        <div class="row-none">
-            <h6 class="snb-title text-center">알고리즘예제</h6>
-        </div>
-        <hr>    
-        <ul class="row-none ps-4">
-            <li class="snb-text"><a href="#">Java 백준</a></li>
-            <li class="snb-text"><a href="#">python 코드업</a></li>
-        </ul>
-        <!-- 반복문 적용 -->
-        <!-- 반복문 적용 -->
-        <hr>
-        <div class="row-none">
-            <h6 class="snb-title text-center">CS지식</h6>
-        </div>
-        <hr>    
-        <ul class="row-none ps-4">
-            <li class="snb-text"><a href="#">디자인 패턴</a></li>
-            <li class="snb-text"><a href="#">운영체제</a></li>
-            <li class="snb-text"><a href="#">데이터베이스</a></li>
-            <li class="snb-text"><a href="#">자료구조</a></li>
-        </ul>
+        </c:forEach>
         <!-- 반복문 적용 -->
     </div>
     <!-- ./ 카테고리 더미 데이터 -->

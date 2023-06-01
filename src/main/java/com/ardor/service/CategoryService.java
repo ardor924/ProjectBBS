@@ -10,7 +10,7 @@ public interface CategoryService {
 	public boolean registerCategory(CategoryDTO categoryDTO);
 
 	// 카테고리 전체 목록 조회
-	public List<CategoryDTO> getAllCategoryList(CategoryDTO categoryDTO);
+	public List<CategoryDTO> getAllCategoryList();
 	
 	// 카테고리 1개 정보 조회
 	 public CategoryDTO getCategoryInfo(String catCode);

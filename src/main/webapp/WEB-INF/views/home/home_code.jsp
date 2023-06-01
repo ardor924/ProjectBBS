@@ -20,7 +20,7 @@
             <div class="site-link">
                 <img src="${ctx}/resources/img/site-link.jpg" alt="사이트링크jpg" class="site-link-image">
             </div>
-            <a href="#link_1" class="banner-link bg-warning">링크1 : 깃헙</a>
+            <a href="https://github.com/ardor924/" class="banner-link bg-warning">링크1 : 깃헙</a>
             <a href="#link_2" class="banner-link bg-success">링크2 : 포트폴리오사이트</a>
             <a href="#link_3" class="banner-link bg-primary">링크3 : AI-Chat 사이트</a>
             <a href="#link_4" class="banner-link bg-danger">링크4 : 팀프로젝트</a>

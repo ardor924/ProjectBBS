@@ -1,61 +1,132 @@
-@charset "UTF-8";
+/*=============================================================================================================================================================================================*/
+/*================================================================================관리자페이지================================================================================================*/
+/*=============================================================================================================================================================================================*/
 
-.wrapper-category-reg{
-
+/*관리자 페이지 랩퍼 설정*/
+.admin-page-wrapper{
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-
 }   
 
-
+/*헤더 제목*/
 .header-title{
     display: flex;
     justify-content: center;
     margin: 20px 0px;
     
-    margin-top: 50px;
+    margin-top: 100px;
+    margin-right: 10px;
 }
-
-/*categoryreg-wrap 중앙정렬*/
-.categoryreg-wrap{
+/* START=================================== 컨텐츠 ====================================== */
+/*---------------------------------------------------------------------------------------*/
+/*관리자 패널*/
+.admin-panel{
     display: flex;
     justify-content: center;
+    min-width: 1000px;
+    max-width: 1000px;
+    padding: 10px 0px 10px 0px;
+    margin-left: -10px;
 
-    min-width: 500px;
 }
+/*----------------------------------------------------------------------------------------*/
+/* ======================================== 컨텐츠 ===================================END */
 
-/*categoryreg-box 가로길이 지정*/
-.categoryreg-box{
-    border: 1px solid #e2e6ee;
+
+
+
+
+/* START=========================== 카테고리 사이드 박스================================= */
+/*---------------------------------------------------------------------------------------*/
+
+/* 카테고리 목록 박스*/
+.category-list-box{
+    min-width: 200px;
+    max-width: 200px;
+
+    border: 2px solid #e2e6ee;
     border-radius: 5px;
+    padding: 0px 15px;
+    margin-right: 20px;
+
+    max-height: 470px;
+
+    /* direction:rtl; */
+    overflow: auto;
+
+    background-color: #f8f9fa;
 }
-
-/*  카테고리 타이틀표시*/
-/* 지워도 문제없으나 일단 디폴트 길이 지정*/
-.categoryreg-navigation{
-    padding: 0 20px;
-
-    width: 500px;
-    height: 50px;
-
-    border-bottom: none;
-    border-radius: 5px 5px 0px 0px;
+/* 스크롤설정 */
+.category-list-box::-webkit-scrollbar {
+    width: 10px;
 }
-
-.nav-left,.nav-right{
-    width: 200px;
-    height: 50px;
+.category-list-box::-webkit-scrollbar-thumb:hover {
+    background: #ffa500; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 둥근 테두리 */
     
+    background-clip: padding-box;
+    border: 2px solid transparent;
+
+  }
+.category-list-box::-webkit-scrollbar-track:hover {
+    background: rgba(220, 170, 20, 0.1);  /*스크롤바 뒷 배경 색상*/
+    box-shadow: inset 0px 0px 5px white;
+
+  }
+
+.category-title{
+    font-weight: normal;
+}
+
+/* 카테고리  목록  리스트 스타일 설정*/
+ul{
+    list-style-type: circle;
+}
+
+.category-item{
+    font-weight: lighter;
+}
+
+/*------------------------------------------------------------------------------------*/
+/* =========================== 카테고리 사이드 박스==============================END */
+
+
+
+
+/* START=======================현재 설정 화면 박스================================ */
+/*----------------------------------------------------------------------------------------*/
+
+/*현재 설정하고있는 기능*/
+.current-configuration-box{
+    max-width: 555px;
+
+    flex-grow: 3;
+    margin-right: 20px;
+
+    max-height: 470px;
+
+    border: 2px solid #e2e6ee;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+
+    overflow: auto;
+}
+/*스크롤 기능*/
+.current-configuration-box::-webkit-scrollbar {
+    width: 10px;
+}
+/*현재 설정의 상단내비바(제목칸)*/
+.category-reg-navigation{
     display: flex;
     justify-content: center;
-    align-items: center;
 }
-
-
-
-/*카테고리 등록 폼양식*/
-.category-form{
+/*제목이 있는 div*/
+.nav-headline{
+    text-align: center;
+}
+/*현재 설정의 제출폼(내용칸) */
+.category-reg-form{
     padding: 0 20px;
     
     display: flex;
@@ -63,53 +134,74 @@
     flex-direction: column;
 
     border-top: 1px solid #e2e6ee;
-
 }
+/*----------------------------------------------------------------------------------------*/
+/* ==========================현재 설정 화면 박스================================END */
 
-/* input창 외곽 흰색 배경*/
-.input-box{
-    min-width: 100%;
-    height: 50px;
-    background-color: #ffffff;
-    border: 1px solid #e2e6ee;
+
+
+
+
+
+/* START=================================관리자링크 박스=============================== */
+/*---------------------------------------------------------------------------------------*/
+/*관리자링크 박스*/
+.admin-links-box{
+    width: 100px;
+    flex-grow: 1;
+    max-height: 470px;
+
+    border: 2px solid #e2e6ee;
     border-radius: 5px;
+    background-color: #f8f9fa;
 
-    display: flex;
-    align-items: center;
-
-    margin: 5px 0;
+    overflow: auto;
 }
-/* input창 아이콘*/
-.input-box-icon{
-    height: 100%;
-    width: 40px;
+/*스크롤 기능 설정*/
+.admin-links-box::-webkit-scrollbar {
+    width: 10px;
+    cursor: pointer;
+}
+.admin-links-box::-webkit-scrollbar-thumb:hover {
+    background: #ffa500; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 둥근 테두리 */
+    
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+.admin-links-box::-webkit-scrollbar-track:hover {
+    background: rgba(220, 170, 20, 0.1);  /*스크롤바 뒷 배경 색상*/
+    box-shadow: inset 0px 0px 5px white;
+  }
+/*제목이 있는 div*/
+.nav-headline{
+    text-align: center;
+}
+.admin-links-list{
+    border-top: 1px solid #e2e6ee;
+    display: flex;
+    flex-direction: column;
+}
 
+.admin-link-item{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 5px;
+
+    height: 50px;
+    width: 80%;
 }
-.input-box-icon>i{
-    font-size: 2em;
-    color: #666666;
-}
-
-/*input창*/
-.input-box-element{
-    border: none;
-    flex: 1;
-    height: 100%;
-}
-/*input창 외곽제거*/
-.input-box-element:focus{
-    border: none;
-    box-shadow: none;
-}
+/*---------------------------------------------------------------------------------------*/
+/* ======================================관리자링크 박스================================== END*/
 
 
 
 
 
+
+
+/* =================================게시판관리 푸터=============================== */
+/*---------------------------------------------------------------------------------*/
 /*footer 덮어쓰기 설정*/
 
 footer{
@@ -142,9 +234,12 @@ footer>div>*{
 
 }
 
-/* 폼 작성 오류 알람*/
-.form-alert{
-    color: red;
-    font-size: 0.8em;
-    margin-left: 5px;
-}
+/*---------------------------------------------------------------------------------*/
+/* =================================게시판관리 푸터=============================== */
+
+
+
+
+/*=============================================================================================================================================================================================*/
+/*================================================================================관리자페이지================================================================================================*/
+/*=============================================================================================================================================================================================*/

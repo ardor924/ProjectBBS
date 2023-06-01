@@ -22,8 +22,8 @@ public class CategoryServiceImpl implements CategoryService{
 
 	// 카테고리 전체 목록 조회
 	@Override
-		public List<CategoryDTO> getAllCategoryList(CategoryDTO categoryDTO) {
-			return categoryMapper.getAllCategoryFromDB(categoryDTO);
+		public List<CategoryDTO> getAllCategoryList() {
+			return categoryMapper.getAllCategoryFromDB();
 		}
 
 	

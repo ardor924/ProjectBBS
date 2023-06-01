@@ -22,14 +22,30 @@
 <!-- Body : START -->
 <body>
     <!-- Wrapper : START-->
-    <div class="wrapper-category-reg container">    
-    
+    <div class="admin-page-wrapper container">    
+    	
 		<!--헤더 : START-->
 		<%@ include file="/WEB-INF/views/template/components/admin/header.jsp" %>
 		<!--헤더 : START-->
-		
+				
 		<!--컨텐츠 : START-->
-		<%@ include file="/WEB-INF/views/admin/category/manage_code.jsp" %>
+		<div class="contents">
+        		<div class="admin-panel mb-3">
+				<!--카테고리 사이드 박스 : START-->
+				<%@ include file="/WEB-INF/views/admin/category_list_code.jsp" %>
+				<!--카테고리 사이드 박스 : END-->
+				
+				
+				<!--관리자패널 : START-->
+				<%@ include file="/WEB-INF/views/admin/category/manage_code.jsp" %>
+				<!--./관리자패널 : END-->
+				
+				
+				<!--관리자 링크 박스 : START-->
+				<%@ include file="/WEB-INF/views/admin/category/manage_admin_links_code.jsp" %>
+				<!--./관리자 링크 박스 : END-->
+			</div>
+        </div>
 		<!--./컨텐츠 : END-->
 		
 		<!--푸터 : START-->

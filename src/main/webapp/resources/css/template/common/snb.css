@@ -11,7 +11,7 @@
 /* --------------------------- */
 /* snb - 나의정보칸*/
 .snb-myinfo{
-    border: 2px solid #222;
+    border: 2px solid #e2e6ee;
     padding: 0 15px;
     margin-bottom: 30px;
 }
@@ -47,7 +47,7 @@
 
 /* snb - 카테고리 칸*/
 .snb-category{
-    border: 2px solid #222;
+    border: 2px solid #e2e6ee;
     padding: 0px 15px;
 }
 

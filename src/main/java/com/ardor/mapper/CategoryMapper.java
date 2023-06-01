@@ -14,7 +14,7 @@ public interface CategoryMapper {
 	public boolean insertCategoryInfoToDB(CategoryDTO categoryDTO);
 		
 	// 카테고리 전체 목록 조회
-	public List<CategoryDTO> getAllCategoryFromDB(CategoryDTO categoryDTO);
+	public List<CategoryDTO> getAllCategoryFromDB();
 	
 	// 카테고리 정보조회(카테고리 코드로)
 	public CategoryDTO getCategoryInfoByCatCode(String catCode);

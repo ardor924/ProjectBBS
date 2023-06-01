@@ -28,7 +28,7 @@ async function checkDuplicateID(){
 		
 		try {
 			// 컨트롤러에 memberID 비동기로 값을 보내기
-			const response = await axios.post(window.ctx+'/member/join/checkID', { memberID: memberIDValue }); // 서버로 전송되는 데이터 객체
+			const response = await axios.post(window.ctx+'/members/join/checkID', { memberID: memberIDValue }); // 서버로 전송되는 데이터 객체
 		
 			// 응답을 받아와서 중복인경우 로직실행
 			const isDuplicate = response.data.isDuplicate; // 중복여부

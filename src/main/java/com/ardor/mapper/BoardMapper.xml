@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="com.ardor.mapper.BoardMapper">
+	
+	<!-- 게시판 등록 -->
+	<insert id="insertBoardInfoToDB">
+		insert into boards(bbsName,bbsDescription,bbsCreateDate,catNo)
+		values(#{bbsName},#{bbsDescription},#{bbsCreateDate},#{catNo})
+	</insert>
+	
+	<!-- 게시판 전체 목록 가져오기 -->
+	<select id="getAllBoardListFromDB" resultType="boardDTO">
+		select * from boards; 
+	</select>
+	
+	
+</mapper>

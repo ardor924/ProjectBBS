@@ -5,9 +5,9 @@
 <!-- 템플릿설정 -->
 <%@ include file="/WEB-INF/views/template/layout/html_top.jsp" %>
 <!--현재파일의 CSS -->
-<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/membership/header.css"> 
-<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/members/myinfo.css"> 
-<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/membership/footer.css"> 
+<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/admin/header.css"> 
+<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/admin/bbs/edit.css"> 
+<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/admin/footer.css"> 
 <!-----------------------------------------./기본설정(상단) ---------------------------------------- -->
 <!-- ================================================================================================ END-->
 
@@ -22,18 +22,18 @@
 <!-- Body : START -->
 <body>
     <!-- Wrapper : START-->
-    <div class="wrapper-myinfo container">    
+    <div class="admin-page-wrapper container">    
     
 		<!--헤더 : START-->
-		<%@ include file="/WEB-INF/views/template/components/membership/header.jsp" %>
+		<%@ include file="/WEB-INF/views/template/components/admin/header.jsp" %>
 		<!--헤더 : START-->
 		
 		<!--컨텐츠 : START-->
-		<%@ include file="/WEB-INF/views/members/myinfo_code.jsp" %>
+		<%@ include file="/WEB-INF/views/admin/bbs/edit_code.jsp" %>
 		<!--./컨텐츠 : END-->
 		
 		<!--푸터 : START-->
-		<%@ include file="/WEB-INF/views/template/components/membership/footer.jsp" %>
+		<%@ include file="/WEB-INF/views/template/components/admin/footer.jsp" %>
 		<!--./푸터 : END-->
 		
     </div>
@@ -52,18 +52,13 @@
 
 <!-- START================================================================================================ -->
 <!-- ---------------------------------- 자바스크립트 :START ---------------------------------- -->
-<script type="text/javascript">
-window.ctx = "${pageContext.request.contextPath}";
-</script>
+<!-- 카테고리등록 유효성검사 -->
+<script src="${ctx}/resources/js/admin/category/category_valid.js"></script>
 
-<!-- 회원가입 유효성검사 -->
-<script src="${ctx}/resources/js/members/myinfo_valid.js"></script>
-
-<!-- 프로필 사진 업로드 로직 -->
-<script src="${ctx}/resources/js/common/upload_profile_origin.js"></script>
 
 <!-- ---------------------------------- 자바스크립트 :END ---------------------------------- -->
 <!-- ================================================================================================ END-->
+
 
 
 

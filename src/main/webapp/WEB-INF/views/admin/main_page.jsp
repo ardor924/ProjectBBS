@@ -31,7 +31,7 @@
 		
 		<!--컨텐츠 : START-->
 		<div class="contents">
-        	<div class="admin-panel mb-3">
+        		<div class="admin-panel mb-3">
 				<!--카테고리 사이드 박스 : START-->
 				<%@ include file="/WEB-INF/views/admin/category_list_code.jsp" %>
 				<!--카테고리 사이드 박스 : END-->
@@ -43,7 +43,7 @@
 				
 				
 				<!--관리자 링크 박스 : START-->
-				<%@ include file="/WEB-INF/views/admin/admin_links_code.jsp" %>
+				<%@ include file="/WEB-INF/views/admin/main_admin_links_code.jsp" %>
 				<!--./관리자 링크 박스 : END-->
 			</div>
         </div>

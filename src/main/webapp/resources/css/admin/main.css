@@ -139,7 +139,7 @@ ul{
 }
 
 .config-frame{
-    width: 100px;
+    width: 100px !important;
     height: 100px;
     margin: 10px 15px;
 

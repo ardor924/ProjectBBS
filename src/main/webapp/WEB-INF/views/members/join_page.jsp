@@ -59,13 +59,13 @@ window.ctx = "${pageContext.request.contextPath}";
 
 
 <!-- 회원가입 유효성검사 및 아이디 중복검사 스크립트-->
-<script src="${ctx}/resources/js/member/join_valid_and_check_duplicate_id.js"></script>
+<script src="${ctx}/resources/js/members/join_valid_and_check_duplicate_id.js"></script>
 <%-- <!-- 회원가입 유효성검사 -->
 <script src="${ctx}/resources/js/member/join_valid.js"></script>
 <!-- 아이디 중복 확인 스크립트 -->
 <script src="${ctx}/resources/js/member/check_duplicate_id.js"></script> --%>
 <!-- 동의 체크박스 상태 스크립트 -->
-<script src="${ctx}/resources/js/member/agreement_checkbox.js"></script>
+<script src="${ctx}/resources/js/members/agreement_checkbox.js"></script>
 <!-- 프로필 사진 업로드 로직 -->
 <script src="${ctx}/resources/js/common/upload_profile_origin.js"></script>
 
