@@ -41,7 +41,7 @@
 	
 	
 	
-	<context:component-scan base-package="com.ardor.myapp"/>
+	<context:component-scan base-package="com.ardor.controller"/>
 	
 	
 	

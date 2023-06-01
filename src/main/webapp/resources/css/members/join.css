@@ -1,0 +1,252 @@
+.wrapper-join{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}  
+
+
+.header-title{
+    display: flex;
+    justify-content: center;
+    margin: 20px 0px;
+
+    margin-top: 50px;
+}
+
+/*join-wrap를 중앙정렬*/
+.join-wrap{
+    display: flex;
+    justify-content: center;
+
+    max-width: 500px;
+    min-width: 500px;
+}
+.join-box{
+    border: 1px solid #e2e6ee;
+    border-radius: 5px;
+}
+
+/* 로그인-회원가입 링크 내비게이션*/
+/* 지워도 문제없으나 일단 디폴트 길이 지정*/
+.join-navigation{
+    padding: 0 20px;
+
+    width: 500px;
+    height: 50px;
+
+    border-bottom: none;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.nav-left,.nav-right{
+    width: 200px;
+    height: 50px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 회원가입 내비 및줄*/
+.selected-nav-underline{
+    border-bottom: 2px solid royalblue;
+}
+
+
+
+
+/*회원가입 폼양식*/
+.join-form{
+    padding: 0 20px;
+    
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    border-top: 1px solid #e2e6ee;
+
+}
+
+/* 프로필 사진 설정 */
+.my-photo-frame{
+    margin: 0;padding: 0;
+    justify-content: center;
+    
+    height: 100px;
+    
+    /* border: 1px solid #e2e6ee; */
+    
+}
+.my-photo{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    
+	cursor: pointer;
+
+}
+
+
+/*프사 등록버튼 위치조정*/
+#profile-image-upload-btn{
+    position: relative;
+    bottom: 25px;
+
+    width: 100px;
+    height: 25px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 0;
+
+
+}
+
+/* 프사 캡션*/
+/* .my-photo-caption{
+    position: relative;
+    left: 12px;
+    top: -10px;
+} */
+
+/* 회원가입 각 항목의 label 설정*/
+.label-field{
+    margin-left: 5px;
+}
+
+
+/* input창 외곽 흰색 배경*/
+.input-box{
+    min-width: 100%;
+    height: 50px;
+    background-color: #ffffff;
+    border: 1px solid #e2e6ee;
+    border-radius: 5px;
+
+    display: flex;
+    align-items: center;
+
+    margin: 5px 0;
+}
+
+/* input 사이의 거리 지정*/
+.input-box-apart{
+    min-width: 100%;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+
+    overflow: hidden;
+
+}
+
+
+/*input창*/
+.input-box-element{
+    border: none;
+    flex: 1;
+    height: 100%;
+}
+/*input창 외곽제거*/
+.input-box-element:focus{
+    border: none;
+    box-shadow: none;
+}
+
+
+
+/* input창 간격 옵션*/
+.input-box-element-apart{
+    height: 100%;
+    margin: 10px;
+    border-radius: 5px;
+    flex: 1;
+
+    border: 1px solid #e2e6ee;
+
+}
+/* input창 간격 옵션 - 외곽제거*/
+.input-box-element-apart:focus{
+    border: 1px solid #e2e6ee;
+    box-shadow: none;
+}
+
+
+/*아이디 중복체크*/
+.id-check{
+    display: flex;
+    align-items: center;
+    height: 100%;
+    border-radius: 0px 5px 5px 0px;
+}
+
+
+/* 정책-약관 동의 태그설정*/
+.policy_terms-areement{
+    display: flex;
+    align-items: center;
+}
+.policy_terms-checkbox,.policy_terms-detail {
+    margin-right: 10px;
+    cursor: pointer;
+}
+/*체크박스 크기지정*/
+input[type=checkbox] {
+    width: 20px;
+    height: 20px;
+}
+
+
+
+/*footer 덮어쓰기 설정*/
+
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-direction: column;
+    flex-wrap: wrap;
+
+
+    
+    width: 430px;
+    background-color: #ffffff !important;
+    color: #111111 !important;
+
+    margin-top: 20px;
+}
+
+
+footer>div{
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+footer>div>*{
+    margin: 0 2px;
+
+}
+
+
+/* 회원가입 폼 작성 오류 알람*/
+.form-alert{
+    color: red;
+    font-size: 0.8em;
+    margin-left: 5px;
+}
+
+
+
+
+/*유효성 검사시 포커스의 색상을 변경*/
+.highlight-border {
+  border: 2px solid #f00 !important; 
+}

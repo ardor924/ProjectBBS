@@ -6,32 +6,50 @@ public class MemberDTO {
 	
     private int memberNo;
     private String memberPhotoName;
-    private String memberPhotoURL;
+    private String memberPhotoPath;
+    private Date memberPhotoRegdate;
+    
     private String memberID;
     private String memberPW;
     private String memberName;
-    private int memberAge;
+    private Integer memberAge;
     private Date memberBirth;
     private String memberEmail;
     private String memberTel;
-    private String memberPolicyAgreement;
-    private String memberTermsAgreement;
-    private String memberEventAgreement;
+
+    
+    private AgreementStatus memberPolicyAgreement;
+    private AgreementStatus memberTermsAgreement;
+    private AgreementStatus memberEventAgreement;
+    
     private Date memberRegdate;
-    private String memberGrant;
+    private MemberGrant memberGrant;
+    
+    // 관리자권한부여  Enum
+    public enum MemberGrant {
+        ADMIN,
+        USER
+    }
+    
+    // 동의 상태 Enum
+    public enum AgreementStatus {
+        YES,
+        NO
+    }
 
     // 기본 생성자
-    public MemberDTO(){};
+     public MemberDTO() {}
 
-    // 생성자
-	public MemberDTO(int memberNo, String memberPhotoName, String memberPhotoURL, String memberID, String memberPW,
-			String memberName, int memberAge, Date memberBirth, String memberEmail, String memberTel,
-			String memberPolicyAgreement, String memberTermsAgreement, String memberEventAgreement, Date memberRegdate,
-			String memberGrant) {
+	public MemberDTO(int memberNo, String memberPhotoName, String memberPhotoPath, Date memberPhotoRegdate,
+			String memberID, String memberPW, String memberName, Integer memberAge, Date memberBirth,
+			String memberEmail, String memberTel, AgreementStatus memberPolicyAgreement,
+			AgreementStatus memberTermsAgreement, AgreementStatus memberEventAgreement, Date memberRegdate,
+			MemberGrant memberGrant) {
 		super();
 		this.memberNo = memberNo;
 		this.memberPhotoName = memberPhotoName;
-		this.memberPhotoURL = memberPhotoURL;
+		this.memberPhotoPath = memberPhotoPath;
+		this.memberPhotoRegdate = memberPhotoRegdate;
 		this.memberID = memberID;
 		this.memberPW = memberPW;
 		this.memberName = memberName;
@@ -46,7 +64,6 @@ public class MemberDTO {
 		this.memberGrant = memberGrant;
 	}
 
-	// 게터세터
 	public int getMemberNo() {
 		return memberNo;
 	}
@@ -63,12 +80,20 @@ public class MemberDTO {
 		this.memberPhotoName = memberPhotoName;
 	}
 
-	public String getMemberPhotoURL() {
-		return memberPhotoURL;
+	public String getMemberPhotoPath() {
+		return memberPhotoPath;
 	}
 
-	public void setMemberPhotoURL(String memberPhotoURL) {
-		this.memberPhotoURL = memberPhotoURL;
+	public void setMemberPhotoPath(String memberPhotoPath) {
+		this.memberPhotoPath = memberPhotoPath;
+	}
+
+	public Date getMemberPhotoRegdate() {
+		return memberPhotoRegdate;
+	}
+
+	public void setMemberPhotoRegdate(Date memberPhotoRegdate) {
+		this.memberPhotoRegdate = memberPhotoRegdate;
 	}
 
 	public String getMemberID() {
@@ -95,11 +120,11 @@ public class MemberDTO {
 		this.memberName = memberName;
 	}
 
-	public int getMemberAge() {
+	public Integer getMemberAge() {
 		return memberAge;
 	}
 
-	public void setMemberAge(int memberAge) {
+	public void setMemberAge(Integer memberAge) {
 		this.memberAge = memberAge;
 	}
 
@@ -127,27 +152,27 @@ public class MemberDTO {
 		this.memberTel = memberTel;
 	}
 
-	public String getMemberPolicyAgreement() {
+	public AgreementStatus getMemberPolicyAgreement() {
 		return memberPolicyAgreement;
 	}
 
-	public void setMemberPolicyAgreement(String memberPolicyAgreement) {
+	public void setMemberPolicyAgreement(AgreementStatus memberPolicyAgreement) {
 		this.memberPolicyAgreement = memberPolicyAgreement;
 	}
 
-	public String getMemberTermsAgreement() {
+	public AgreementStatus getMemberTermsAgreement() {
 		return memberTermsAgreement;
 	}
 
-	public void setMemberTermsAgreement(String memberTermsAgreement) {
+	public void setMemberTermsAgreement(AgreementStatus memberTermsAgreement) {
 		this.memberTermsAgreement = memberTermsAgreement;
 	}
 
-	public String getMemberEventAgreement() {
+	public AgreementStatus getMemberEventAgreement() {
 		return memberEventAgreement;
 	}
 
-	public void setMemberEventAgreement(String memberEventAgreement) {
+	public void setMemberEventAgreement(AgreementStatus memberEventAgreement) {
 		this.memberEventAgreement = memberEventAgreement;
 	}
 
@@ -159,31 +184,15 @@ public class MemberDTO {
 		this.memberRegdate = memberRegdate;
 	}
 
-	public String getMemberGrant() {
+	public MemberGrant getMemberGrant() {
 		return memberGrant;
 	}
 
-	public void setMemberGrant(String memberGrant) {
+	public void setMemberGrant(MemberGrant memberGrant) {
 		this.memberGrant = memberGrant;
 	}
 
-	
-	// 디버그용 toString
-	@Override
-	public String toString() {
-		return "MemberDTO [memberNo=" + memberNo + ", memberPhotoName=" + memberPhotoName + ", memberPhotoURL="
-				+ memberPhotoURL + ", memberID=" + memberID + ", memberPW=" + memberPW + ", memberName=" + memberName
-				+ ", memberAge=" + memberAge + ", memberBirth=" + memberBirth + ", memberEmail=" + memberEmail
-				+ ", memberTel=" + memberTel + ", memberPolicyAgreement=" + memberPolicyAgreement
-				+ ", memberTermsAgreement=" + memberTermsAgreement + ", memberEventAgreement=" + memberEventAgreement
-				+ ", memberRegdate=" + memberRegdate + ", memberGrant=" + memberGrant + "]";
-	};
-    
 
 
-	
-	
-
-    
 
 }

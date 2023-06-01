@@ -30,9 +30,11 @@
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 
     <!-- 7. 공통 CSS -->
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/common/font.css"> 
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/common/button.css"> 
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/common/global.css"> 
-
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/global/font.css"> 
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/global/button.css"> 
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/global/global.css"> 
+	
+	<!-- 8. 공통 JS -->
+	<script src="${ctx}/resources/js/common/redirect_to_login.js"></script>
 
 </head>

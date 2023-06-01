@@ -7,5 +7,6 @@
   <typeAliases>
   	<typeAlias type="com.ardor.model.MemberDTO" alias="memberDTO"/>
   	<typeAlias type="com.ardor.model.FileDTO" alias="fileDTO"/>
+  	<typeAlias type="com.ardor.model.CategoryDTO" alias="categoryDTO"/>
   </typeAliases>
 </configuration>

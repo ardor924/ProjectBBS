@@ -1,0 +1,266 @@
+/*=============================================================================================================================================================================================*/
+/*================================================================================관리자페이지================================================================================================*/
+/*=============================================================================================================================================================================================*/
+
+/*관리자 페이지 랩퍼 설정*/
+.admin-page-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}   
+
+/*헤더 제목*/
+.header-title{
+    display: flex;
+    justify-content: center;
+    margin: 20px 0px;
+    
+    margin-top: 100px;
+    margin-right: 10px;
+}
+/* START=================================== 컨텐츠 ====================================== */
+/*---------------------------------------------------------------------------------------*/
+/*관리자 패널*/
+.admin-panel{
+    display: flex;
+    justify-content: center;
+    min-width: 1000px;
+    max-width: 1000px;
+    padding: 10px 0px 10px 0px;
+    margin-left: -10px;
+
+}
+/*----------------------------------------------------------------------------------------*/
+/* ======================================== 컨텐츠 ===================================END */
+
+
+
+
+
+/* START=========================== 카테고리 사이드 박스================================= */
+/*---------------------------------------------------------------------------------------*/
+
+/* 카테고리 목록 박스*/
+.category-list-box{
+    min-width: 200px;
+    max-width: 200px;
+
+    border: 2px solid #e2e6ee;
+    border-radius: 5px;
+    padding: 0px 15px;
+    margin-right: 20px;
+
+    max-height: 470px;
+
+    /* direction:rtl; */
+    overflow: auto;
+
+    background-color: #f8f9fa;
+}
+/* 스크롤설정 */
+.category-list-box::-webkit-scrollbar {
+    width: 10px;
+}
+.category-list-box::-webkit-scrollbar-thumb:hover {
+    background: #212529; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 둥근 테두리 */
+    
+    background-clip: padding-box;
+    border: 2px solid transparent;
+
+  }
+.category-list-box::-webkit-scrollbar-track:hover {
+    background: rgba(2, 25, 5, 0.1);  /*스크롤바 뒷 배경 색상*/
+    box-shadow: inset 0px 0px 5px white;
+
+  }
+
+.category-title{
+    font-weight: normal;
+}
+
+/* 카테고리  목록  리스트 스타일 설정*/
+ul{
+    list-style-type: circle;
+}
+
+.category-item{
+    font-weight: lighter;
+}
+
+/*------------------------------------------------------------------------------------*/
+/* =========================== 카테고리 사이드 박스==============================END */
+
+
+
+
+/* START=======================현재 설정 화면 박스================================ */
+/*----------------------------------------------------------------------------------------*/
+
+/*현재 설정하고있는 기능*/
+.current-configuration-box{
+    max-width: 555px;
+
+    flex-grow: 3;
+    margin-right: 20px;
+
+    max-height: 470px;
+
+    overflow: auto;
+
+    border: 2px solid #e2e6ee;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+
+
+}
+/*스크롤 기능*/
+.current-configuration-box::-webkit-scrollbar {
+    width: 10px;
+}
+/*현재 설정의 상단내비바(제목칸)*/
+.main-navigation{
+    display: flex;
+    justify-content: center;
+}
+/*제목이 있는 div*/
+.nav-headline{
+    text-align: center;
+}
+/*현재 설정의(내용칸) */
+.main-config-box{
+    padding: 25px 0px 0px 30px;
+    
+    display: flex;
+
+    border-top: 1px solid #e2e6ee;
+
+}
+
+.config-frame{
+    width: 100px;
+    height: 100px;
+    margin: 10px 15px;
+
+    border: 1px solid #e2e6ee;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.config-frame-img{
+    width: 70px;
+    height: 70px;
+}
+/*----------------------------------------------------------------------------------------*/
+/* ==========================현재 설정 화면 박스================================END */
+
+
+
+
+
+
+/* START=================================관리자링크 박스=============================== */
+/*---------------------------------------------------------------------------------------*/
+/*관리자링크 박스*/
+/*관리자링크 박스*/
+.admin-links-box{
+    width: 100px;
+    flex-grow: 1;
+    max-height: 470px;
+
+    border: 2px solid #e2e6ee;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+
+    overflow: auto;
+}
+/*스크롤 기능 설정*/
+.admin-links-box::-webkit-scrollbar {
+    width: 10px;
+    cursor: pointer;
+}
+.admin-links-box::-webkit-scrollbar-thumb:hover {
+    background: #212529; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 둥근 테두리 */
+    
+    background-clip: padding-box;
+    border: 2px solid transparent;
+  }
+.admin-links-box::-webkit-scrollbar-track:hover {
+    background: rgba(2, 25, 5, 0.1);  /*스크롤바 뒷 배경 색상*/
+    box-shadow: inset 0px 0px 5px white;
+  }
+/*제목이 있는 div*/
+.nav-headline{
+    text-align: center;
+}
+.admin-links-list{
+    border-top: 1px solid #e2e6ee;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-link-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 50px;
+    width: 80%;
+}
+/*---------------------------------------------------------------------------------------*/
+/* ======================================관리자링크 박스================================== END*/
+
+
+
+
+
+
+
+/* =================================게시판관리 푸터=============================== */
+/*---------------------------------------------------------------------------------*/
+/*footer 덮어쓰기 설정*/
+
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-direction: column;
+    flex-wrap: wrap;
+
+
+    
+    width: 430px;
+    background-color: #ffffff !important;
+    color: #111111 !important;
+
+    margin-top: 20px;
+}
+
+
+footer>div{
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+footer>div>*{
+    margin: 0 2px;
+
+}
+
+/*---------------------------------------------------------------------------------*/
+/* =================================게시판관리 푸터=============================== */
+
+
+
+
+/*=============================================================================================================================================================================================*/
+/*================================================================================관리자페이지================================================================================================*/
+/*=============================================================================================================================================================================================*/

@@ -11,14 +11,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 회원등록 -->
 	<insert id="insertMembersToDB">
-		insert into members(memberPhotoName,memberPhotoURL,memberID,memberPW,memberName,memberAge,memberBirth,memberEmail,memberTel,
-		memberPolicyAgreement,memberTermsAgreement,memberEventAgreement
-		memberRegdate,memberGrant
-		)
-		values(#{memberPhotoName},#{memberPhotoURL},#{memberID},#{memberPW},#{memberName},#{memberAge},#{memberBirth},#{memberEmail},#{memberTel},
-		#{memberPolicyAgreement},#{memberTermsAgreement},#{memberEventAgreement},
-		#{memberRegdate},#{memberGrant}
-		)
+		insert into members(memberPhotoName,memberPhotoPath,memberPhotoRegdate,memberID,memberPW,memberName,memberAge,memberBirth,memberEmail,memberTel,memberPolicyAgreement,memberTermsAgreement,memberEventAgreement,memberRegdate,memberGrant)
+		values(#{memberPhotoName},#{memberPhotoPath},#{memberPhotoRegdate},#{memberID},#{memberPW},#{memberName},#{memberAge},#{memberBirth},#{memberEmail},#{memberTel},#{memberPolicyAgreement},#{memberTermsAgreement},#{memberEventAgreement},#{memberRegdate},#{memberGrant})
 	</insert>
+	<!-- 회원수 조회 -->
+	<select id="getMemberCount" resultType="int">
+		SELECT COUNT(*) FROM members
+	</select>
+	
+	<!-- 아이디중복체크 -->
+	<select id="checkDuplicateIdFromDB" resultType="boolean">
+	  SELECT EXISTS(SELECT 1 FROM members WHERE memberID = #{memberID}) AS isDuplicate;
+	</select>
+
+
+	<!-- 회원아이디로 회원정보 가져오기 -->
+	<select id="getMemberInfoBymemberID" resultType="memberDTO">
+		select * from members where memberID =  #{memberID}
+	</select>
+
+
 
 </mapper>

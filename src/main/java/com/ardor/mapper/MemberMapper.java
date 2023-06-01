@@ -13,5 +13,16 @@ public interface MemberMapper {
 	public int insertMembersToDB(MemberDTO memberDTO);
 	
 	
-
+	// 회원수 조회
+	public int getMemberCount();
+	
+	
+	// 아이디중복체크
+	public boolean checkDuplicateIdFromDB(String memberID);
+	
+		
+	
+	// 회원 아이디로 회원정보 가져오기
+	public MemberDTO getMemberInfoBymemberID(String memberID);
+	
 }

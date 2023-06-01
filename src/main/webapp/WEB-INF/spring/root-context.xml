@@ -45,5 +45,10 @@
 	<!-- 5.Component Scanner -->
 	<context:component-scan base-package="com.ardor.service"/>
 	
+	<!-- 6. 스프일 시큐리티 -->
+    <!-- XML 설정 파일에서 PasswordEncoder 빈 등록 -->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+	
+	
 </beans>
 
