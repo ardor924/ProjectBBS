@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +39,8 @@ public class BoardController {
 		@RequestParam(defaultValue = "10") int pageRows,
 		@RequestParam(defaultValue = "TITLE") SearchTarget searchTarget,
 		@RequestParam(defaultValue = "") String keyWord,
-		@RequestParam(defaultValue = "IDX_DESC") SortOrder orderBy
+		@RequestParam(defaultValue = "IDX_DESC") SortOrder orderBy,
+		@ModelAttribute PostingDTO postingDTO 
 	) 
 	{
 		
@@ -59,8 +61,17 @@ public class BoardController {
 		String bbsName = boardService.getRealNameFromUrlName(bbsNameForURL); // (URLName => RealName)
 		// 게시판 PK번호 가져오기
 		int bbsNo = boardService.getBbsNoByUrlName(bbsNameForURL); // (URL이름으로 조회)	
-
 		
+		// 디버그확인용 DTO 세팅
+//		SortOrder orderBy = SortOrder.IDX_DESC;
+//		SearchTarget searchTarget = SearchTarget.TITLE;
+//		String keyWord = "음식";
+		
+		System.out.println("orderBy :"+orderBy);
+		System.out.println("searchTarget :"+searchTarget);
+		
+		// DTO에 파라미터 세팅
+		postingDTO = new PostingDTO(bbsNo,  orderBy,  searchTarget,  keyWord); 
 		
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
@@ -73,15 +84,15 @@ public class BoardController {
 		
 		// 게시판 페이지네이션
 		BoardPagingDTO bp = postingService.setBoardPaging(totalRows,pageRows,currentPage);
-		System.out.println("bp : "+bp.toString());
+	
 		// 게시글 전체 조회
-		List<PostingDTO> postList = postingService.getBoardPostings(bbsNo, bp); // (조회하려는 게시판 PK값 이용)
+		List<PostingDTO> postList = postingService.getBoardPostings(postingDTO, bp); // (조회하려는 게시판 PK값 이용)
 		
 		// ========================유틸기능 영역================== //
 		
 		
 		// 오늘날짜인지 확인
-		boolean regDateIsToday = postingService.hasTodayPostings(bbsNo);  // (게시글 생성일이 오늘날자인경우 작성한 시,분만 표시하는 용도)
+		// boolean regDateIsToday = postingService.hasTodayPostings(bbsNo);  // (게시글 생성일이 오늘날자인경우 작성한 시,분만 표시하는 용도)
 		
 		// 응답메세지
 		String headerMsg = "게시글 리스트";
@@ -95,7 +106,7 @@ public class BoardController {
 		{	
 			model.addAttribute("bbsNameForURL", bbsNameForURL);
 			model.addAttribute("bbsName", bbsName);
-			model.addAttribute("regDateIsToday", regDateIsToday ? true : null); // (게시글이 오늘작성되었는지 판단하여 true일경우 JSP에는 시간과 분만 표시)
+			// model.addAttribute("regDateIsToday", regDateIsToday ? true : null); // (게시글이 오늘작성되었는지 판단하여 true일경우 JSP에는 시간과 분만 표시)
 			model.addAttribute("postList", postList);
 			model.addAttribute("bp", bp);
 			model.addAttribute("resultMSG", goodMsg);

@@ -67,9 +67,18 @@ public class PostingDTO {
 	
 	// 기본 생성자
 	public PostingDTO() {}
+	
+	
+	// 파라미터 생성자
+	public PostingDTO(int bbsNo, SortOrder orderBy, SearchTarget searchTarget, String keyWord) {
+		super();
+		this.bbsNo = bbsNo;
+		this.orderBy = orderBy;
+		this.searchTarget = searchTarget;
+		this.keyWord = keyWord;
+	}
 
-
-
+	// 인자 생성자
 	public PostingDTO(int postNo, int bbsPostNo, String postWriter, String postTitle, String postContents,
 			isNotice postNotice, int postHit, Date postRegdate, int bbsNo, int pageRows, int pageStartRowNum,
 			int currentPage, SortOrder orderBy, SearchTarget searchTarget, String keyWord) {
@@ -92,11 +101,9 @@ public class PostingDTO {
 	}
 
 
-
 	public int getPostNo() {
 		return postNo;
 	}
-
 
 
 	public void setPostNo(int postNo) {
@@ -104,11 +111,9 @@ public class PostingDTO {
 	}
 
 
-
 	public int getBbsPostNo() {
 		return bbsPostNo;
 	}
-
 
 
 	public void setBbsPostNo(int bbsPostNo) {
@@ -116,11 +121,9 @@ public class PostingDTO {
 	}
 
 
-
 	public String getPostWriter() {
 		return postWriter;
 	}
-
 
 
 	public void setPostWriter(String postWriter) {
@@ -128,11 +131,9 @@ public class PostingDTO {
 	}
 
 
-
 	public String getPostTitle() {
 		return postTitle;
 	}
-
 
 
 	public void setPostTitle(String postTitle) {
@@ -140,11 +141,9 @@ public class PostingDTO {
 	}
 
 
-
 	public String getPostContents() {
 		return postContents;
 	}
-
 
 
 	public void setPostContents(String postContents) {
@@ -152,11 +151,9 @@ public class PostingDTO {
 	}
 
 
-
 	public isNotice getPostNotice() {
 		return postNotice;
 	}
-
 
 
 	public void setPostNotice(isNotice postNotice) {
@@ -164,11 +161,9 @@ public class PostingDTO {
 	}
 
 
-
 	public int getPostHit() {
 		return postHit;
 	}
-
 
 
 	public void setPostHit(int postHit) {
@@ -176,11 +171,9 @@ public class PostingDTO {
 	}
 
 
-
 	public Date getPostRegdate() {
 		return postRegdate;
 	}
-
 
 
 	public void setPostRegdate(Date postRegdate) {
@@ -188,11 +181,9 @@ public class PostingDTO {
 	}
 
 
-
 	public int getBbsNo() {
 		return bbsNo;
 	}
-
 
 
 	public void setBbsNo(int bbsNo) {
@@ -200,11 +191,9 @@ public class PostingDTO {
 	}
 
 
-
 	public int getPageRows() {
 		return pageRows;
 	}
-
 
 
 	public void setPageRows(int pageRows) {
@@ -212,11 +201,9 @@ public class PostingDTO {
 	}
 
 
-
 	public int getPageStartRowNum() {
 		return pageStartRowNum;
 	}
-
 
 
 	public void setPageStartRowNum(int pageStartRowNum) {
@@ -224,11 +211,9 @@ public class PostingDTO {
 	}
 
 
-
 	public int getCurrentPage() {
 		return currentPage;
 	}
-
 
 
 	public void setCurrentPage(int currentPage) {
@@ -236,11 +221,9 @@ public class PostingDTO {
 	}
 
 
-
 	public SortOrder getOrderBy() {
 		return orderBy;
 	}
-
 
 
 	public void setOrderBy(SortOrder orderBy) {
@@ -248,11 +231,9 @@ public class PostingDTO {
 	}
 
 
-
 	public SearchTarget getSearchTarget() {
 		return searchTarget;
 	}
-
 
 
 	public void setSearchTarget(SearchTarget searchTarget) {
@@ -260,21 +241,17 @@ public class PostingDTO {
 	}
 
 
-
 	public String getKeyWord() {
 		return keyWord;
 	}
-
 
 
 	public void setKeyWord(String keyWord) {
 		this.keyWord = keyWord;
 	}
 
-	
-	
-	
-	
+
+
 
 
 

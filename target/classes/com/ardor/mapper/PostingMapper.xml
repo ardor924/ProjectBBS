@@ -84,13 +84,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 검색어 필터링 -->
 	<sql id="searchResult">
 	    <choose>
-	        <when test="searchTarget == 'TITLE'">
-	            and postTitle like CONCAT('%', #{keyWord}, '%')
-	        </when>
-	        <when test="searchTarget == 'WRITER'">
+	        <when test="searchTarget.name() == 'WRITER'">
 	            and postWriter like CONCAT('%', #{keyWord}, '%')
 	        </when>
-	        <when test="searchTarget == 'CONTENTS'">
+	        <when test="searchTarget.name() == 'TITLE'">
+	            and postTitle like CONCAT('%', #{keyWord}, '%')
+	        </when>
+	        <when test="searchTarget.name() == 'CONTENTS'">
 	            and postContents like CONCAT('%', #{keyWord}, '%')
 	        </when>
 	    </choose>
@@ -99,19 +99,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 순서 필터링 -->
 	<sql id="ordering">
 	    <choose>
-	        <when test="orderBy == 'IDX_ASC'">
+	        <when test="orderBy.name() == 'IDX_ASC'">
 	            order by bbsNo ASC
 	        </when>
-	        <when test="orderBy == 'REGDATE_DESC'">
+	        <when test="orderBy.name() == 'REGDATE_DESC'">
 	            order by postRegdate DESC
 	        </when>
-	        <when test="orderBy == 'REGDATE_ASC'">
+	        <when test="orderBy.name() == 'REGDATE_ASC'">
 	            order by postRegdate ASC
 	        </when>
-	        <when test="orderBy == 'HIT_DESC'">
+	        <when test="orderBy.name() == 'HIT_DESC'">
 	            order by postHit DESC
 	        </when>
-	        <when test="orderBy == 'HIT_ASC'">
+	        <when test="orderBy.name() == 'HIT_ASC'">
 	            order by postHit ASC
 	        </when>
 	        <otherwise>

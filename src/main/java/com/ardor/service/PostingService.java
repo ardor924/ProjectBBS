@@ -21,7 +21,7 @@ public interface PostingService {
 	public PostingDTO getPosting(int postNo);
 	
 	// 게시글 전체 조회
-	public List<PostingDTO> getBoardPostings(int bbsNo , BoardPagingDTO bp); // (조회하려는 게시판DTO정보 이용)
+	public List<PostingDTO> getBoardPostings(PostingDTO postingDTO , BoardPagingDTO bp); // (조회하려는 게시판DTO정보 이용)
 	
 
 	// (Total)모든 게시판의 게시글 조회
@@ -32,6 +32,7 @@ public interface PostingService {
 	
 
 	
+	// 파라미터 세팅
 	
 	
 	
@@ -53,7 +54,7 @@ public interface PostingService {
 	
 
 	// 게시판등록 날짜가 오늘날짜라면 true 리턴 
-	public boolean hasTodayPostings(int bbsNo);
+	// public boolean hasTodayPostings(int bbsNo);
 	
 	// 게시글 조회수 증가
 	public void addHitUp(PostingDTO postingDTO);

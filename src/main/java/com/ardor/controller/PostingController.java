@@ -215,7 +215,7 @@ public class PostingController {
 		// ========================유틸기능 영역================== //
 		
 		// 오늘날짜인지 확인
-		boolean regDateIsToday = postingService.hasTodayPostings(bbsNo);  // (게시글 생성일이 오늘날자인경우 작성시간 분만 표시하는 용도)
+		// boolean regDateIsToday = postingService.hasTodayPostings(bbsNo);  // (게시글 생성일이 오늘날자인경우 작성시간 분만 표시하는 용도)
 		
 		
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
@@ -226,7 +226,7 @@ public class PostingController {
 		// ========================파라미터 전송 영역================== //
 		
 		// 파라미터 보내기
-		model.addAttribute("regDateIsToday", regDateIsToday); 
+		//model.addAttribute("regDateIsToday", regDateIsToday); 
 		model.addAttribute("postingDTO", postingDTO);
 		model.addAttribute("bbsNameForURL", bbsNameForURL);
 		model.addAttribute("bbsName", bbsName);

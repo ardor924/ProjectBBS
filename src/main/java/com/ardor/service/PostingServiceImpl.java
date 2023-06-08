@@ -56,17 +56,17 @@ public class PostingServiceImpl implements PostingService{
 	
 	// 게시글 전체 조회(특정게시판 PK값 이용)
 	@Override
-	public List<PostingDTO> getBoardPostings(int bbsNo,BoardPagingDTO bp) {
-		
-		PostingDTO postingDTO = new PostingDTO();
-		
+	public List<PostingDTO> getBoardPostings(PostingDTO postingDTO ,BoardPagingDTO bp) {
+				
 		
 		int pageRows = bp.getPageRows();
 		int pageStartRowNum =  bp.getPageStartRowNum(); 
 		
-		postingDTO.setBbsNo(bbsNo);
 		postingDTO.setPageRows(pageRows);
 		postingDTO.setPageStartRowNum(pageStartRowNum);
+		
+		System.out.println("postingDTO : "+ postingDTO.getSearchTarget().toString());
+		
 		
 		return postingMapper.getBoardPostingsByDTO(postingDTO);
 	}
@@ -172,28 +172,28 @@ public class PostingServiceImpl implements PostingService{
 	
 	
 
-	
-	// 게시판등록 날짜가 오늘날짜라면 true 리턴 
-	@Override
-	public boolean hasTodayPostings(int bbsNo) {
-		
-		BoardPagingDTO bp = new BoardPagingDTO(); // <- 값없는 임시 더미데이터
-	    List<PostingDTO> postList = getBoardPostings(bbsNo,bp);
-	    List<PostingDTO> todayPostList = new ArrayList<>();
-
-	    for (PostingDTO postDTO : postList) {
-	        Date postRegdate = postDTO.getPostRegdate();
-	        boolean regDateIsToday = utilService.compareToRegDateFromNowDate(postRegdate);
-	        System.out.println("regDateIsToday : "+regDateIsToday);
-	        if (regDateIsToday) {
-	            todayPostList.add(postDTO);
-	        }
-	    }
-
-	    return !todayPostList.isEmpty();
-	}
-	
-	
+//	
+//	// 게시판등록 날짜가 오늘날짜라면 true 리턴 
+//	@Override
+//	public boolean hasTodayPostings(int bbsNo) {
+//		
+//		BoardPagingDTO bp = new BoardPagingDTO(); // <- 값없는 임시 더미데이터
+//	    List<PostingDTO> postList = getBoardPostings(postingDTO,bp);
+//	    List<PostingDTO> todayPostList = new ArrayList<>();
+//
+//	    for (PostingDTO postDTO : postList) {
+//	        Date postRegdate = postDTO.getPostRegdate();
+//	        boolean regDateIsToday = utilService.compareToRegDateFromNowDate(postRegdate);
+//	        System.out.println("regDateIsToday : "+regDateIsToday);
+//	        if (regDateIsToday) {
+//	            todayPostList.add(postDTO);
+//	        }
+//	    }
+//
+//	    return !todayPostList.isEmpty();
+//	}
+//	
+//	
 	// 게시글 조회수증가
 	@Override
 	public void addHitUp(PostingDTO postingDTO) {
