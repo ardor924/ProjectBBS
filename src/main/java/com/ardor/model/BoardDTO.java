@@ -7,6 +7,7 @@ public class BoardDTO {
 	
 	private int bbsNo;
 	private String bbsName;
+	private String bbsNameForURL;
 	private String bbsDescription;
 	private Date bbsCreateDate;
 	private int catNo;
@@ -16,10 +17,12 @@ public class BoardDTO {
 	public BoardDTO() {}
 
 
-	public BoardDTO(int bbsNo, String bbsName, String bbsDescription, Date bbsCreateDate, int catNo) {
+	public BoardDTO(int bbsNo, String bbsName, String bbsNameForURL, String bbsDescription, Date bbsCreateDate,
+			int catNo) {
 		super();
 		this.bbsNo = bbsNo;
 		this.bbsName = bbsName;
+		this.bbsNameForURL = bbsNameForURL;
 		this.bbsDescription = bbsDescription;
 		this.bbsCreateDate = bbsCreateDate;
 		this.catNo = catNo;
@@ -43,6 +46,16 @@ public class BoardDTO {
 
 	public void setBbsName(String bbsName) {
 		this.bbsName = bbsName;
+	}
+
+
+	public String getBbsNameForURL() {
+		return bbsNameForURL;
+	}
+
+
+	public void setBbsNameForURL(String bbsNameForURL) {
+		this.bbsNameForURL = bbsNameForURL;
 	}
 
 
@@ -73,7 +86,10 @@ public class BoardDTO {
 
 	public void setCatNo(int catNo) {
 		this.catNo = catNo;
-	};
+	}
+
+
+	
 	
 	
 	

@@ -56,7 +56,7 @@
 <!-- 로그인 유효성검사 -->
 <script src="${ctx}/resources/js/members/login_valid.js"></script>
 <!-- 로그인 결과 메세지 -->
-<script src="${ctx}/resources/js/common/result_msg.js"></script>
+<script src="${ctx}/resources/js/members/login_result_msg.js"></script>
 <!-- 결과 메세지가져오기 -->
 <script type="text/javascript">
 var resultMSG = "<%= request.getAttribute("resultMSG") %>";

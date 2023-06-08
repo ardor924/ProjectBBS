@@ -45,6 +45,9 @@
             </div>
             </c:if>
             <!-- 관리자 로그인시 관리자 페이지 표시 -->
+            <div class="gnb-item">
+                <a href="${ctx}/bbs/viewTest" class="gnb-link">게시판뷰테스트</a>
+            </div>            
         </div>
     </div>
     <!-- 글로벌내비 -->

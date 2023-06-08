@@ -5,6 +5,7 @@ document.querySelector(".bbs-reg-form").addEventListener("submit", function(even
   // 각 입력 필드의 값 가져오기
   var catCode = document.getElementById("catCode").value;
   var catName = document.getElementById("bbsName").value;
+  var catNameForURL = document.getElementById("catNameForURL").value;
 
   // 에러 메시지 출력 함수
   function displayErrorMessage(elementId, message) {
@@ -26,7 +27,7 @@ document.querySelector(".bbs-reg-form").addEventListener("submit", function(even
       return;
   }
 
-  if (bbsName.trim() === "") {
+  if (bbsName.trim() === "" || bbsNameForURL.trim() === "") {
       displayErrorMessage("bbsName-alert", "카테고리명을 입력하세요.");
       return;
   }

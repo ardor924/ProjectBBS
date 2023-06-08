@@ -2,7 +2,8 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <!-- 2 taglib-->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> <!-- 날짜시간 포맷형식지정 -->
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> <!-- fn:escapeXml() :  특수 문자를 HTML 엔티티로 인코딩하는 함수제공  -->
 <!-- 3 contextPath-->
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
@@ -33,8 +34,12 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/global/font.css"> 
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/global/button.css"> 
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/global/global.css"> 
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/api/ckeditor5.css"> 
 	
 	<!-- 8. 공통 JS -->
-	<script src="${ctx}/resources/js/common/redirect_to_login.js"></script>
+	<script type="text/javascript">var ctx = "<%= request.getContextPath() %>";</script>
+	<script type="text/javascript">var resultMSG = "<%= request.getAttribute("resultMSG") %>";</script>
+	<script type="text/javascript">var bbsNameForURL = "<%= request.getAttribute("bbsNameForURL")%>";</script>
+	<script src="${ctx}/resources/js/common/redirect_message.js"></script>
 
 </head>

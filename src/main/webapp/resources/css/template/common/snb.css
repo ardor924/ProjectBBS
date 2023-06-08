@@ -12,8 +12,11 @@
 /* snb - 나의정보칸*/
 .snb-myinfo{
     border: 2px solid #e2e6ee;
+    border-radius: 5px;
     padding: 0 15px;
     margin-bottom: 30px;
+    
+    background-color: #fff;
 }
 
 
@@ -33,14 +36,22 @@
     flex-grow: 1;
 }   
 
+/*카테고리 타이틀 라인*/
+.snb-title-wrap{
+	border-top : 1px solid #2f2f2f35;
+	border-bottom : 1px solid #2f2f2f35;
+	
 
+}
 /* snb 텍스트 설정*/
 .snb-title{
     margin: 10px 0;
+    
 }
 .snb-text{
     padding: 0;
     margin: 0;  
+    opacity: 1;
 }
 
 /* --------------------------- */
@@ -48,7 +59,10 @@
 /* snb - 카테고리 칸*/
 .snb-category{
     border: 2px solid #e2e6ee;
+    border-radius: 5px;
     padding: 0px 15px;
+    
+    background-color: #fff;
 }
 
 /* 카테고리  목록  리스트 스타일 설정*/

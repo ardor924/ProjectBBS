@@ -23,25 +23,7 @@ public class AdminController {
 	// 관리자 메인 페이지 이동
 	@GetMapping("/admin")
 	public String adminMainPage(Model model) {
-		
-		// 카테고리 & 게시판 전체 내역 가져오기
-		List<CategoryDTO> catList  = categoryService.getAllCategoryList();
-		List<BoardDTO> boardList = boardService.getAllBoardList();
-		
-		// 파라미터 보내기
-		if(catList != null && boardList != null)
-		{
-			model.addAttribute("catList", catList);
-			model.addAttribute("boardList", boardList);
-			model.addAttribute("resultMSG", "카테고리,게시판 목록 불러오기 성공");
-			return "/admin/main_page";
-		}
-		else
-		{
-			model.addAttribute("resultMSG", "카테고리,게시판 목록 불러오기 실패");
-			return "/admin/main_page";
-		}
-		
+		return "/admin/main_page";
 	}
 	
 	// 회원관리 페이지 이동

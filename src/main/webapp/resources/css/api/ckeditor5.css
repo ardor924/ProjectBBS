@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+
+/*---------------editor(writePage,editPage)----------------*/
+.ck-editor__editable[aria-label="편집기 편집 영역: main"] {
+  min-height: 550px;
+
+  font-size: 15px;
+  padding: 50px 45px;
+}
+
+.ck-content .image {
+  max-width: 80%;
+  margin: 20px auto;
+}
+
+.ck-editor__editable[aria-label="이미지용 캡션"]{
+	position : relative;
+	height : auto !important;
+	background-color: #f7f7f7;
+	font-size: 1.2em;
+	border: 1px solid #e2e6ee !important;
+
+}
+
+.ck-content hr{
+	color : #6e7e8e !important;
+	background-color:#6e7e8e !important;
+}
+
+/*---------------editor(writePage,editPage)----------------*/
+
+/* ------------------------view------------------------------*/
+.view-contents .image-style-align-right {
+    float: right;
+    margin-left: var(--ck-image-style-spacing);
+}
+
+
+.view-contents figure.image {
+	margin: .9em auto;
+	text-align: center;
+	width: fit-content;
+}
+
+
+.view-contents .image.image_resized {
+    display: block;
+    box-sizing: border-box;
+}
+.view-contents .image.image_resized img {
+    width: 100%;
+}
+
+.view-contents .image-style-align-left {
+    float: left;
+    margin-left: var(--ck-image-style-spacing);
+}
+
+.view-contents figcaption{
+	background-color: #f7f7f7 !important;	
+	border: 0.5px solid #e2e6ee !important;
+}
+
+/* ------------------------view------------------------------*/

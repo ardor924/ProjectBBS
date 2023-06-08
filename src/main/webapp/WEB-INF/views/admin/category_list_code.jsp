@@ -6,20 +6,20 @@
         <h5 class="category-title">카테고리 목록</h5>
     </div>
     <!-- 반복문 적용 -->
-    	<c:forEach var="cLi" items="${catList}">
-    <!-- <hr> -->
-    <div class="row-none">
-        <h6 class="category-title text-center">${cLi.catName}</h6>
-    </div>
-    <!-- <hr> -->    
+    <c:forEach var="cLi" items="${catList}">
+    <div class="category-title-wrap">
+    	<div class="row-none">
+        	<h6 class="category-title text-center">${cLi.catName}</h6>
+    	</div>
+    </div>	
     <ul class="row-none ps-4">
-    		<c:forEach var="bLi" items="${boardList}">
-    		<c:if test="${cLi.catNo eq bLi.catNo}">
+    	<c:forEach var="bLi" items="${boardList}">
+    	<c:if test="${cLi.catNo eq bLi.catNo}">
         <li class="category-item"><a href="../bbs_page/bbs_101.html">${bLi.bbsName}</a></li>
-    		</c:if>
-    		</c:forEach>
-    </ul>
+    	</c:if>
     	</c:forEach>
+    </ul>
+   	</c:forEach>
     <!-- 반복문 적용 -->
 </div>
 <!-- 카테고리 사이드 박스 : END -->

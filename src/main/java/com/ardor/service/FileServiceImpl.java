@@ -3,6 +3,8 @@ package com.ardor.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -88,15 +90,20 @@ public class FileServiceImpl implements FileService{
 	        }
 	        
 	        	System.out.println("DB등록 성공");
+	        	
+	        	
 	        // 이미지 업로드 성공 응답 데이터 생성
 	        String responseMessage = "이미지가 업로드되었습니다.";
 	        
 	        
-	        String imageUrl = "http://localhost:8080"+"/myapp"+"/images/"+fileStrRegdate + "/" + fileName;
+	        // 파일 이름 특수 문자 인코팅 에러처리
+        	String encodedFileName = URLEncoder.encode(fileName, "UTF-8");
+        	String imageUrl = "http://localhost:8080"+"/myapp"+"/images/"+fileStrRegdate + "/" + encodedFileName;
+	        
 	        
 	        
 	        response.put("url", imageUrl);
-	        response.put("message", responseMessage);
+	        response.put("responseMessage", responseMessage);
 	        response.put("filePath", filePath);
 	        response.put("fileRealName", fileRealName);
 	        

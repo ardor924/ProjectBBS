@@ -55,6 +55,32 @@ ClassicEditor
 
     placeholder: '내용을 입력해 주세요',
 
+	image: {
+		resizeUnit: "px",
+		resizeOptions: [ {
+			name: 'resizeImage:original',
+			value: null,
+			icon: 'original'
+		},
+		{
+			name: 'resizeImage:25',
+			value: '25',
+			icon: 'small'
+		},
+		{
+			name: 'resizeImage:50',
+			value: '50',
+			icon: 'medium'
+		},
+		{
+			name: 'resizeImage:75',
+			value: '75',
+			icon: 'large'
+		} ],	
+		styles: ['full','alignLeft','alignRight','side','block' ],
+		toolbar:[ 'resizeImage:original' ,'imageTextAlternative','toggleImageCaption', 'imageStyle:alignLeft', 'imageStyle:block', 'imageStyle:alignRight', 'linkImage']
+	},
+
     fontFamily: {
       options: [
         'default',
@@ -124,9 +150,12 @@ ClassicEditor
 
 
 
-/*--------------------------------*/
-
-
+/*-------------------------------------UploadAdapter------------------------------------*/
+// 게시판이름 가져오기 !* url요청 보낼때 필수
+var bbsNameInput = document.getElementById("bbsNameInput").value	
+var bbsNameSelect = document.getElementById("bbsNameSelect").value	
+console.log("bbsNameInput : "+document.getElementById("bbsNameInput").value);
+console.log("bbsNameSelect : "+document.getElementById("bbsNameSelect").value);
 
 class UploadAdapter {
     constructor(loader) {
@@ -142,8 +171,22 @@ class UploadAdapter {
     }
 
     _initRequest() {
+	
+
+
+		// Select창에 게시판이름이 없는경우 
+			// => 리턴시키고 알럿 메세지 송출("게시판을 선택해주세요")  			
+		if(bbsNameInput != bbsNameSelect || bbsNameSelect == "null" || bbsNameSelect == "")
+		{
+			alert("게시판을 찾지 못했습니다 게시판을 선택한뒤 이미지를 첨부해주세요");
+			return;
+		}
+			
+			
+		// URL용 게시판이름값을 요청
+		var bbsNameForURL = document.getElementById("bbsNameForURL").value
         const xhr = this.xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:8080/myapp/uploadImage.do', true);
+        xhr.open('POST', ctx+'/bbs/'+bbsNameForURL+"/writing/upload", true);
         xhr.responseType = 'json';
     }
 
@@ -156,6 +199,15 @@ class UploadAdapter {
         xhr.addEventListener('abort', () => reject())
         xhr.addEventListener('load', () => {
             const response = xhr.response
+
+			var msg = response.responseMessage;	
+			console.log("msg :"+msg);
+			var filePath = response.filePath;	
+			var fileRealName = response.fileRealName;	
+
+
+
+
             if(!response || response.error) {
                 return reject( response && response.error ? response.error.message : genericErrorText );
             }
@@ -168,7 +220,7 @@ class UploadAdapter {
 
     _sendRequest(file) {
         const data = new FormData()
-        data.append('upload',file)
+        data.append('bbsIMG',file)
         this.xhr.send(data)
     }
 }

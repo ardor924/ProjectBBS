@@ -27,13 +27,17 @@
         </fieldset>
         <fieldset class="row-none m-0">
             <div class="row-none">
-                <label for="bbsName" class="label-field"><span class="text-danger me-1">*</span>게시판이름</label>
+                <label for="bbsName" class="label-field"><span class="text-danger me-1">*</span>게시판이름 / 영문이름</label>
                 <span class="form-alert" id="bbsName-alert"></span>
             </div>
             <div class="input-box">
                 <input type="text" class="input-box-element form-control" 
                 name="bbsName" id="bbsName" placeholder="ex) Java-Spring , Python 크롤링 , 언리얼엔진 ...">
             </div>
+            <div class="input-box mt-3">
+                <input type="text" class="input-box-element form-control" 
+                name="catNameForURL" id="catNameForURL" placeholder="게시판 URL용 영문명 입력">
+            </div>            
         </fieldset>
         <fieldset class="row-none mb-3">
             <div class="row-none">
@@ -42,7 +46,7 @@
             </div>
             <div class="input-box">
                 <textarea class="input-box-element form-control" 
-                name="bbsDescription" id="bbsDescription" placeholder="ex) 웹개발 : 스프링레거시MVC 프로젝트 학습용 게시판" rows="4"></textarea>
+                name="bbsDescription" id="bbsDescription" placeholder="ex) 웹개발 : 스프링레거시MVC 프로젝트 학습용 게시판" rows="2"></textarea>
             </div>
         </fieldset>
         <fieldset class="row-center mb-3">

@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%-- <%@ include file="/WEB-INF/views/template/layout/html_top.jsp" %>    --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/template/layout/html_top.jsp" %>   
 <!-- 사이드 내비 : START -->
 <div class="snb">
 	<c:choose>
@@ -67,19 +66,26 @@
 
     <div class="snb-category">
         <div class="row-center">
-            <h5 class="snb-title">전체 글 보기</h5>
+        	<a href="${ctx}/bbs">
+            	<h5 class="snb-title">전체 글 보기</h5>
+        	</a>
         </div>
         <!-- 반복문 적용 -->
-        	<c:forEach var="cLi" items="${catList}">
-        <div class="row-none border-top border-bottom">
-            <h6 class="snb-title text-center">${cLi.catName}</h6>
+        <c:forEach var="cLi" items="${catList}">
+        <div class="snb-title-wrap">	
+        	<div class="row-none">
+            	<h6 class="snb-title text-center">${cLi.catName}</h6>
+        	</div>
         </div>
         <ul class="row-none ps-4">
-            	<c:forEach var="bLi" items="${boardList}">
-    			<c:if test="${cLi.catNo eq bLi.catNo}">
-            <li class="snb-text"><a href="../bbs_page/bbs_101.html">${bLi.bbsName}</a></li>
-            </c:if>
-    			</c:forEach>
+	        <c:forEach var="bLi" items="${boardList}">
+	            <c:if test="${cLi.catNo eq bLi.catNo}">
+	                <li class="snb-text">
+	                    <c:url var="encodedUrl" value="/bbs/${fn:escapeXml(bLi.bbsNameForURL)}"/>
+	                    <a href="${encodedUrl}">${bLi.bbsName}</a>
+	                </li>
+	            </c:if>
+	        </c:forEach>
         </ul>
         </c:forEach>
         <!-- 반복문 적용 -->

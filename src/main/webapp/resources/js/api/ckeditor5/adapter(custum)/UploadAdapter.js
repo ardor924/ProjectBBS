@@ -13,7 +13,7 @@ class UploadAdapter {
 
     _initRequest() {
         const xhr = this.xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://example.com:8080/myapp/uploadImage.do', true);
+        xhr.open('POST', ctx+'/images', true);
         xhr.responseType = 'json';
     }
 
@@ -26,6 +26,13 @@ class UploadAdapter {
         xhr.addEventListener('abort', () => reject())
         xhr.addEventListener('load', () => {
             const response = xhr.response
+
+			var url = response.url;
+			var msg = response.responseMessage;	
+			console.log("url :"+url);
+			console.log("msg :"+msg);
+
+
             if(!response || response.error) {
                 return reject( response && response.error ? response.error.message : genericErrorText );
             }

@@ -1,0 +1,185 @@
+@charset "UTF-8";
+
+/* =====================컨텐츠 설정============================ */
+
+/* 컨텐츠 설정 */
+.contents{
+    display: flex;
+    padding: 0px 0px 10px 0px;
+
+}
+/* =====================컨텐츠 설정============================ */
+
+
+
+/* =============================메인================================== */
+
+.main{
+    flex-grow: 1;
+    padding: 10px 0px 10px 10px;
+}
+
+.bbs-area{
+    padding: 30px;
+    border: 2px solid #e2e6ee;
+    border-radius: 5px;
+    
+    background-color: #fff;
+}
+
+.bbs-headline{
+    margin-bottom: 20px;
+}
+.bbs-main{
+    margin-bottom: 0px;
+}
+.bbs-bottom{
+    margin-bottom: 0px;
+}
+
+.section-line{
+    margin-bottom: 20px;
+
+}
+
+
+.bbs-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.post-search{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 500px;
+}
+
+.post-search-frm{
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding: 5px 0;
+}
+
+/*검색창 3부분 옵션*/
+.search-option{
+    width:100px !important;
+}
+
+.search-option:focus{
+}
+
+.search-input{
+    width: 250px !important;
+    height: 40px !important;
+}
+
+.search-input:focus{
+}
+
+.search-btn{
+    width: 40px;
+    height: 40px;
+}
+
+/*게시글 제목 링크 밑줄설정*/
+.post-link:hover{
+    text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+
+
+/*------------------------------------------------------*/
+/*Sample2 의 writing 설정 리팩토링 필수!!!*/
+
+.writing-form{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.textarea-wrap{
+    height: 50px;
+    width: 100%;
+    background-color: #fff;
+    margin-bottom: 20px;
+    border: 1px solid #222;
+    
+}
+
+.textara-input{
+	width: 100%;	
+    border: none;
+    padding: 10px 10px;
+}
+
+
+
+.btn-wrap{
+    display: flex;
+    justify-content: center;
+}
+
+.btn-item{
+    padding: auto;
+    width: 100px;
+    margin: 10px 20px;
+}
+
+.test{
+	background-color: red;
+}
+
+.textarea-none{
+	margin: 0;
+    padding: 0;
+    width: 100%;
+    border: none;
+    resize: none; 
+    overflow: hidden; 
+}
+
+.section-line{
+    margin: 10px 0;
+    width: 100%;
+}
+
+
+
+/*------------------------------------------------------*/
+/*23-06-20 추가*/
+.select-boards{
+	width: 800px
+}
+
+
+
+/* 공지사항등록 체크설정*/
+.notice-check{
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    
+    background-color: #f423a215;
+    box-shadow: 1em;
+    border-radius: 10px;
+    padding: 10px;
+}
+.notice_checkbox {
+    margin-right: 10px;
+    cursor: pointer;
+}
+/*체크박스 크기지정*/
+input[type=checkbox] {
+    width: 20px;
+    height: 20px;
+}

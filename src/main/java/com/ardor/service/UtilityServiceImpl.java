@@ -1,5 +1,7 @@
 package com.ardor.service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,13 +10,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ardor.mapper.MemberMapper;
+import com.ardor.mapper.PostingMapper;
 import com.ardor.model.MemberDTO;
+import com.ardor.model.PostingDTO;
 import com.ardor.model.MemberDTO.AgreementStatus;
 import com.ardor.model.MemberDTO.MemberGrant;
+import com.ardor.model.PostingDTO.isNotice;
 
 /*import com.ardor.model.MemberDTO.AgreementStatus;
 import com.ardor.model.MemberDTO.MemberGrant;
@@ -24,6 +28,23 @@ public class UtilityServiceImpl implements UtilityService{
 
 	
 	@Autowired MemberMapper memberMapper;
+	@Autowired PostingMapper postingMapper;
+
+	// URL맵핑시 깨지는 문자열을 인코딩해서 보내기
+	@Override
+	public String encodeStringToUTF8(String urlName) {
+		try 
+		{
+			String encodedBbsName = URLEncoder.encode(urlName, StandardCharsets.UTF_8);
+			return encodedBbsName;
+		} 
+		
+		catch (Exception e) 
+		{			
+			return "fail to encoding url";
+		}
+
+	}
 	
 	
 	//현재날짜 가져오기 메서드
@@ -150,6 +171,18 @@ public class UtilityServiceImpl implements UtilityService{
 	    }
 	}
 		 
+	// 공지사항 체크상태 저장 메서드	  
+	@Override 
+	public isNotice convertToEnumNotice(String value) {
+		if (value == null || value== "NO") {
+			return isNotice.NO;
+		} else if (value.equalsIgnoreCase("YES")) {
+			return isNotice.YES;
+		} else {
+			return isNotice.NO;
+		}
+	}
+	
 	
 	// 파라미터 조합 및 선택사항파라미터 미입력시 처리 //
 	
@@ -196,6 +229,25 @@ public class UtilityServiceImpl implements UtilityService{
 	}
 	
 	
+	// DB에 등록한 날짜와 오늘날짜를 비교
+	@Override
+	public boolean compareToRegDateFromNowDate(Date Regdate) {
+		
+		Date nowDate = getNowDate();
+		
+		
+	    // 날짜 값 비교
+	    if (Regdate.getYear() == nowDate.getYear() &&
+	        Regdate.getMonth() == nowDate.getMonth() &&
+	        Regdate.getDate() == nowDate.getDate()) {
+	        return true;
+	    } else {
+	        return false;
+	    }
+
+	}
+	
+	
 	// 스트링값을 객체로 변환
 	@Override
 	public Map<String, Object> parseStringToObject(String value){
@@ -205,6 +257,42 @@ public class UtilityServiceImpl implements UtilityService{
 		
 		return requestData;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// 더미데이터 생성
+	@Override
+	public boolean dummy() {
+		
+		PostingDTO postingDTO = new PostingDTO();
+		boolean success = false;
+
+		for(int dummy = 1; dummy <= 264; dummy++) 
+		{			
+			
+		postingDTO.setBbsPostNo(dummy); // 순차적으로 증가시킬 번호
+		postingDTO.setPostTitle("테스트"+dummy);	
+		postingDTO.setPostWriter("관리자");	
+		postingDTO.setPostContents("더미데이터"+dummy);
+		
+		postingDTO.setPostRegdate(getNowDate());
+		postingDTO.setPostHit(0);
+		postingDTO.setBbsNo(1);		
+		success = postingMapper.insertPostingToDB(postingDTO);
+		
+		}
+		
+		return success ? true : false;
+	}
+	
+	
 	
 	
 	

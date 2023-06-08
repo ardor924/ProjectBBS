@@ -2,6 +2,8 @@ package com.ardor.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +22,8 @@ public class HomeController {
 	
 	// 홈페이지 이동
 	@RequestMapping("/")
-	public String goHomePage(Model model) {		
+	public String goHomePage(HttpSession session,Model model) {		
+		
 		// 카테고리 & 게시판 전체 내역 가져오기
 		List<CategoryDTO> catList  = categoryService.getAllCategoryList();
 		List<BoardDTO> boardList = boardService.getAllBoardList();
@@ -28,8 +31,8 @@ public class HomeController {
 		// 파라미터 보내기
 		if(catList != null && boardList != null)
 		{
-			model.addAttribute("catList", catList);
-			model.addAttribute("boardList", boardList);
+			session.setAttribute("catList", catList);
+			session.setAttribute("boardList", boardList);
 			model.addAttribute("resultMSG", "카테고리,게시판 목록 불러오기 성공");
 			return "/home/home_page";
 		}

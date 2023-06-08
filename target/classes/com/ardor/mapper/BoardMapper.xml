@@ -12,8 +12,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 게시판 등록 -->
 	<insert id="insertBoardInfoToDB">
-		insert into boards(bbsName,bbsDescription,bbsCreateDate,catNo)
-		values(#{bbsName},#{bbsDescription},#{bbsCreateDate},#{catNo})
+		insert into boards(bbsName,bbsNameForURL,bbsDescription,bbsCreateDate,catNo)
+		values(#{bbsName},#{bbsNameForURL},#{bbsDescription},#{bbsCreateDate},#{catNo})
 	</insert>
 	
 	<!-- 게시판 전체 목록 가져오기 -->
@@ -21,5 +21,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from boards; 
 	</select>
 	
+	<!-- 게시판이름으로 게시글번호 가져오기 -->
+	<select id="getBbsNoByUrlName" resultType="Integer">
+		select bbsNo from boards where bbsNameForURL = #{bbsNameForURL}
+	</select>
+	
+	<!-- 게시판 URL이름 으로 게시판실제이름 가져오기 -->
+	<select id="getRealNameByUrlName" resultType="String">
+		select bbsName from boards where bbsNameForURL = #{bbsNameForURL}
+	</select>
+	
+	
+	<!-- 게시판 이름으로 게시글정보 가져오기 -->
+	<select id="getBoardInfoByUrlName" resultType="boardDTO">
+		select * from boards where bbsNameForURL = #{bbsNameForURL};
+	</select>
+
 	
 </mapper>

@@ -28,10 +28,32 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	
+	// 게시판이름 변환 (URLName => RealName)
+	@Override
+	public String getRealNameFromUrlName(String bbsNameForURL) {
+		return boardMapper.getRealNameByUrlName(bbsNameForURL);
+	}
+	
+	
+	
 	// 게시판 전체 목록 가져오기
 	@Override
 	public List<BoardDTO> getAllBoardList() {
 		return boardMapper.getAllBoardListFromDB();
 	}
+	
+	// 게시판 이름으로 게시판PK값 가져오기 (URL이름으로 조회)
+	@Override
+	public int getBbsNoByUrlName(String bbsNameForURL) {
+		return boardMapper.getBbsNoByUrlName(bbsNameForURL);
+	}
+	
+	// 게시판 이름으로 게시판정보가져오기
+	@Override
+	public BoardDTO getBoardInfoByUrlName(String bbsNameForURL) {
+		return boardMapper.getBoardInfoByUrlName(bbsNameForURL);
+	}
+	
+
 	
 }

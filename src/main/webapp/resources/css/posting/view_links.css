@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+
+.bbs-link-area .row-item{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.bbs-link-area .row-right{
+  display: flex;
+}

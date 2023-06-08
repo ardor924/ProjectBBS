@@ -1,6 +1,7 @@
 package com.ardor.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ardor.model.MemberDTO;
@@ -32,6 +34,7 @@ public class FileController {
 	
 	
 	// 파일업로드 및 주소가져오기
+	@ResponseBody
 	@PostMapping("/images")
 	public ResponseEntity<Object> insertFileToDB(@RequestParam("memberPhoto") MultipartFile memberPhoto){
 
@@ -99,6 +102,42 @@ public class FileController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    
+    
+    
+//	-----------------------------------CKeditor5업로드로직--------------------------------------------------------------------    
+    
+    
+    @ResponseBody
+    @PostMapping("/bbs/{bbsNameForURL}/writing/upload")
+    public ResponseEntity<Object> insertBbsImgToDB(@PathVariable String bbsNameForURL, @PathVariable("bbsIMG") MultipartFile bbsIMG) {
+    	
+    	
+    	System.out.println("------------------------CKeditor5 테스트 진입성공------------------------------");
+    	System.out.println("파라미터 확인용 : "+bbsIMG.getOriginalFilename());
+    	
+    	// 파일 업로드 및 이미지 URL생성
+    	Map<String, Object> response = fileService.uploadFile(bbsIMG);
+    	
+    	
+    	return ResponseEntity.ok(response);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 	
 	
 	

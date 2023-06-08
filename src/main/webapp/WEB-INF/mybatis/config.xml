@@ -9,5 +9,6 @@
   	<typeAlias type="com.ardor.model.FileDTO" alias="fileDTO"/>
   	<typeAlias type="com.ardor.model.CategoryDTO" alias="categoryDTO"/>
   	<typeAlias type="com.ardor.model.BoardDTO" alias="boardDTO"/>
+  	<typeAlias type="com.ardor.model.PostingDTO" alias="postingDTO"/>
   </typeAliases>
 </configuration>

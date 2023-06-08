@@ -1,0 +1,175 @@
+/* =====================컨텐츠 설정============================ */
+
+/* 컨텐츠 설정 */
+.contents{
+  display: flex;
+  padding: 0px 0px 10px 0px;
+
+}
+.section-line{
+  border: 0.5px solid #939a9a;
+}
+
+.reply-text-bold{
+  font-family: twayair;
+  font-size: 20px;
+  font-weight: 500;
+}
+.reply-text{
+  font-family: twayair;
+  font-size: 17px;
+  font-weight: 500;
+  margin-right: 4px;
+}
+.reply-text-sm{
+  font-size: 14px;
+  font-weight: 100;
+  margin-bottom: 2px;
+}
+
+.comment-tool-more a:hover{
+  text-decoration: underline;
+}
+/* =====================컨텐츠 설정============================ */
+
+/* ======================사이드 내비게이션바=========================== */
+/*사이드 내비게이션바*/
+.snb{
+  min-width: 220px;
+  max-width: 220px;
+  padding: 10px 0px 10px 0px;
+  margin-right: 10px;
+}
+/* --------------------------- */
+/* snb - 나의정보칸*/
+.snb-myinfo{
+  border: 2px solid #222;
+  padding: 0 15px;
+  margin-bottom: 30px;
+}
+
+
+/* 프로필 사진 설정 */
+.my-photo{
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-right: 10px;
+
+}
+/* my-info 설정 */
+.my-info{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+}   
+
+
+/* snb 텍스트 설정*/
+.snb-title{
+  margin: 10px 0;
+}
+.snb-text{
+  padding: 0;
+  margin: 0;  
+}
+
+/* --------------------------- */
+
+/* snb - 카테고리 칸*/
+.snb-category{
+  border: 2px solid #222;
+  padding: 0px 15px;
+}
+
+/* 카테고리  목록  리스트 스타일 설정*/
+ul{
+  list-style-type: circle;
+}
+/* ======================사이드 내비게이션바=========================== */
+
+/* =============================메인================================== */
+
+.main{
+  flex-grow: 1;
+  padding: 10px 0px 10px 10px;
+
+  min-width: 1140px;
+}
+
+.bbs-area{
+  border: 2px solid #e2e6ee;
+  border-bottom: 0;
+  border-radius: 5px 5px 0px 0px;
+
+  background-color: #fff;  
+
+  margin-bottom: 0;
+
+}
+
+
+.bbs-headline{
+}
+.bbs-headline-row{
+  margin: 0;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.bbs-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bbs-move-frm{
+
+}
+
+.bbs-main{
+  border-top: 1px solid #e2e6ee;
+  border-bottom: 1px solid #e2e6ee;
+  padding: 30px;
+}
+.row-left{
+  display: flex;
+}
+.row-right{
+
+}
+.row-item{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.writer-name{
+  font-size: 1em;
+}
+
+.posting-regdate{
+  font-size: 0.3em;
+}
+
+
+.profile-photo-frame{
+  margin-right: 10px;
+}
+
+.profile-photo{
+  border-radius: 50%;
+
+  width: 50px;
+  height: 50px;
+}
+
+.view-contents{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+
