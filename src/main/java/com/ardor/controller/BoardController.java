@@ -68,7 +68,8 @@ public class BoardController {
 //		String keyWord = "음식";
 		
 		System.out.println("orderBy :"+orderBy);
-		System.out.println("searchTarget :"+searchTarget);
+		System.out.println("orderBy :"+orderBy);
+		System.out.println("keyWord :"+keyWord);
 		
 		// DTO에 파라미터 세팅
 		postingDTO = new PostingDTO(bbsNo,  orderBy,  searchTarget,  keyWord); 
@@ -99,6 +100,7 @@ public class BoardController {
 		String goodMsg = headerMsg+"요청에 성공했습니다";
 		String badMsg = headerMsg+"요청에 실패했습니다";
 		
+		
 		// ========================파라미터 전송 영역================== //
 
 
@@ -110,6 +112,18 @@ public class BoardController {
 			model.addAttribute("postList", postList);
 			model.addAttribute("bp", bp);
 			model.addAttribute("resultMSG", goodMsg);
+			
+			
+			
+			// JSP파라미터 보내기
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("pageRows", pageRows);
+			model.addAttribute("orderBy", orderBy);
+			model.addAttribute("searchTarget", searchTarget);
+			model.addAttribute("keyWord", keyWord);
+			
+			
+			
 			return "/boards/bbs_page";
 		}
 		
@@ -159,6 +173,10 @@ public class BoardController {
     	model.addAttribute("orderBy", orderBy); // 순서정렬
     	model.addAttribute("searchTarget", searchTarget); // 검색대상
     	model.addAttribute("keyWord", keyWord); // 검색어
+    	
+    	System.out.println("--------------------post---------------");
+    	System.out.println("keyWsearchTargetord : "+searchTarget);
+    	System.out.println("keyWord : "+keyWord);
 		
 
 	    return "redirect:/bbs/" + bbsNameForURL;

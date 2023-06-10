@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ardor.model.PostingDTO;
+import com.ardor.model.PostingDTO.SortOrder;
 import com.ardor.model.PostingDTO.isNotice;
 import com.ardor.service.BoardService;
 import com.ardor.service.PostingService;
@@ -208,6 +209,8 @@ public class PostingController {
 		// 게시글 1개 가져오기
 		PostingDTO postingDTO = postingService.getPosting(postNo); // (게시글 PK값으로 조회)
 		
+		// 게시판정렬
+		// SortOrder orderBy = postingService.setOrderBy()
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
 		
@@ -217,6 +220,8 @@ public class PostingController {
 		// 오늘날짜인지 확인
 		// boolean regDateIsToday = postingService.hasTodayPostings(bbsNo);  // (게시글 생성일이 오늘날자인경우 작성시간 분만 표시하는 용도)
 		
+		// 조회수증가
+		postingService.addHitUp(postingDTO);
 		
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
@@ -225,6 +230,7 @@ public class PostingController {
 		
 		// ========================파라미터 전송 영역================== //
 		
+
 		// 파라미터 보내기
 		//model.addAttribute("regDateIsToday", regDateIsToday); 
 		model.addAttribute("postingDTO", postingDTO);

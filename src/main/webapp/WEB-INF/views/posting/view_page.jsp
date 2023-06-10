@@ -87,13 +87,29 @@
 <!-- 현재JSP의 JS파일 -->
 <script src="${ctx}/resources/js/posting/view_textarea_setting.js"></script>
 
-
+<!-- 게시판 게시글옵션변경 폼 제출 -->
+<script src="${ctx}/resources/js/boards/board_dynamic_form.js"></script>
 
 
 <!-- ---------------------------------- 자바스크립트 :END ---------------------------------- -->
 <!-- ================================================================================================ END-->
 
+<script type="text/javascript">
+function submitFormWithOption(targetFrmId,targetName) {
+    console.log("진입성공!")
 
+
+
+var form = document.getElementById(targetFrmId);
+form.action = ctx + "/bbs/" + bbsNameForURL + "/changeOption/" + form[targetName].value;
+form.submit();
+
+
+
+
+}
+
+</script>
 
 
 

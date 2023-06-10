@@ -63,29 +63,7 @@
 <!-- ---------------------------------- 자바스크립트 :START ---------------------------------- -->
 
 <!-- 게시판 게시글옵션변경 폼 제출 -->
-<script>
-<%-- var ctx = "<%= request.getContextPath() %>";
-var bbsNameForURL = "<%= request.getAttribute("bbsNameForURL") %>"; --%>
-
-
-/* POST방식 */
- 
-/*게시글갯수*/
-function submitFormWithOption(targetFrmId, targetName) {
-    var form = document.getElementById(targetFrmId); 
-    form.action = ctx+"/bbs/" + bbsNameForURL  + "/changeOption/" + form[targetName].value;
-    form.submit();
-}
-
-
-/*GET방식*/
-/* function changePageOption(targetId) {
-    var targetElement = document.getElementById(targetId); // 파라미터의 값을 전송하는 용도
-    var targetValue = targetElement.value; // 파라미터의 값  
-    var url = ctx + '/bbs/' + bbsNameForURL + '?' + targetElement.getAttribute('id') + '=' + targetValue;
-    location.href = url; */
-
-</script>
+<script src="${ctx}/resources/js/boards/board_dynamic_form.js"></script>
 
 <!-- ---------------------------------- 자바스크립트 :END ---------------------------------- -->
 <!-- ================================================================================================ END-->

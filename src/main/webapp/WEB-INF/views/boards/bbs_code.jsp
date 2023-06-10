@@ -10,15 +10,15 @@
             <div class="row-between">
                 <h2 class="bbs-title">${bbsName}</h2><!--타이틀명만 수정-->  
                 <div class="post-search">
-                    <form class="post-search-frm" id="searchForm">
-                        <select class="search-option form-select" name="searchTarget">
+                    <form class="post-search-frm" id="searchForm" method="POST">
+                        <select class="search-option form-select" id="searchTarget" name="searchTarget">
                             <option value="none">선택</option>
-                            <option value="postTitle">제목</option>
-                            <option value="postContents">내용</option>
-                            <option value="postWriter">글쓴이</option>
+                            <option value="TITLE">제목</option>
+                            <option value="CONTENTS">내용</option>
+                            <option value="WRITER">글쓴이</option>
                         </select>
                         <input type="text" name="keyWord" id="keyWord" class="search-input form-control rounded-0 rounded-start" placeholder="검색어를 입력 하세요">
-                        <button class="btn btn-primary search-btn btn-lg rounded-0 rounded-end" onclick="submitFormWithOption('searchForm','keyWord')">
+                        <button class="btn btn-primary search-btn btn-lg rounded-0 rounded-end" onclick="submitFormWithOption3('searchForm','keyWord','event')">
                             <i class="fa fa-search"></i>
                         </button>
                         <!-- 전송용 공통 파라미터 -->
@@ -36,11 +36,91 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>번호</th>
+	                    <c:choose>
+	                    	<c:when test="${orderBy eq 'IDX_ASC'}">
+	                        	<th scope="col">
+	                        		<form method="POST" id="IDX_DESC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="${orderBy eq 'IDX_DESC' ? 'IDX_ASC' : 'IDX_DESC'}">	
+										<a onclick="submitFormWithOption('IDX_DESC-orderForm','orderBy','event')">번호</a>
+										<i class='fa-solid fa-sort-up'></i>									                      			
+	                        		</form>
+	                        	</th>
+	                    	</c:when>
+	                    	<c:otherwise>
+	                         	<th scope="col">
+	                        		<form method="POST" id="IDX_ASC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="${orderBy eq 'IDX_DESC' ? 'IDX_ASC' : 'IDX_DESC'}">	
+										<a onclick="submitFormWithOption('IDX_ASC-orderForm','orderBy','event')">번호</a>
+										<i class='fa-solid fa-sort-down'></i>									                      			
+	                        		</form>
+	                        	</th>                   		
+	                    	</c:otherwise>
+	                    </c:choose>
                         <th>제목</th>
                         <th>작성자</th>
-                        <th>조회수</th>
-                        <th>작성일</th>
+	                    <c:choose>
+	                    	<c:when test="${orderBy eq 'HIT_ASC'}">
+	                        	<th scope="col">
+	                        		<form method="POST" id="HIT_DESC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="HIT_DESC">	
+										<a onclick="submitFormWithOption('HIT_DESC-orderForm','orderBy','event')">조회수</a>
+										<i class='fa-solid fa-sort-up'></i>									                      			
+	                        		</form>
+	                        	</th>
+	                    	</c:when>
+	                    	<c:otherwise>
+	                         	<th scope="col">
+	                        		<form method="POST" id="HIT_ASC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="HIT_ASC">	
+										<a onclick="submitFormWithOption('HIT_ASC-orderForm','orderBy','event')">조회수</a>
+										<i class='fa-solid fa-sort-down'></i>									                      			
+	                        		</form>
+	                        	</th>                   		
+	                    	</c:otherwise>
+	                    </c:choose>				
+ 	                    <c:choose>
+	                    	<c:when test="${orderBy eq 'REGDATE_ASC'}">
+	                        	<th scope="col">
+	                        		<form method="POST" id="REGDATE_DESC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="REGDATE_DESC">	
+										<a onclick="submitFormWithOption('REGDATE_DESC-orderForm','orderBy','event')">작성일</a>
+										<i class='fa-solid fa-sort-up'></i>									                      			
+	                        		</form>
+	                    	</c:when>
+	                    	<c:otherwise>
+	                         	<th scope="col">
+	                        		<form method="POST" id="REGDATE_ASC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="REGDATE_ASC">	
+										<a onclick="submitFormWithOption('REGDATE_ASC-orderForm','orderBy','event')">작성일</a>
+										<i class='fa-solid fa-sort-down'></i>									                      			
+	                        		</form>
+	                        	</th>                   		
+	                    	</c:otherwise>
+	                    </c:choose>                       
                     </tr>
                 </thead>
                 <tbody>
@@ -81,8 +161,8 @@
             <hr class="section-line">
             <div class="row-between">
                 <div class="bbs-bottom-left">
-					<form action="" id="pageRowsForm" method="POST">
-						<select class="form-select" id="pageRows" name="pageRows" onchange="submitFormWithOption('pageRowsForm','pageRows')">
+					<form id="pageRowsForm" method="POST">
+						<select class="form-select" id="pageRows" name="pageRows" onchange="submitFormWithOption('pageRowsForm','pageRows','event')">
 						    <option value="10" ${bp.pageRows eq 10 ? 'selected' : ''}>10개씩</option>
 						    <option value="15" ${bp.pageRows eq 15 ? 'selected' : ''}>15개씩</option>
 						    <option value="20" ${bp.pageRows eq 20 ? 'selected' : ''}>20개씩</option>

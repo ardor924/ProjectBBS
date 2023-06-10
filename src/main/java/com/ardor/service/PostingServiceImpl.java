@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ardor.mapper.PostingMapper;
+import com.ardor.model.BoardDynamicParamDTO;
 import com.ardor.model.BoardPagingDTO;
 import com.ardor.model.PostingDTO;
+import com.ardor.model.PostingDTO.SearchTarget;
+import com.ardor.model.PostingDTO.SortOrder;
 
 @Service
 public class PostingServiceImpl implements PostingService{
@@ -65,7 +68,9 @@ public class PostingServiceImpl implements PostingService{
 		postingDTO.setPageRows(pageRows);
 		postingDTO.setPageStartRowNum(pageStartRowNum);
 		
-		System.out.println("postingDTO : "+ postingDTO.getSearchTarget().toString());
+		System.out.println("postingDTO-orderBy : "+ postingDTO.getOrderBy().toString());
+		System.out.println("postingDTO-searchTarget : "+ postingDTO.getSearchTarget().toString());
+		System.out.println("postingDTO-keyWord : "+ postingDTO.getKeyWord().toString());
 		
 		
 		return postingMapper.getBoardPostingsByDTO(postingDTO);
@@ -107,12 +112,7 @@ public class PostingServiceImpl implements PostingService{
 		return bp;
 	}
 	
-	
-	
-	
-	
-	
-	
+
 	
 	// 특정 게시판의 게시글수 가져오기
 	@Override

@@ -2,8 +2,11 @@ package com.ardor.service;
 
 import java.util.List;
 
+import com.ardor.model.BoardDynamicParamDTO;
 import com.ardor.model.BoardPagingDTO;
 import com.ardor.model.PostingDTO;
+import com.ardor.model.PostingDTO.SearchTarget;
+import com.ardor.model.PostingDTO.SortOrder;
 
 public interface PostingService {
 	
@@ -31,16 +34,14 @@ public interface PostingService {
 	public BoardPagingDTO setBoardPaging(int totalRows, int pageRows,int currentPage);
 	
 
-	
-	// 파라미터 세팅
-	
-	
-	
-	
-	
-	
-	
 	// (total bbs)모든 게시판의 게시글수 가져오기
+
+	
+	
+	
+	
+	
+	
 	
 	// 특정 게시판의 게시글수 가져오기
 	public int getTotalPostingCntBybbsNo(int bbsNo); 
