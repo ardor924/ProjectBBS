@@ -7,7 +7,7 @@
 
 
 /*게시글 검색 옵션변경 제출폼 */
-function submitFormWithOption3(targetFrmId,targetName) 
+function submitFormWithOption3(targetFrmId) 
 {
 	
   document.getElementById(targetFrmId).addEventListener("submit", function(event) {
@@ -29,7 +29,7 @@ function submitFormWithOption3(targetFrmId,targetName)
 	      }
   
   var form = document.getElementById(targetFrmId);
-  form.action = ctx + "/bbs/" + bbsNameForURL + "/changeOption/" + form[targetName].value;
+  form.action = ctx + "/bbs/" + bbsNameForURL;
   form.submit();
 
   
@@ -40,14 +40,14 @@ function submitFormWithOption3(targetFrmId,targetName)
 }
 
 /*게시글 옵션변경 제출폼 */
-function submitFormWithOption(targetFrmId,targetName) 
+function submitFormWithOption(targetFrmId) 
 {
     console.log("진입성공!")
 
 
 
 var form = document.getElementById(targetFrmId);
-form.action = ctx + "/bbs/" + bbsNameForURL + "/changeOption/" + form[targetName].value;
+form.action = ctx + "/bbs/" + bbsNameForURL;
 form.submit();
 
 

@@ -8,13 +8,13 @@
 	        <div class="bbs-headline-row row-between">
 	            <h6 class="bbs-title">${bbsName} 게시판</h6><!--타이틀명만 수정-->  
 	            <form method="POST" id="moveToBbsFrm">
-	                <input type="hidden" name="currentPage" value="{bp.current_page}"/>
-	                <input type="hidden" name="pageRows" value="{bp.page_rows}"/>
-	                <input type="hidden" name="searchTarget" value="{bDto.searchTarget}"/>
-	                <input type="hidden" name="keyWord" value="{bDto.keyWord}"/>
-	                <input type="hidden" name="orderBy" value="{bDto.orderBy}"/>
+	                <input type="hidden" name="currentPage" value="{bp.currentPage}"/>
+	                <input type="hidden" name="pageRows" value="{pageRows}"/>
+	                <input type="hidden" name="searchTarget" value="{searchTarget}"/>
+	                <input type="hidden" name="keyWord" value="{keyWord}"/>
+	                <input type="hidden" name="orderBy" value="{orderBy}"/>
 	                <!-- <a href="" class=""> -->
-	                <a onclick="submitFormWithOption('moveToBbsFrm','currentPage','event')">
+	                <a onclick="submitFormWithOption('moveToBbsFrm')">
 	                    <i class="xi-view-list"></i>
 	                    <span>목록</span>
 	                </a>

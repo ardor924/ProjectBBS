@@ -18,11 +18,11 @@
                             <option value="WRITER">글쓴이</option>
                         </select>
                         <input type="text" name="keyWord" id="keyWord" class="search-input form-control rounded-0 rounded-start" placeholder="검색어를 입력 하세요">
-                        <button class="btn btn-primary search-btn btn-lg rounded-0 rounded-end" onclick="submitFormWithOption3('searchForm','keyWord','event')">
+                        <button class="btn btn-primary search-btn btn-lg rounded-0 rounded-end" onclick="submitFormWithOption3('searchForm','event')">
                             <i class="fa fa-search"></i>
                         </button>
                         <!-- 전송용 공통 파라미터 -->
-						<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+						<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? currentPage : ''}">
 						<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    		            
 						<input type="hidden" name="orderBy" value="${orderBy ne null ? orderBy : ''}">	                        
                     </form>
@@ -136,7 +136,14 @@
                     <tr>
                         <td>${li.bbsPostNo}</td>
                         <td>
-                            <a href="${ctx}/bbs/${bbsNameForURL}/${li.bbsPostNo}" class="post-link">${li.postTitle}</a>
+                        	<form action="${ctx}/bbs/${bbsNameForURL}/${li.bbsPostNo}" id="goViewForm${li.bbsPostNo}" method="POST">
+                            	<a class="post-link" onclick="document.getElementById('goViewForm${li.bbsPostNo}').submit();">${li.postTitle}</a>
+								<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+								<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">   
+								<input type="hidden" name="orderBy" value="${orderBy ne null ? orderBy : ''}">
+								<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+								<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">                                	
+                        	</form>
                         </td>
                         <td>${li.postWriter}</td>
                         <td>${li.postHit}</td>
@@ -162,7 +169,7 @@
             <div class="row-between">
                 <div class="bbs-bottom-left">
 					<form id="pageRowsForm" method="POST">
-						<select class="form-select" id="pageRows" name="pageRows" onchange="submitFormWithOption('pageRowsForm','pageRows','event')">
+						<select class="form-select" id="pageRows" name="pageRows" onchange="submitFormWithOption('pageRowsForm','event')">
 						    <option value="10" ${bp.pageRows eq 10 ? 'selected' : ''}>10개씩</option>
 						    <option value="15" ${bp.pageRows eq 15 ? 'selected' : ''}>15개씩</option>
 						    <option value="20" ${bp.pageRows eq 20 ? 'selected' : ''}>20개씩</option>

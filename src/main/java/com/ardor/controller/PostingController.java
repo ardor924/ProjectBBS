@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ardor.model.PostingDTO;
+import com.ardor.model.PostingDTO.SearchTarget;
 import com.ardor.model.PostingDTO.SortOrder;
 import com.ardor.model.PostingDTO.isNotice;
 import com.ardor.service.BoardService;
@@ -186,7 +187,19 @@ public class PostingController {
 	
 	//게시판 조회 페이지:
 	@GetMapping("/bbs/{bbsNameForURL}/{bbsPostNo}")
-	public String viewPage(@PathVariable String bbsNameForURL,@PathVariable("bbsPostNo") int bbsPostNo, Model model) {
+	public String viewPage
+	(
+			Model model,
+			@PathVariable String bbsNameForURL,
+			@PathVariable("bbsPostNo") int bbsPostNo,
+			@RequestParam(defaultValue = "1") int currentPage,
+			@RequestParam(defaultValue = "10") int pageRows,
+			@RequestParam(defaultValue = "TITLE") SearchTarget searchTarget,
+			@RequestParam(defaultValue = "") String keyWord,
+			@RequestParam(defaultValue = "IDX_DESC") SortOrder orderBy
+	) 
+	
+	{
 		
 		/* 	notice : 
 		 * 	개별 게시글번호로 URL을 받아오면 rest API 관점에서 사용자에게 직관적이면서도 
@@ -238,6 +251,16 @@ public class PostingController {
 		model.addAttribute("bbsName", bbsName);
 		
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
+		
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("pageRows", pageRows);
+		model.addAttribute("orderBy", orderBy);
+		model.addAttribute("searchTarget", searchTarget);
+		model.addAttribute("keyWord", keyWord);
+		
+		
+		
+		
 		
 		return "/posting/view_page";
 	}

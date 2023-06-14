@@ -35,12 +35,14 @@ public class BoardController {
 	(
 		Model model,
 		@PathVariable("bbsNameForURL") String bbsNameForURL,
+		
 		@RequestParam(defaultValue = "1") int currentPage,
 		@RequestParam(defaultValue = "10") int pageRows,
 		@RequestParam(defaultValue = "TITLE") SearchTarget searchTarget,
 		@RequestParam(defaultValue = "") String keyWord,
-		@RequestParam(defaultValue = "IDX_DESC") SortOrder orderBy,
-		@ModelAttribute PostingDTO postingDTO 
+		@RequestParam(defaultValue = "IDX_DESC") SortOrder orderBy
+		
+
 	) 
 	{
 		
@@ -54,25 +56,23 @@ public class BoardController {
 		 *  백단에서 사용할 내부용 전달 파라미터로 공백이나 특수 문자 등을 적절히 처리할수 있는 URL용 이름을사용
 		*/
 
-		System.out.println("bbsNameForURL : "+bbsNameForURL);
+		
+		
+		
+		
 		// ================파라미터 생성 및 조합 영역============= //
 		
 		// 게시판 실제이름 가져오기
 		String bbsName = boardService.getRealNameFromUrlName(bbsNameForURL); // (URLName => RealName)
 		// 게시판 PK번호 가져오기
 		int bbsNo = boardService.getBbsNoByUrlName(bbsNameForURL); // (URL이름으로 조회)	
+
 		
-		// 디버그확인용 DTO 세팅
-//		SortOrder orderBy = SortOrder.IDX_DESC;
-//		SearchTarget searchTarget = SearchTarget.TITLE;
-//		String keyWord = "음식";
-		
-		System.out.println("orderBy :"+orderBy);
-		System.out.println("orderBy :"+orderBy);
-		System.out.println("keyWord :"+keyWord);
-		
+
 		// DTO에 파라미터 세팅
-		postingDTO = new PostingDTO(bbsNo,  orderBy,  searchTarget,  keyWord); 
+		PostingDTO postingDTO = new PostingDTO(bbsNo,  orderBy,  searchTarget,  keyWord); 
+		
+		
 		
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
@@ -140,12 +140,11 @@ public class BoardController {
 	
 	
 	// (POST)게시판 페이지이동 : START
-	@PostMapping("/bbs/{bbsNameForURL}/changeOption/{dynamicParam}")
+	@PostMapping("/bbs/{bbsNameForURL}")
 	public String bbsPagePost
 	(
 		Model model,
 		@PathVariable("bbsNameForURL") String bbsNameForURL,
-		@PathVariable("dynamicParam") String dynamicParam,
 		@RequestParam(defaultValue = "1") int currentPage,
 		@RequestParam(defaultValue = "10") int pageRows,
 		@RequestParam(defaultValue = "TITLE") SearchTarget searchTarget,
@@ -165,21 +164,34 @@ public class BoardController {
 		*/
 		
 		
+		
+		System.out.println("--------------------POST 디버그 확인용-------------------------------");
+		
+		System.out.println("currentPage:"+currentPage);
+		System.out.println("pageRows:"+pageRows);
+		System.out.println("orderBy:"+orderBy);
+		System.out.println("searchTarget:"+searchTarget);
+		System.out.println("keyWord:"+keyWord);
+		System.out.println("--------------------POST 디버그 확인용-------------------------------");
+		
 		//========================JSP 페이지에서 온 변경사항 Get으로 리턴 ================== //
 		
-		
-    	model.addAttribute("currentPage", currentPage); // 현재페이지 (must)
-    	model.addAttribute("pageRows", pageRows); // 페이지갯수 (must)
-    	model.addAttribute("orderBy", orderBy); // 순서정렬
-    	model.addAttribute("searchTarget", searchTarget); // 검색대상
-    	model.addAttribute("keyWord", keyWord); // 검색어
-    	
-    	System.out.println("--------------------post---------------");
-    	System.out.println("keyWsearchTargetord : "+searchTarget);
-    	System.out.println("keyWord : "+keyWord);
-		
 
-	    return "redirect:/bbs/" + bbsNameForURL;
+
+		
+		
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("pageRows", pageRows);
+		model.addAttribute("orderBy", orderBy);
+		model.addAttribute("searchTarget", searchTarget);
+		model.addAttribute("keyWord", keyWord);
+
+		
+		
+		
+		
+		
+		return "redirect:/bbs/" + bbsNameForURL;
 
 	}
 	
