@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ardor.mapper.PostingMapper;
-import com.ardor.model.BoardDynamicParamDTO;
 import com.ardor.model.BoardPagingDTO;
 import com.ardor.model.PostingDTO;
 import com.ardor.model.PostingDTO.SearchTarget;

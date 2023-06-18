@@ -69,6 +69,19 @@
 
 <script src="${ctx}/resources/js/posting/writing_submit.js"></script><!-- 게시글 폼 제출-->
 
+<!-- bbsNameForURL이 none일때 select option변경으로 GET요청 -->
+<script>
+    function sendBbsName(selectElement, targetElement) {
+        var bbsName = selectElement.value;
+        console.log(bbsNameForURLelement)
+        var bbsNameForURLelement = document.getElementById(targetElement);
+        var bbsNameForURL = bbsNameForURLelement.value;
+        if (bbsName !== '' && bbsNameForURL !== '') {
+            window.location.href = '${ctx}/bbs/' + bbsNameForURL + '/write-page';
+        }
+    }
+</script>
+
 <!-- ---------------------------------- 자바스크립트 :END ---------------------------------- -->
 <!-- ================================================================================================ END-->
 

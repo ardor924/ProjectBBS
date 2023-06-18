@@ -2,7 +2,6 @@ package com.ardor.service;
 
 import java.util.List;
 
-import com.ardor.model.BoardDynamicParamDTO;
 import com.ardor.model.BoardPagingDTO;
 import com.ardor.model.PostingDTO;
 import com.ardor.model.PostingDTO.SearchTarget;

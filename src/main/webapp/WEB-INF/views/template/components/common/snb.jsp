@@ -32,9 +32,14 @@
 	        </div>
 	        <hr>
 	        <div class="row-none">
-	            <form  action="#writeBoardPage.do">
-	                <button class="btn btn-blue btn-100" onclick="alert('게시글을 작성하기 위해서는 로그인이 필요합니다.')">게시글작성</button>
-	            </form>    
+	        	<c:choose>
+	        		<c:when test="${bbsNameForURL eq null}">
+	        			<a href="${ctx}/bbs/none/write-page" class="btn btn-blue btn-100">게시글작성</a>	        		
+	        		</c:when>
+	        		<c:otherwise>	        		
+	        			<a href="${ctx}/bbs/${bbsNameForURL}/write-page" class="btn btn-blue btn-100">게시글작성</a>	        		
+	        		</c:otherwise>
+	        	</c:choose>
 	        </div>
 	    </div>
 	    </c:when>

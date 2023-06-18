@@ -2,6 +2,8 @@ package com.ardor.controller;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,13 +64,25 @@ public class PostingController {
 	
 	// 게시글 쓰기 페이지 이동 :
 	@GetMapping("/bbs/{bbsNameForURL}/write-page")
-	public String writingPage(@PathVariable String bbsNameForURL,Model model) {
-		String bbsName =  boardService.getRealNameFromUrlName(bbsNameForURL);
-		model.addAttribute("bbsName", bbsName); //(화면출력용 실제게시판이름으로 파라미터전송)
-		return "/posting/writing_page";
+	public String writingPage(@PathVariable String bbsNameForURL,Model model) {	
+	    if (bbsNameForURL == null || bbsNameForURL.isEmpty()) {
+	        bbsNameForURL = "none"; // 기본값 설정
+	    }
+	    
+		String bbsName =  boardService.getRealNameFromUrlName(bbsNameForURL);			
+		model.addAttribute("bbsName", bbsName); //(화면출력용 실제게시판이름으로 파라미터전송)		
+		return "/posting/writing_page";	
 	}
 	
-	
+//	
+//	// 게시글 쓰기 페이지에서 select선택후 bbsName받아와서 bbsName과 bbsNameForURL 보내기
+//	@GetMapping("/bbs/{bbsName}/write-page/selecting")
+//	public String writingPageBySelecting(@PathVariable String bbsName,Model model) {		
+//		
+//		bbsNameForURL = postingService.getBbsNameForURLByBbsName(bbsName);
+//		return "redirect:/bbs/{bbsNameForURL}/write-page";	
+//	}
+//	
 	
 	// 게시글 쓰기 폼 제출
 	@PostMapping("/bbs/{bbsNameForURL}/write-page/submit")
