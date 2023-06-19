@@ -151,11 +151,26 @@ ClassicEditor
 
 
 /*-------------------------------------UploadAdapter------------------------------------*/
+function sendBbsName(selectElement) {
+  return selectElement.value !== '' ? selectElement.value : null;
+}
+
+
 // 게시판이름 가져오기 !* url요청 보낼때 필수
 var bbsNameInput = document.getElementById("bbsNameInput").value	
-var bbsNameSelect = document.getElementById("bbsNameSelect").value	
+var bbsNameSelectElement = document.getElementById("bbsNameSelect")
+
+bbsNameSelectElement.addEventListener("change", function(){
+	var bbsNameForURL =  sendBbsName(this);
+	console.log("bbsNameForURL : "+bbsNameForURL)
+	document.getElementById("bbsNameForURL").value = bbsNameForURL;
+});
+
+	
+
 console.log("bbsNameInput : "+document.getElementById("bbsNameInput").value);
 console.log("bbsNameSelect : "+document.getElementById("bbsNameSelect").value);
+
 
 class UploadAdapter {
     constructor(loader) {
@@ -174,13 +189,6 @@ class UploadAdapter {
 	
 
 
-		// Select창에 게시판이름이 없는경우 
-			// => 리턴시키고 알럿 메세지 송출("게시판을 선택해주세요")  			
-		if(bbsNameInput != bbsNameSelect || bbsNameSelect == "null" || bbsNameSelect == "")
-		{
-			alert("게시판을 찾지 못했습니다 게시판을 선택한뒤 이미지를 첨부해주세요");
-			return;
-		}
 			
 			
 		// URL용 게시판이름값을 요청

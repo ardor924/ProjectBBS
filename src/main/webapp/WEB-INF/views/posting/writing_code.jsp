@@ -24,19 +24,17 @@
 
         <!-- 게시글 메인 : START-->
         <fieldset class="bbs-main">
-            <form class="writing-form" id="editForm" name="editForm"  action="${ctx}/bbs/${bbsNameForURL}/write-page/submit" method="post">
+            <form class="writing-form" id="editForm" name="editForm">
                 <input type="hidden" name="postWriter" value="${memberID}">
-                <input type="hidden" name="bbsNameInput" id="bbsNameInput" value="${bbsName}">
+                <input type="hidden" name="bbsNameInput" id="bbsNameInput" value="${bbsNameForURL}">
                 <input type="hidden" name="bbsNameForURL" id="bbsNameForURL" value="${bbsNameForURL}">
                 <div class="row-between textarea-wrap form-group border-0">
-                		<input type="hidden" id="${bLi.bbsNameForURL}" value=""> <!-- 숨은 입력란을 반복문 외부에 배치 -->
-					<select class="select-boards" name="bbsNameSelect" id="bbsNameSelect" onchange="sendBbsName(this, '${bbsNameForURL}')">
+					<select class="select-boards" name="bbsNameSelect" id="bbsNameSelect" onchange="sendBbsName(this)">
 					    <option value="">------------------------------------------------게시판선택------------------------------------------------</option>
 					    <c:forEach var="cLi" items="${catList}">
 					        <c:forEach var="bLi" items="${boardList}">
 					            <c:if test="${cLi.catNo eq bLi.catNo}">
-					                <option value="${bLi.bbsName}" onclick="document.getElementById('${bLi.bbsNameForURL}').value = '${bLi.bbsNameForURL}'">[${cLi.catCode}]${cLi.catName} : ${bLi.bbsName}</option>
-					            </c:if>
+								<option value="${bLi.bbsNameForURL}"  ${bbsNameForURL eq bLi.bbsNameForURL ? 'selected' : ''} >[${cLi.catCode}]${cLi.catName} : ${bLi.bbsName}</option>					            </c:if>
 					        </c:forEach>
 					    <option value="">-----------------------------------------------------------------------------------------------------------</option>
 					    </c:forEach>

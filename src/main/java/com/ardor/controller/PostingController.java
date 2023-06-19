@@ -65,12 +65,8 @@ public class PostingController {
 	// 게시글 쓰기 페이지 이동 :
 	@GetMapping("/bbs/{bbsNameForURL}/write-page")
 	public String writingPage(@PathVariable String bbsNameForURL,Model model) {	
-	    if (bbsNameForURL == null || bbsNameForURL.isEmpty()) {
-	        bbsNameForURL = "none"; // 기본값 설정
-	    }
-	    
-		String bbsName =  boardService.getRealNameFromUrlName(bbsNameForURL);			
-		model.addAttribute("bbsName", bbsName); //(화면출력용 실제게시판이름으로 파라미터전송)		
+
+		model.addAttribute("bbsNameForURL", bbsNameForURL); //(화면출력용 실제게시판이름으로 파라미터전송)		
 		return "/posting/writing_page";	
 	}
 	
@@ -135,7 +131,7 @@ public class PostingController {
 
 		
 		// 게시판이름 파라미터 비교
-		boolean isBbsNameMatch = postingService.isBbsNameMatch(bbsNameSelect,bbsName); // (JSP에서 선택한 게시판이름과 URL로 가져온 게시판이름 비교)
+		boolean isBbsNameMatch = postingService.isBbsNameMatch(bbsNameSelect,bbsNameForURL); // (JSP에서 선택한 게시판이름과 URL로 가져온 게시판이름 비교)
 		
 		// 응답메세지
 		String headerMsg = "게시글 등록";
@@ -200,7 +196,7 @@ public class PostingController {
 
 	
 	//게시판 조회 페이지:
-	@GetMapping("/bbs/{bbsNameForURL}/{bbsPostNo}")
+	@PostMapping("/bbs/{bbsNameForURL}/{bbsPostNo}")
 	public String viewPage
 	(
 			Model model,

@@ -6,11 +6,11 @@ submitButton.addEventListener('click', function(event) {
 
     /* 유효성 검사 */
 
-    var bbsName = document.getElementById('bbsNameSelect').value; // 게시판 선택 값 가져오기
+    var bbsNameForURL = document.getElementById('bbsNameSelect').value; // 게시판 선택 값 가져오기
     var postTitle = document.editForm.elements.postTitle.value; // 제목 값 가져오기
 
     /* 게시판이름 없을시 리턴 */
-    if (bbsName == "" || bbsName == "null") {
+    if (bbsNameForURL == "" || bbsNameForURL == "null") {
         alert("게시판을 선택하세요");
         return;
     }
@@ -21,5 +21,13 @@ submitButton.addEventListener('click', function(event) {
         return;
     }
 
+
+
+
+
+
+    // 폼 제출
+    document.editForm.action = ctx+'/bbs/'+bbsNameForURL+"/write-page/submit"; // 폼을 제출할 URL을 지정
+    document.editForm.method = 'POST'; // 폼을 POST 방식으로 설정
     document.editForm.submit();
 });

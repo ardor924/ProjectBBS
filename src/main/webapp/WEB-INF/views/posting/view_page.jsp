@@ -95,13 +95,13 @@
 <!-- ================================================================================================ END-->
 
 <script type="text/javascript">
-function submitFormWithOption(targetFrmId,targetName) {
+function submitFormWithOption(targetFrmId) {
     console.log("진입성공!")
 
 
 
 var form = document.getElementById(targetFrmId);
-form.action = ctx + "/bbs/" + bbsNameForURL + "/changeOption/" + form[targetName].value;
+form.action = ctx + "/bbs/" + bbsNameForURL;
 form.submit();
 
 

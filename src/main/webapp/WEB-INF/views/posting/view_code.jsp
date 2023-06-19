@@ -7,14 +7,14 @@
 	    <fieldset class="bbs-headline">
 	        <div class="bbs-headline-row row-between">
 	            <h6 class="bbs-title">${bbsName} 게시판</h6><!--타이틀명만 수정-->  
-	            <form method="POST" id="moveToBbsFrm">
-	                <input type="hidden" name="currentPage" value="{bp.currentPage}"/>
-	                <input type="hidden" name="pageRows" value="{pageRows}"/>
-	                <input type="hidden" name="searchTarget" value="{searchTarget}"/>
-	                <input type="hidden" name="keyWord" value="{keyWord}"/>
-	                <input type="hidden" name="orderBy" value="{orderBy}"/>
+	            <form action="${ctx}/bbs/${bbsNameForURL}" id="moveToBbsFrm" method="POST">
+	                <input type="hidden" name="currentPage" value="${currentPage}"/>
+	                <input type="hidden" name="pageRows" value="${pageRows}"/>
+	                <input type="hidden" name="searchTarget" value="${searchTarget}"/>
+	                <input type="hidden" name="keyWord" value="${keyWord}"/>
+	                <input type="hidden" name="orderBy" value="${orderBy}"/>
 	                <!-- <a href="" class=""> -->
-	                <a onclick="submitFormWithOption('moveToBbsFrm')">
+	              	<a onclick="document.getElementById('moveToBbsFrm').submit();">
 	                    <i class="xi-view-list"></i>
 	                    <span>목록</span>
 	                </a>
