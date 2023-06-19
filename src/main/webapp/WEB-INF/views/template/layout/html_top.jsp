@@ -38,6 +38,7 @@
 	
 	<!-- 8. 공통 JS -->
 	<script type="text/javascript">var ctx = "<%= request.getContextPath() %>";</script>
+	<script type="text/javascript">var ctx_resources = "<%= request.getContextPath() %>/resources";</script>
 	<script type="text/javascript">var resultMSG = "<%= request.getAttribute("resultMSG") %>";</script>
 	<script type="text/javascript">var bbsNameForURL = "<%= request.getAttribute("bbsNameForURL")%>";</script>
 	<script src="${ctx}/resources/js/common/redirect_message.js"></script>

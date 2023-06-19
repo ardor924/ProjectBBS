@@ -1,6 +1,6 @@
 {
   "name": "@ardor924/project_bbs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "ProjectBBS",
   "main": "main.js",
   "type": "module",

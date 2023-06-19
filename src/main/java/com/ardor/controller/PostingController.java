@@ -88,7 +88,6 @@ public class PostingController {
 		@PathVariable String bbsNameForURL,
 		@RequestParam(value="postHit" , defaultValue="0" ) int postHit , 
 		@RequestParam(value="postNotice" , defaultValue="NO" ) String postNoticeStr , 
-		@RequestParam String bbsNameSelect,
 		Model model
 	) 
 	
@@ -130,9 +129,6 @@ public class PostingController {
 		// ========================유틸기능 영역================== //
 
 		
-		// 게시판이름 파라미터 비교
-		boolean isBbsNameMatch = postingService.isBbsNameMatch(bbsNameSelect,bbsNameForURL); // (JSP에서 선택한 게시판이름과 URL로 가져온 게시판이름 비교)
-		
 		// 응답메세지
 		String headerMsg = "게시글 등록";
 		String goodMsg = headerMsg+"요청에 성공했습니다";
@@ -167,7 +163,7 @@ public class PostingController {
 		
 		
 		//성공
-		if(success && isBbsNameMatch) // (DB등록성공과 게시판이 일치하면 등록성공)
+		if(success) // (DB등록성공)
 		{	
 			model.addAttribute("resultMSG", goodMsg);
 			return "redirect:/bbs/"+bbsNameForURL ;

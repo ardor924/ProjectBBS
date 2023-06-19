@@ -26,8 +26,6 @@
         <fieldset class="bbs-main">
             <form class="writing-form" id="editForm" name="editForm">
                 <input type="hidden" name="postWriter" value="${memberID}">
-                <input type="hidden" name="bbsNameInput" id="bbsNameInput" value="${bbsNameForURL}">
-                <input type="hidden" name="bbsNameForURL" id="bbsNameForURL" value="${bbsNameForURL}">
                 <div class="row-between textarea-wrap form-group border-0">
 					<select class="select-boards" name="bbsNameSelect" id="bbsNameSelect" onchange="sendBbsName(this)">
 					    <option value="">------------------------------------------------게시판선택------------------------------------------------</option>

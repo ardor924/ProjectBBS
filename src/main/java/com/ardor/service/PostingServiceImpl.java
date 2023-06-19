@@ -127,13 +127,14 @@ public class PostingServiceImpl implements PostingService{
 	
 	
 	// 게시판이름 파라미터 비교
-	@Override
-	public boolean isBbsNameMatch(String bbsNameSelect, String bbsName) {	
-		
-		// 같은값이면 true리턴
-		return bbsNameSelect.trim().equals(bbsName.trim());	// (JSP에서 파라미터로 넘어온 게시판의 bbsNameSelect와 bbsName 의 이름이 같은지 비교)
-		
-	}
+	//(제거할예정)
+//	@Override
+//	public boolean isBbsNameMatch(String bbsNameSelect, String bbsName) {	
+//		
+//		// 같은값이면 true리턴
+//		return bbsNameSelect.trim().equals(bbsName.trim());	// (JSP에서 파라미터로 넘어온 게시판의 bbsNameSelect와 bbsName 의 이름이 같은지 비교)
+//		
+//	}
 	
 	
 	

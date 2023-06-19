@@ -111,7 +111,8 @@ public class FileController {
     
     @ResponseBody
     @PostMapping("/bbs/{bbsNameForURL}/writing/upload")
-    public ResponseEntity<Object> insertBbsImgToDB(@PathVariable String bbsNameForURL, @PathVariable("bbsIMG") MultipartFile bbsIMG) {
+    //public ResponseEntity<Object> insertBbsImgToDB(@PathVariable String bbsNameForURL, @PathVariable("bbsIMG") MultipartFile bbsIMG) {
+    public ResponseEntity<Object> insertBbsImgToDB(@RequestParam("bbsIMG") MultipartFile bbsIMG) {
     	
     	
     	System.out.println("------------------------CKeditor5 테스트 진입성공------------------------------");

@@ -46,7 +46,8 @@ public interface PostingService {
 	public int getTotalPostingCntBybbsNo(int bbsNo); 
 	
 	// 게시판이름 파라미터 비교
-	public boolean isBbsNameMatch(String bbsNameSelect, String bbsName);
+	//(제거할예정)
+	// public boolean isBbsNameMatch(String bbsNameSelect, String bbsName);
 	
 	
 	// 게시글번호 생성 및 추가(게시판마다 별도로생성)

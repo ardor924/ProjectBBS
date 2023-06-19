@@ -151,25 +151,21 @@ ClassicEditor
 
 
 /*-------------------------------------UploadAdapter------------------------------------*/
-function sendBbsName(selectElement) {
-  return selectElement.value !== '' ? selectElement.value : null;
-}
+
+/*게시판 옵션 선택시 bbsNameForURL값변경 함수*/
+function sendBbsName(selectElement){return selectElement.value !== '' ? selectElement.value : null;} 
 
 
 // 게시판이름 가져오기 !* url요청 보낼때 필수
-var bbsNameInput = document.getElementById("bbsNameInput").value	
-var bbsNameSelectElement = document.getElementById("bbsNameSelect")
+var bbsNameSelectElement = document.getElementById("bbsNameSelect") //select 태그에 선택된값을 가져온다
 
 bbsNameSelectElement.addEventListener("change", function(){
 	var bbsNameForURL =  sendBbsName(this);
 	console.log("bbsNameForURL : "+bbsNameForURL)
-	document.getElementById("bbsNameForURL").value = bbsNameForURL;
+
 });
 
 	
-
-console.log("bbsNameInput : "+document.getElementById("bbsNameInput").value);
-console.log("bbsNameSelect : "+document.getElementById("bbsNameSelect").value);
 
 
 class UploadAdapter {
@@ -192,7 +188,6 @@ class UploadAdapter {
 			
 			
 		// URL용 게시판이름값을 요청
-		var bbsNameForURL = document.getElementById("bbsNameForURL").value
         const xhr = this.xhr = new XMLHttpRequest();
         xhr.open('POST', ctx+'/bbs/'+bbsNameForURL+"/writing/upload", true);
         xhr.responseType = 'json';
