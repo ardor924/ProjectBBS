@@ -8,11 +8,11 @@
 	        <div class="bbs-headline-row row-between">
 	            <h6 class="bbs-title">${bbsName} 게시판</h6><!--타이틀명만 수정-->  
 	            <form action="${ctx}/bbs/${bbsNameForURL}" id="moveToBbsFrm" method="POST">
-	                <input type="hidden" name="currentPage" value="${currentPage}"/>
-	                <input type="hidden" name="pageRows" value="${pageRows}"/>
-	                <input type="hidden" name="searchTarget" value="${searchTarget}"/>
-	                <input type="hidden" name="keyWord" value="${keyWord}"/>
-	                <input type="hidden" name="orderBy" value="${orderBy}"/>
+	                <input type="hidden" id="currentPage" name="currentPage" value="${currentPage}"/>
+	                <input type="hidden" id="pageRows" name="pageRows" value="${pageRows}"/>
+	                <input type="hidden" id="searchTarget" name="searchTarget" value="${searchTarget}"/>
+	                <input type="hidden" id="keyWord" name="keyWord" value="${keyWord}"/>
+	                <input type="hidden" id="orderBy" name="orderBy" value="${orderBy}"/>
 	                <!-- <a href="" class=""> -->
 	              	<a onclick="document.getElementById('moveToBbsFrm').submit();">
 	                    <i class="xi-view-list"></i>

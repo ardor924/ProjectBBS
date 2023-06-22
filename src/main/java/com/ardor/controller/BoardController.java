@@ -81,7 +81,7 @@ public class BoardController {
 		// ========================페이징처리 영역================== //
 		
 		// 전체 게시글수 가져오기
-		int totalRows = postingService.getTotalPostingCntBybbsNo(bbsNo);
+		int totalRows = postingService.getTotalPostingCntByPostingDTO(postingDTO);
 		
 		// 게시판 페이지네이션
 		BoardPagingDTO bp = postingService.setBoardPaging(totalRows,pageRows,currentPage);
@@ -212,24 +212,167 @@ public class BoardController {
 	
 	// ========================================== 게시판이동  :END ========================================== // 
 	
-	// ======================================(Total)전체글 모두 보는 게시판  :START ======================================== // 
+	// ==============[GET]========================(Total)전체글 모두 보는 게시판  :START ======================================== // 
 	
 	@GetMapping("/bbs")
-	public String globalPostingPage(Model model) {
+	public String globalPostingPageGet
+	(
+			Model model,			
+			@RequestParam(defaultValue = "1") int currentPage,
+			@RequestParam(defaultValue = "10") int pageRows,
+			@RequestParam(defaultValue = "TITLE") SearchTarget searchTarget,
+			@RequestParam(defaultValue = "") String keyWord,
+			@RequestParam(defaultValue = "IDX_DESC") SortOrder orderBy
+	) 
+	
+	
+	
+	{
 		
+		
+		System.out.println("--------------------GET 디버그 확인용-------------------------------");
+		
+		System.out.println("currentPage:"+currentPage);
+		System.out.println("pageRows:"+pageRows);
+		System.out.println("orderBy:"+orderBy);
+		System.out.println("searchTarget:"+searchTarget);
+		System.out.println("keyWord:"+keyWord);
+		System.out.println("--------------------GET 디버그 확인용-------------------------------");
+		
+		
+		
+		// ================파라미터 생성 및 조합 영역============= //
+
+
+		// DTO에 파라미터 세팅
+		PostingDTO postingDTO = new PostingDTO(orderBy,searchTarget,keyWord); 
+		
+		
+		
+		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
+		
+		
+		// ========================페이징처리 영역================== //
+		
+		// 전체 게시글수 가져오기
+		int totalRows = postingService.getAllPostingCnt(postingDTO);
+		
+		// 게시판 페이지네이션
+		BoardPagingDTO bp = postingService.setBoardPaging(totalRows,pageRows,currentPage);
+		
+
 		// 모든 게시판의 게시글 조회
-		List<PostingDTO> totalPostingList = postingService.getGlobalPostings();
+		List<PostingDTO> totalPostingList = postingService.getGlobalPostings(postingDTO, bp);
 		
-		// 파라미터 전송
-		model.addAttribute("totalPostingList", totalPostingList);
 		
-		return "/boards/total_bbs/bbs_page";	
+		
+		
+		
+		// ========================유틸기능 영역================== //
+		
+		
+		// 오늘날짜인지 확인
+		// boolean regDateIsToday = postingService.hasTodayPostings(bbsNo);  // (게시글 생성일이 오늘날자인경우 작성한 시,분만 표시하는 용도)
+		
+		// 응답메세지
+		String headerMsg = "게시글 리스트";
+		String goodMsg = headerMsg+"요청에 성공했습니다";
+		String badMsg = headerMsg+"요청에 실패했습니다";
+		
+		
+		// ========================파라미터 전송 영역================== //
+
+
+		if(totalPostingList != null)
+		{	
+			model.addAttribute("totalPostingList", totalPostingList);
+			model.addAttribute("bp", bp);
+			model.addAttribute("resultMSG", goodMsg);
+			
+			
+			
+			// JSP파라미터 보내기
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("pageRows", pageRows);
+			model.addAttribute("orderBy", orderBy);
+			model.addAttribute("searchTarget", searchTarget);
+			model.addAttribute("keyWord", keyWord);
+			
+			
+			
+			return "/boards/total_bbs/bbs_page";
+		}
+		
+		else
+		{
+			model.addAttribute("resultMSG", badMsg);
+			return "redirect:/bbs";
+		}
+		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
+		
+		
+
+			
 	}
 	
+	// ==============[POST]========================(Total)전체글 모두 보는 게시판  :START ======================================== // 
 	
 	
 	
-	
+	// (POST)게시판 페이지이동 : START
+	@PostMapping("/bbs")
+	public String globalPostingPagePost
+	(
+		Model model,
+		@RequestParam(defaultValue = "1") int currentPage,
+		@RequestParam(defaultValue = "10") int pageRows,
+		@RequestParam(defaultValue = "TITLE") SearchTarget searchTarget,
+		@RequestParam(defaultValue = "") String keyWord,
+		@RequestParam(defaultValue = "IDX_DESC") SortOrder orderBy
+	) 
+	{
+		
+		/* 	notice : 
+		 *  changetOption은 JSP에서 보내온 파라미터 옵션을 의미하는 문자열임, 
+		 *  dynamicParam에는 pageOption이나 keyWord를 받아온다 
+		 *  둘다 사용자에게 URL에 무엇이 바뀌었는지 표시하는 용도로사용 
+		 *  (dynamicParam은 사용자경험을 위한 url표시와 파라미터값 비교용으로 사용)
+		 *  
+		 *  그리고 JSP에서 form으로 온 파라미터값과 dynamicParam의 값을 비교한뒤
+		 *  form에서 전송받은 해당 파라미터를 GetMapping에 리다이렉트하여 Get코드를 재사용한다 
+		*/
+		
+		
+		
+		System.out.println("--------------------POST 디버그 확인용-------------------------------");
+		
+		System.out.println("currentPage:"+currentPage);
+		System.out.println("pageRows:"+pageRows);
+		System.out.println("orderBy:"+orderBy);
+		System.out.println("searchTarget:"+searchTarget);
+		System.out.println("keyWord:"+keyWord);
+		System.out.println("--------------------POST 디버그 확인용-------------------------------");
+		
+		//========================JSP 페이지에서 온 변경사항 Get으로 리턴 ================== //
+		
+
+
+		
+		
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("pageRows", pageRows);
+		model.addAttribute("orderBy", orderBy);
+		model.addAttribute("searchTarget", searchTarget);
+		model.addAttribute("keyWord", keyWord);
+
+		
+		
+		
+		
+		
+		return "redirect:/bbs";
+
+	}
 	
 	
 	

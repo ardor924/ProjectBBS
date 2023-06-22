@@ -1,5 +1,5 @@
 // 제출버튼 생성
-const submitButton = document.getElementById('writingSubmitBtn');
+const submitButton = document.getElementById('editSubmitBtn');
 
 submitButton.addEventListener('click', function(event) {
     event.preventDefault(); // 폼 제출 방지
@@ -8,6 +8,8 @@ submitButton.addEventListener('click', function(event) {
 
     var bbsNameForURL = document.getElementById('bbsNameSelect').value; // 게시판 선택 값 가져오기
     var postTitle = document.editForm.elements.postTitle.value; // 제목 값 가져오기
+    var bbsPostNo = document.editForm.elements.bbsPostNo.value; // bbsPostNo 번호 값 가져오기
+
 
     /* 게시판이름 없을시 리턴 */
     if (bbsNameForURL == "" || bbsNameForURL == "null") {
@@ -23,9 +25,11 @@ submitButton.addEventListener('click', function(event) {
 
 
 
+
+
+
     // 폼 제출
-    document.editForm.action = ctx+'/bbs/'+bbsNameForURL+"/write-page/submit"; // 폼을 제출할 URL을 지정
+    document.editForm.action = ctx+'/bbs/'+bbsNameForURL+'/'+bbsPostNo+"/edit-page/submit"; // 폼을 제출할 URL을 지정
     document.editForm.method = 'POST'; // 폼을 POST 방식으로 설정
-	document.editForm.enctype = "multipart/form-data"
     document.editForm.submit();
 });

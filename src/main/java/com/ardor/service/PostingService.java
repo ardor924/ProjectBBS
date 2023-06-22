@@ -27,7 +27,17 @@ public interface PostingService {
 	
 
 	// (Total)모든 게시판의 게시글 조회
-	public List<PostingDTO> getGlobalPostings();
+	public List<PostingDTO> getGlobalPostings(PostingDTO postingDTO , BoardPagingDTO bp);
+	
+	
+	
+	// 게시글 삭제
+	public boolean deletePostingByPostNo(int postNo);
+	
+	// 게시글 수정
+	public boolean updatePostingByPostingDTO(PostingDTO postingDTO);
+	
+	
 	
 	// 게시판 페이지네이션
 	public BoardPagingDTO setBoardPaging(int totalRows, int pageRows,int currentPage);
@@ -43,7 +53,7 @@ public interface PostingService {
 	
 	
 	// 특정 게시판의 게시글수 가져오기
-	public int getTotalPostingCntBybbsNo(int bbsNo); 
+	public int getTotalPostingCntByPostingDTO(PostingDTO postingDTO);
 	
 	// 게시판이름 파라미터 비교
 	//(제거할예정)
@@ -59,5 +69,17 @@ public interface PostingService {
 	
 	// 게시글 조회수 증가
 	public void addHitUp(PostingDTO postingDTO);
+	
+	
+	
+	
+	
+	// 전체게시판 게시글수 가져오기 
+	public int getAllPostingCnt(PostingDTO postingDTO);
+	
+	
+	// 전체게시글 샘플 가져오기
+	public List<PostingDTO> getGlobalPostingSample();
+	
 
 }

@@ -1,8 +1,8 @@
 package com.ardor.controller;
 
+import java.io.File;
 import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ardor.model.PostingDTO;
 import com.ardor.model.PostingDTO.SearchTarget;
 import com.ardor.model.PostingDTO.SortOrder;
 import com.ardor.model.PostingDTO.isNotice;
 import com.ardor.service.BoardService;
+import com.ardor.service.FileService;
 import com.ardor.service.PostingService;
 import com.ardor.service.UtilityService;
 
@@ -24,6 +26,7 @@ import com.ardor.service.UtilityService;
 public class PostingController {
 
 	@Autowired UtilityService utilService;
+	@Autowired FileService fileService;
 	@Autowired PostingService postingService;
 	@Autowired BoardService boardService;
 	
@@ -85,21 +88,28 @@ public class PostingController {
 	String submitWriting
 	(
 		PostingDTO postingDTO,
+		@RequestParam List<MultipartFile> selectedImg,
 		@PathVariable String bbsNameForURL,
 		@RequestParam(value="postHit" , defaultValue="0" ) int postHit , 
 		@RequestParam(value="postNotice" , defaultValue="NO" ) String postNoticeStr , 
+		@RequestParam(value="isPostingIMG" , defaultValue="NO" ) String isPostingIMG , 
 		Model model
 	) 
 	
 	{
-
 		/* 	notice : 
 		 *  홈화면 사이드바에서 바로 게시글을 작성하거나, 게시글 폼 제출시 게시판이름이 폼으로 제출안되는 경우가 발생함 
 		 *  JSP를 통해 가져온 bbsNameSelect의 경우 값이 선택되지 않고 파라미터가 컨트롤러에 온다면 에러발생
 		 *  때문에, URL로 넘어온 게시판이름과 비교하는 로직이 필요해서 예외처리코드 작성
 		*/
 		
-	
+		
+		for (MultipartFile file : selectedImg)
+		{
+			System.out.println("file : " + file.getOriginalFilename());
+			
+		}
+		
 		// ================파라미터 생성 및 조합 영역============= //
 		
 		// 게시판 실제이름 가져오기
@@ -117,7 +127,9 @@ public class PostingController {
 		// 게시글번호 생성 및 추가
 		int bbsPostNo = postingService.addBbsPostNo(bbsNo); //(각각의 게시판마다 별도의 게시글 번호를 1부터 순차적으로 생성) 
 		
-	
+		// 게시글 PK값 가져오기
+		int postNo = postingService.getPostNo(bbsNo, bbsPostNo);
+		
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
 				
@@ -126,7 +138,20 @@ public class PostingController {
 		
 		
 		
+		// ===================게시판 이미지파일 업로드 처리============= //
+		// 
+		//boolean uploadPostingImage = isPostingIMG.equals("YES") ? fileService.uploadFile(postNo) : false;
+		//System.out.println(uploadPostingImage ? "이미지등록 성공" : "이미지등록안함");
+		
+		
+		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
+		
+		
+		
+		
 		// ========================유틸기능 영역================== //
+		
+
 
 		
 		// 응답메세지
@@ -282,13 +307,247 @@ public class PostingController {
 	// ========================================== 게시글 수정 : START ========================================== // 
 	
 	//게시판 수정 페이지:
-	@GetMapping("/bbs/{bbsNameForURL}/{postNo}/edit-page")
-	public String editPage() {
+	@PostMapping("/bbs/{bbsNameForURL}/{bbsPostNo}/edit-page")
+	public String editPage
+	(
+		Model model,
+		@PathVariable String bbsNameForURL, 
+		@PathVariable int bbsPostNo,
+		@RequestParam(defaultValue = "1") int currentPage,
+		@RequestParam(defaultValue = "10") int pageRows,
+		@RequestParam(defaultValue = "TITLE") SearchTarget searchTarget,
+		@RequestParam(defaultValue = "") String keyWord,
+		@RequestParam(defaultValue = "IDX_DESC") SortOrder orderBy
+	) 
+	{
+		// ================파라미터 생성 및 조합 영역============= //
+		// 게시판 PK번호 가져오기
+		int bbsNo = boardService.getBbsNoByUrlName(bbsNameForURL); // (URL이름으로 조회)
+		
+		// 게시글 PK번호 가져오기
+		int postNo = postingService.getPostNo(bbsNo, bbsPostNo); // (게시판번호, 개별 게시글번호로 검색하여 조회)
+		
+		// 게시글 1개 가져오기
+		PostingDTO postingDTO = postingService.getPosting(postNo); // (게시글 PK값으로 조회)
+		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
+		
+		
+		// ========================파라미터 전송 영역================== //
+		
+
+		// 파라미터 보내기
+		model.addAttribute("postingDTO", postingDTO);
+		model.addAttribute("bbsNameForURL", bbsNameForURL);
+		model.addAttribute("bbsPostNo", bbsPostNo);
+		
+		
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("pageRows", pageRows);
+		model.addAttribute("orderBy", orderBy);
+		model.addAttribute("searchTarget", searchTarget);
+		model.addAttribute("keyWord", keyWord);
+		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
+		
+		
+		
 		return "/posting/edit_page";
 	}
 	
 	
+	
+	
+	
+	// 게시글 수정 폼 제출
+	@PostMapping("/bbs/{bbsNameForURL}/{bbsPostNo}/edit-page/submit")
+	String submitEditing
+	(
+		PostingDTO postingDTO,
+		@PathVariable String bbsNameForURL,
+		@PathVariable("bbsPostNo") int bbsPostNo,
+		@RequestParam(value="postHit" , defaultValue="0" ) int postHit , 
+		@RequestParam(value="postNotice" , defaultValue="NO" ) String postNoticeStr , 
+		Model model
+	) 
+	
+	{
+
+		/* 	notice : 
+		 *  홈화면 사이드바에서 바로 게시글을 작성하거나, 게시글 폼 제출시 게시판이름이 폼으로 제출안되는 경우가 발생함 
+		 *  JSP를 통해 가져온 bbsNameSelect의 경우 값이 선택되지 않고 파라미터가 컨트롤러에 온다면 에러발생
+		 *  때문에, URL로 넘어온 게시판이름과 비교하는 로직이 필요해서 예외처리코드 작성
+		*/
+		
+	
+		// ================파라미터 생성 및 조합 영역============= //
+		
+		// 게시판 실제이름 가져오기
+		String bbsName = boardService.getRealNameFromUrlName(bbsNameForURL); // (URLName => RealName)
+			
+		// 게시판 PK번호 가져오기
+		int bbsNo = boardService.getBbsNoByUrlName(bbsNameForURL); // (URL이름으로 조회)
+		
+		// 게시글 PK번호 가져오기
+		int postNo = postingService.getPostNo(bbsNo, bbsPostNo); // (게시판번호, 개별 게시글번호로 검색하여 조회)
+		
+		// 공지사항 Enum값 처리
+		isNotice postNotice = utilService.convertToEnumNotice(postNoticeStr);	
+		
+		// 게시글 등록일자 처리
+		Date postRegdate = utilService.getNowDate();
+				
+	
+		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
+		
+				
+		
+		
+		
+		
+		
+		// ========================유틸기능 영역================== //
+
+		
+		// 응답메세지
+		String headerMsg = "게시글 수정";
+		String goodMsg = headerMsg+"요청에 성공했습니다";
+		String badMsg = headerMsg+"요청에 실패했습니다";
+	
+		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
+		
+		
+		
+		
+		
+		
+		
+
+
+		
+		
+
+		// ========================파라미터 전송 영역================== //
+				
+
+		
+		// DTO에 파라미터 세팅
+		postingDTO.setPostNo(postNo);
+		postingDTO.setPostNotice(postNotice);
+		postingDTO.setPostRegdate(postRegdate);
+		
+		// DB에 게시글정보 업데이트
+		boolean success =  postingService.updatePostingByPostingDTO(postingDTO);
+		
+		
+		//성공
+		if(success) // (DB등록성공)
+		{	
+			model.addAttribute("resultMSG", goodMsg);
+			return "redirect:/bbs/"+bbsNameForURL ;
+
+		}
+		
+		// 실패
+		else 
+		{	
+			model.addAttribute("resultMSG", badMsg);
+			return "redirect:/bbs/"+bbsNameForURL+"/writing";
+
+		}
+
+		
+		
+	} // ./게시글쓰기 폼 제출 : END
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// ========================================== 게시글 수정 : END ========================================== // 
+	
+	
+	
+	
+	
+	
+	// ========================================== 게시글 삭제 : START ========================================== // 
+	
+	//게시판 삭제
+	@PostMapping("/bbs/{bbsNameForURL}/{bbsPostNo}/delete")
+	public String deletePosting
+	(
+		Model model,
+		@PathVariable String bbsNameForURL,	
+		@PathVariable("bbsPostNo") int bbsPostNo
+	) 
+	{	
+		System.out.println("------------------게시글 삭제------------------------");
+		// ================파라미터 생성 및 조합 영역============= //
+				
+		// 게시판 실제이름 가져오기
+		String bbsName = boardService.getRealNameFromUrlName(bbsNameForURL); // (URLName => RealName)
+		
+		// 게시판 PK번호 가져오기
+		int bbsNo = boardService.getBbsNoByUrlName(bbsNameForURL); // (URL이름으로 조회)
+		
+		// 게시글 PK번호 가져오기
+		int postNo = postingService.getPostNo(bbsNo, bbsPostNo); // (게시판번호, 개별 게시글번호로 검색하여 조회)
+		
+		
+		// ========================유틸기능 영역================== //
+
+		
+		// 응답메세지
+		String headerMsg = "게시글 삭제";
+		String goodMsg = headerMsg+"요청에 성공했습니다";
+		String badMsg = headerMsg+"요청에 실패했습니다";
+		
+		// 물리폴더 이미지 삭제
+		//String deleteResultMSG = fileService.deletePostContentsIMG(postNo);
+		//if(deleteResultMSG.equals("이미지삭제 성공")) {System.out.println("물리 폴더내의 이미지삭제 성공");};
+		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
+		
+		
+		/*------------------------------*/
+		
+		// DB에 게시글정보 저장
+		boolean success =  postingService.deletePostingByPostNo(postNo);
+		
+		//성공
+		if(success) // (DB삭제성공)
+		{	
+			//model.addAttribute("deleteResultMSG", deleteResultMSG);
+			model.addAttribute("resultMSG", goodMsg);
+			return "redirect:/bbs/"+bbsNameForURL ;
+
+		}
+		
+		// 실패
+		else 
+		{	
+			model.addAttribute("resultMSG", badMsg);
+			return "redirect:/bbs/"+bbsNameForURL+"/"+bbsPostNo;
+
+		}
+		
+		
+	}
+	
+	
+	// ========================================== 게시글 삭제 : END ========================================== // 
 
 	
 	

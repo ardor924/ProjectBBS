@@ -7,7 +7,7 @@
 <!--현재파일의 CSS -->
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/common/header.css"> 
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/common/snb.css"> 
-<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/boards/bbs_list.css"> 
+<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/posting/writing.css"> 
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/template/common/footer.css"> 
 <!-----------------------------------------./기본설정(상단) ---------------------------------------- -->
 <!-- ================================================================================================ END-->
@@ -36,8 +36,9 @@
 			<!--./ 사이드 내비 : END-->
 			
 			<!--메인컨텐츠 : START-->
-			<%@ include file="/WEB-INF/views/boards/total_bbs/bbs_code.jsp" %>		
+			<%@ include file="/WEB-INF/views/posting/edit_code.jsp" %>		
 			<!--./ 메인컨텐츠 : END-->
+			
 		</div>	
 		<!--./컨텐츠 : END-->
 		
@@ -61,8 +62,13 @@
 
 <!-- START================================================================================================ -->
 <!-- ---------------------------------- 자바스크립트 :START ---------------------------------- -->
-<!-- 게시판 게시글옵션변경 폼 제출 -->
-<script src="${ctx}/resources/js/boards/total_board_dynamic_form.js"></script>
+
+<!-- 현재JSP의 JS파일 -->
+<script src="${ctx}/resources/js/api/ckeditor5/build/ckeditor.js"></script><!-- ckEditor5 Full npm 빌드-->
+<script src="${ctx}/resources/js/api/ckeditor5/editor_setting.js"></script><!-- ckEditor5 설정파일-->
+
+<script src="${ctx}/resources/js/posting/editing_submit.js"></script><!-- 게시글 업데이트 폼 제출-->
+
 
 
 <!-- ---------------------------------- 자바스크립트 :END ---------------------------------- -->

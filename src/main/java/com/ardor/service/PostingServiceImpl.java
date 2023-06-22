@@ -86,12 +86,39 @@ public class PostingServiceImpl implements PostingService{
 	
 	// (Total)모든 게시판의 게시글 조회
 	@Override
-	public List<PostingDTO> getGlobalPostings() {
-		return postingMapper.getGlobalPostingsFromDB();
+	public List<PostingDTO> getGlobalPostings(PostingDTO postingDTO , BoardPagingDTO bp) {
+		
+		int pageRows = bp.getPageRows();
+		int pageStartRowNum =  bp.getPageStartRowNum(); 
+		
+		postingDTO.setPageRows(pageRows);
+		postingDTO.setPageStartRowNum(pageStartRowNum);
+		
+		System.out.println("postingDTO-orderBy : "+ postingDTO.getOrderBy().toString());
+		System.out.println("postingDTO-searchTarget : "+ postingDTO.getSearchTarget().toString());
+		System.out.println("postingDTO-keyWord : "+ postingDTO.getKeyWord().toString());
+		
+		return postingMapper.getGlobalPostingsFromDB(postingDTO);
 	}
 	
 	
+	
+	
+	// 게시글 삭제
+	@Override
+	public boolean deletePostingByPostNo(int postNo) {
+		return postingMapper.deletePostingByPostNo(postNo);
+	}
+	
 
+	
+	
+	// 게시글 수정
+	@Override
+	public boolean updatePostingByPostingDTO(PostingDTO postingDTO) {
+		return postingMapper.updatePostingByPostingDTO(postingDTO);
+	}
+	
 	
 	
 	
@@ -115,8 +142,8 @@ public class PostingServiceImpl implements PostingService{
 	
 	// 특정 게시판의 게시글수 가져오기
 	@Override
-	public int getTotalPostingCntBybbsNo(int bbsNo) {
-		return postingMapper.getPostingCountBybbsNo(bbsNo);
+	public int getTotalPostingCntByPostingDTO(PostingDTO postingDTO) {
+		return postingMapper.getPostingCountByPostingDTO(postingDTO);
 	}
 	
 	
@@ -145,30 +172,50 @@ public class PostingServiceImpl implements PostingService{
 	// 게시판 별로 게시글번호생성 및 추가
 	@Override
 	public int addBbsPostNo(int bbsNo) {
-
-		// 게시판의 게시글의 갯수 가져오기
-		int bbsPostno = postingMapper.getPostingCountBybbsNo(bbsNo);
 		
-		// 해당 게시판의 게시글 갯수가 0 이라면, 
-		if(bbsPostno == 0)
+
+		// 특정게시판의 게시글의 갯수 가져오기
+		int bbsPostNo = postingMapper.getPostingCountBybbsNo(bbsNo);
+		// bbsPostNo가 중복인지 확인
+		boolean isBbsPostNoDuplicate = isBbsPostNoDuplicate(bbsNo,bbsPostNo);
+				
+		// 해당 게시판의 게시글의 총갯수가 0 이라면, 
+		if(bbsPostNo == 0)
 		{	
 			// 게시글번호를 1로설정
-			bbsPostno = 1;
+			bbsPostNo = 1;
 		}
-		// 해당 게시판의 게시글 갯수가 0 이 아니라면, 
-		else
+		
+		// 해당 게시판의 게시글의 총갯수가 0 이 아니고 번호(bbsPostNo)가 중복이 아니라면, 
+		else if(bbsPostNo != 0 && isBbsPostNoDuplicate)
 		{	
-			// 게시글번호에 1추가
-			bbsPostno += 1;
+			PostingDTO postingDTO = new PostingDTO();
+			postingDTO.setBbsNo(bbsNo);
+			postingDTO.setBbsPostNo(bbsPostNo);
+			bbsPostNo = postingMapper.getLastBbsPostNo(postingDTO);
+			++bbsPostNo; // 마지막번호에 +1
 		}
+
 		
 		
-		return bbsPostno;
+		return bbsPostNo;
 	}
 	
 	
 
+	
+	// bbsPostNo가 중복인지 확인
+	public boolean isBbsPostNoDuplicate(int bbsNo, int bbsPostNo) {
+		PostingDTO postingDTO = new PostingDTO();
+		postingDTO.setBbsNo(bbsNo);
+		postingDTO.setBbsPostNo(bbsPostNo);
+		
+		int count = postingMapper.isBbsPostNoDuplicate(postingDTO);
+		System.out.println("count : "+count);
+		return (count <= 1) ? true : false;
 
+		
+	}
 	
 	
 
@@ -211,6 +258,21 @@ public class PostingServiceImpl implements PostingService{
 	}
 	
 	
+	
+	
+	// 전체게시판 게시글수 가져오기 
+	@Override
+	public int getAllPostingCnt(PostingDTO postingDTO) {
+		return postingMapper.getAllPostingCnt(postingDTO);
+	}
+	
+	
+	
+	// 전체게시글 샘플 가져오기
+	@Override
+	public List<PostingDTO> getGlobalPostingSample() {
+		return postingMapper.getGlobalPostingSample();
+	}
 
 
 }

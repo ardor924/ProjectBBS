@@ -1,16 +1,33 @@
 package com.ardor.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ardor.model.FileDTO;
+import com.ardor.model.FileDTO.isTEMP;
 
 @Mapper
 public interface FileMapper {
 
 	// 파일등록(DB등록)
-	public int insertFileToDB(FileDTO fileDTO);
+	public boolean insertFileToDB(FileDTO fileDTO);
+	
+	//파일 PK로 파일정보 가져오기
+	public FileDTO getFileInfoByFileNo(int FileNo);
 	
 	//파일이름으로 파일정보 가져오기
 	public FileDTO getFileInfoFromDB(String fileName);
+	
+	// 임시 Temp 파일 전부 가져오기
+	public List<FileDTO> getAllTempFiles(isTEMP TRUE);	
+	
+	// postNo에 해당하는 파일 전부 가져오기
+	public List<FileDTO> getAllFilesByPostNo(int postNo);
+	
+	
+	//Temp 파일경로 DB수정
+	public boolean updateFileInfo(FileDTO fileDTO);
+	
 	
 }

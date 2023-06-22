@@ -18,7 +18,7 @@
                             <option value="WRITER">글쓴이</option>
                         </select>
                         <input type="text" name="keyWord" id="keyWord" class="search-input form-control rounded-0 rounded-start" placeholder="검색어를 입력 하세요">
-                        <button class="btn btn-primary search-btn btn-lg rounded-0 rounded-end" onclick="submitFormWithOption3('searchForm','event')">
+                        <button class="btn btn-primary search-btn btn-lg rounded-0 rounded-end" onclick="submitFormWithOptionForSearchBar('searchForm','event')">
                             <i class="fa fa-search"></i>
                         </button>
                         <!-- 전송용 공통 파라미터 -->
@@ -45,7 +45,7 @@
 										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
 										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
 										<input type="hidden" name="orderBy" value="${orderBy eq 'IDX_DESC' ? 'IDX_ASC' : 'IDX_DESC'}">	
-										<a onclick="submitFormWithOption('IDX_DESC-orderForm','orderBy','event')">번호</a>
+										<a onclick="submitFormWithOptionForCommon('IDX_DESC-orderForm','orderBy','event')">번호</a>
 										<i class='fa-solid fa-sort-up'></i>									                      			
 	                        		</form>
 	                        	</th>
@@ -58,7 +58,7 @@
 										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
 										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
 										<input type="hidden" name="orderBy" value="${orderBy eq 'IDX_DESC' ? 'IDX_ASC' : 'IDX_DESC'}">	
-										<a onclick="submitFormWithOption('IDX_ASC-orderForm','orderBy','event')">번호</a>
+										<a onclick="submitFormWithOptionForCommon('IDX_ASC-orderForm','orderBy','event')">번호</a>
 										<i class='fa-solid fa-sort-down'></i>									                      			
 	                        		</form>
 	                        	</th>                   		
@@ -75,7 +75,7 @@
 										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
 										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
 										<input type="hidden" name="orderBy" value="HIT_DESC">	
-										<a onclick="submitFormWithOption('HIT_DESC-orderForm','orderBy','event')">조회수</a>
+										<a onclick="submitFormWithOptionForCommon('HIT_DESC-orderForm','orderBy','event')">조회수</a>
 										<i class='fa-solid fa-sort-up'></i>									                      			
 	                        		</form>
 	                        	</th>
@@ -88,7 +88,7 @@
 										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
 										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
 										<input type="hidden" name="orderBy" value="HIT_ASC">	
-										<a onclick="submitFormWithOption('HIT_ASC-orderForm','orderBy','event')">조회수</a>
+										<a onclick="submitFormWithOptionForCommon('HIT_ASC-orderForm','orderBy','event')">조회수</a>
 										<i class='fa-solid fa-sort-down'></i>									                      			
 	                        		</form>
 	                        	</th>                   		
@@ -103,7 +103,7 @@
 										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
 										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
 										<input type="hidden" name="orderBy" value="REGDATE_DESC">	
-										<a onclick="submitFormWithOption('REGDATE_DESC-orderForm','orderBy','event')">작성일</a>
+										<a onclick="submitFormWithOptionForCommon('REGDATE_DESC-orderForm','orderBy','event')">작성일</a>
 										<i class='fa-solid fa-sort-up'></i>									                      			
 	                        		</form>
 	                    	</c:when>
@@ -115,7 +115,7 @@
 										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
 										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
 										<input type="hidden" name="orderBy" value="REGDATE_ASC">	
-										<a onclick="submitFormWithOption('REGDATE_ASC-orderForm','orderBy','event')">작성일</a>
+										<a onclick="submitFormWithOptionForCommon('REGDATE_ASC-orderForm','orderBy','event')">작성일</a>
 										<i class='fa-solid fa-sort-down'></i>									                      			
 	                        		</form>
 	                        	</th>                   		
@@ -169,7 +169,7 @@
             <div class="row-between">
                 <div class="bbs-bottom-left">
 					<form id="pageRowsForm" method="POST">
-						<select class="form-select" id="pageRows" name="pageRows" onchange="submitFormWithOption('pageRowsForm','event')">
+						<select class="form-select" id="pageRows" name="pageRows" onchange="submitFormWithOptionForCommon('pageRowsForm','event')">
 						    <option value="10" ${bp.pageRows eq 10 ? 'selected' : ''}>10개씩</option>
 						    <option value="15" ${bp.pageRows eq 15 ? 'selected' : ''}>15개씩</option>
 						    <option value="20" ${bp.pageRows eq 20 ? 'selected' : ''}>20개씩</option>

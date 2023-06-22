@@ -10,17 +10,21 @@
             <div class="row-between">
                 <h2 class="bbs-title">전체 게시글 보기</h2><!--타이틀명만 수정-->  
                 <div class="post-search">
-                    <form class="post-search-frm" action="getPostListFromDB.do" method="POST">
-                        <select class="search-option form-select" >
+                    <form class="post-search-frm" id="searchForm" method="POST">
+                        <select class="search-option form-select" id="searchTarget" name="searchTarget">
                             <option value="none">선택</option>
-                            <option value="postTitle">제목</option>
-                            <option value="postContents">내용</option>
-                            <option value="postWriter">글쓴이</option>
+                            <option value="TITLE">제목</option>
+                            <option value="CONTENTS">내용</option>
+                            <option value="WRITER">글쓴이</option>
                         </select>
-                        <input type="text" name="keyword" id="keyword" class="search-input form-control rounded-0 rounded-start" placeholder="검색어를 입력 하세요">
-                        <button class="btn btn-primary search-btn btn-lg rounded-0 rounded-end">
+                        <input type="text" name="keyWord" id="keyWord" class="search-input form-control rounded-0 rounded-start" placeholder="검색어를 입력 하세요">
+                        <button class="btn btn-primary search-btn btn-lg rounded-0 rounded-end" onclick="submitFormWithOptionForSearchBar('searchForm','event')">
                             <i class="fa fa-search"></i>
                         </button>
+                        <!-- 전송용 공통 파라미터 -->
+						<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? currentPage : ''}">
+						<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    		            
+						<input type="hidden" name="orderBy" value="${orderBy ne null ? orderBy : ''}">	                        
                     </form>
                 </div>
             </div>   
@@ -34,12 +38,92 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>번호</th>
-                        <th>게시판명</th>
+	                    <c:choose>
+	                    	<c:when test="${orderBy eq 'IDX_ASC'}">
+	                        	<th scope="col">
+	                        		<form method="POST" id="IDX_DESC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="${orderBy eq 'IDX_DESC' ? 'IDX_ASC' : 'IDX_DESC'}">	
+										<a onclick="submitFormWithOptionForCommon('IDX_DESC-orderForm','orderBy','event')">번호</a>
+										<i class='fa-solid fa-sort-up'></i>									                      			
+	                        		</form>
+	                        	</th>
+	                    	</c:when>
+	                    	<c:otherwise>
+	                         	<th scope="col">
+	                        		<form method="POST" id="IDX_ASC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="${orderBy eq 'IDX_DESC' ? 'IDX_ASC' : 'IDX_DESC'}">	
+										<a onclick="submitFormWithOptionForCommon('IDX_ASC-orderForm','orderBy','event')">번호</a>
+										<i class='fa-solid fa-sort-down'></i>									                      			
+	                        		</form>
+	                        	</th>                   		
+	                    	</c:otherwise>
+	                    </c:choose>
+                        <th>게시판이름</th>
                         <th>제목</th>
                         <th>작성자</th>
-                        <th>조회수</th>
-                        <th>작성일</th>
+	                    <c:choose>
+	                    	<c:when test="${orderBy eq 'HIT_ASC'}">
+	                        	<th scope="col">
+	                        		<form method="POST" id="HIT_DESC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="HIT_DESC">	
+										<a onclick="submitFormWithOptionForCommon('HIT_DESC-orderForm','orderBy','event')">조회수</a>
+										<i class='fa-solid fa-sort-up'></i>									                      			
+	                        		</form>
+	                        	</th>
+	                    	</c:when>
+	                    	<c:otherwise>
+	                         	<th scope="col">
+	                        		<form method="POST" id="HIT_ASC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="HIT_ASC">	
+										<a onclick="submitFormWithOptionForCommon('HIT_ASC-orderForm','orderBy','event')">조회수</a>
+										<i class='fa-solid fa-sort-down'></i>									                      			
+	                        		</form>
+	                        	</th>                   		
+	                    	</c:otherwise>
+	                    </c:choose>				
+ 	                    <c:choose>
+	                    	<c:when test="${orderBy eq 'REGDATE_ASC'}">
+	                        	<th scope="col">
+	                        		<form method="POST" id="REGDATE_DESC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="REGDATE_DESC">	
+										<a onclick="submitFormWithOptionForCommon('REGDATE_DESC-orderForm','orderBy','event')">작성일</a>
+										<i class='fa-solid fa-sort-up'></i>									                      			
+	                        		</form>
+	                    	</c:when>
+	                    	<c:otherwise>
+	                         	<th scope="col">
+	                        		<form method="POST" id="REGDATE_ASC-orderForm">
+										<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+										<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">    	                        		
+										<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+										<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    											
+										<input type="hidden" name="orderBy" value="REGDATE_ASC">	
+										<a onclick="submitFormWithOptionForCommon('REGDATE_ASC-orderForm','orderBy','event')">작성일</a>
+										<i class='fa-solid fa-sort-down'></i>									                      			
+	                        		</form>
+	                        	</th>                   		
+	                    	</c:otherwise>
+	                    </c:choose>                       
                     </tr>
                 </thead>
                 <tbody>
@@ -53,15 +137,22 @@
 					<!-- 반복문 적용 -->
                     <c:forEach var="li" items="${totalPostingList}">
                     <tr>
-                        <td>${li.bbsNo}</td>
+                        <td>${li.postNo}</td>
                        	<c:forEach var="bli" items="${boardList}">
                         <c:if test="${bli.bbsNo == li.bbsNo}">
                         <td>${bli.bbsName}</td>
                         <td>
-                            <a href="${ctx}/bbs/${bli.bbsNameForURL}/${li.bbsPostNo}" class="post-link">${li.postTitle}</a>
-                        	</c:if>
-                        	</c:forEach>
+                        	<form action="${ctx}/bbs/${bli.bbsNameForURL}/${li.bbsPostNo}" id="goViewForm${li.bbsPostNo}" method="POST">
+                            	<a class="post-link" onclick="document.getElementById('goViewForm${li.bbsPostNo}').submit();">${li.postTitle}</a>
+								<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+								<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">   
+								<input type="hidden" name="orderBy" value="${orderBy ne null ? orderBy : ''}">
+								<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+								<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">                                	
+                        	</form>
                         </td>
+                        </c:if>
+                        </c:forEach>
                         <td>${li.postWriter}</td>
                         <td>${li.postHit}</td>
                         <td>
@@ -85,12 +176,18 @@
             <hr class="section-line">
             <div class="row-between">
                 <div class="bbs-bottom-left">
-                    <select class="form-select" name="" id="">
-                        <option value="none" selected>선택</option>
-                        <option value="10">10개씩</option>
-                        <option value="15">15개씩</option>
-                        <option value="20">20개씩</option>
-                    </select>
+					<form id="pageRowsForm" method="POST">
+						<select class="form-select" id="pageRows" name="pageRows" onchange="submitFormWithOptionForCommon('pageRowsForm','event')">
+						    <option value="10" ${bp.pageRows eq 10 ? 'selected' : ''}>10개씩</option>
+						    <option value="15" ${bp.pageRows eq 15 ? 'selected' : ''}>15개씩</option>
+						    <option value="20" ${bp.pageRows eq 20 ? 'selected' : ''}>20개씩</option>
+						</select>
+						<!-- 전송용 공통 파라미터 -->
+						<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+						<input type="hidden" name="orderBy" value="${orderBy ne null ? orderBy : ''}">
+						<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+						<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    							
+					</form>	
                 </div>
                 <div class="bbs-bottom-right">
                     <button class="btn btn-outline-warning">더미데이터</button>
@@ -100,35 +197,56 @@
                     	<a class="btn btn-primary" onclick="javascript:alert('글쓰기 기능을 사용하기 위해서는 로그인이 필요합니다.')">글쓰기</a>                            
                     </c:when>
                     <c:otherwise>                           
-                    	<a href="${ctx}/bbs/${bbsNameForURL}/write-page"class="btn btn-primary">글쓰기</a>
+                    	<a href="${ctx}/bbs/total/write-page"class="btn btn-primary">글쓰기</a>
                     </c:otherwise>
                     </c:choose>                    
                 </div>
             </div>
             <div class="row-center">
-                <ul class="pagingBlock pagination">                              
-<%--                     <c:if test="${bp.prevPage > 0}">
-                      <li class="page-item"><!--이전 페이징 블럭이 0이하 일 경우, 이전 버튼 비활성화-->
-                         <a class="page-link" href="webDevBoard_1.do?i=${bp.prevPage}&cntPerPage=${bp.cntPerPage}">
-                             <i class="fa-solid fa-angle-left"></i>이전
-                         </a>
-                      </li>
-                    </c:if> --%>
-
-                    <c:forEach var="i" begin="${bp.blockStartPage}" end="${bp.blockEndPage}">	  
-                        <li class="page-item ${bp.currentPage == i ? 'active':''}"><!-- 현재 페이지가 i일 경우 active(현재위치표시역할) -->
-                            <a class="page-link" href="">${i}</a>
-                        </li>
-                    </c:forEach>
-
-<%--                     <c:if test="${bp.blockEnd < bp.totalPage}">
-                        <li class="page-item"><!-- 전체게시글 수가 페이징 블럭의 끝번호 보다 작을 경우 disabled(버튼 비활성화) -->
-                            <a class="page-link" href="webDevBoard_1.do?i=${bp.nextPage}&cntPerPage=${bp.cntPerPage}">
-                                다음<i class="fa-solid fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </c:if> --%>
-                </ul> 
+				<ul class="pagingBlock pagination">
+				    <c:if test="${bp.blockPrevPage > 0}">
+				        <li class="page-item">
+				        	<form action="${ctx}/bbs/${bbsNameForURL}" id="prevCurrentPageFrm" method="POST">
+								<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.blockPrevPage : ''}">			            	
+								<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">   				            	
+								<input type="hidden" name="orderBy" value="${orderBy ne null ? orderBy : ''}">
+								<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+								<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    	
+				            	<a class="page-link" onclick="submitFormWithOptionForCommon('prevCurrentPageFrm${i}','event')">
+				            		<i class="fa-solid fa-angle-left"></i>이전
+				            	</a>
+				        	</form>
+				        </li>
+				    </c:if>
+				
+				    <c:forEach var="i" begin="${bp.blockStartPage}" end="${bp.blockEndPage}">
+				        <li class="page-item ${bp.currentPage == i ? 'active':''}">
+				        	<form action="${ctx}/bbs/${bbsNameForURL}" id="moveCurrentPageFrm${i}" method="POST">
+								<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? i : ''}">			            	
+								<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">   				            	
+								<input type="hidden" name="orderBy" value="${orderBy ne null ? orderBy : ''}">
+								<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+								<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    	
+				            	<a class="page-link" onclick="submitFormWithOptionForCommon('moveCurrentPageFrm${i}','event')">${i}</a>
+				        	</form>
+				        </li>
+				    </c:forEach>
+				
+				    <c:if test="${bp.blockEndPage < bp.totalPage}">
+				        <li class="page-item">
+				        	<form action="${ctx}/bbs/${bbsNameForURL}" id="nextCurrentPageFrm${i}" method="POST">
+								<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.blockNextPage : ''}">			            	
+								<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">   				            	
+								<input type="hidden" name="orderBy" value="${orderBy ne null ? orderBy : ''}">
+								<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+								<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">    	
+				            	<a class="page-link" onclick="submitFormWithOptionForCommon('nextCurrentPageFrm${i}','event')">
+									다음<i class="fa-solid fa-angle-right"></i>
+								</a>
+				        	</form>
+				        </li>
+				    </c:if>
+				</ul>
             </div>
         </fieldset>
 

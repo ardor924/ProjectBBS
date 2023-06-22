@@ -24,7 +24,11 @@
 	        <hr>
 	        <div class="row-none">
 	            <div class="my-posting">
-	                <a href="#myPostingPage.do">내가 쓴 글보기</a>
+	            	<form action="${ctx}/bbs" id="goMyPostings" method="POST">
+	                	<a onclick="document.getElementById('goMyPostings').submit()">내가 쓴 글보기</a>
+	                	<input type="hidden" name="searchTarget" value="WRITER">
+	                	<input type="hidden" name="keyWord" value="${sessionScope.memberID}">	                	
+	            	</form>
 	            </div>
 	            <div class="my-posting">
 	                <a href="#myReplyPage.do">내가 쓴 댓글보기</a>
@@ -61,7 +65,7 @@
 	        <hr>
 	        <div class="row-none">
 	            <form action="${ctx}/members/login">
-	                <button class="btn btn-blue btn-100" onclick="redirectToLogin()">게시글작성</button>
+	                <button class="btn btn-blue btn-100" onclick="alert('해당기능을 사용하기 위해서는\n로그인이 필요합니다')">게시글작성</button>
 	            </form>    
 	        </div>
 	    </div>

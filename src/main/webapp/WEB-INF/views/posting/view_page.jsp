@@ -109,6 +109,66 @@ form.submit();
 
 }
 
+/*게시글 삭제 (bbsPostNo값 사용) */
+function deleteThisPosting(bbsPostNo) {
+	confirm("게시글을 삭제 하시겠습니까?")
+	if(confirm){
+		var form = document.createElement("form");
+		form.action = ctx + "/bbs/" + bbsNameForURL + "/" + bbsPostNo + "/delete";
+		form.method = "post"; 
+	    document.body.appendChild(form);
+	    form.submit();
+	}
+}
+
+/*게시글 수정 페이지 이동 (bbsPostNo값 사용) */
+function goEditPage(bbsPostNo) {
+  if (confirm("게시글을 수정 하시겠습니까?")) {
+    var currentPage = document.getElementById('currentPage').value;
+    var pageRows = document.getElementById('pageRows').value;
+    var searchTarget = document.getElementById('searchTarget').value;
+    var keyWord = document.getElementById('keyWord').value;
+    var orderBy = document.getElementById('orderBy').value;
+
+    var form = document.createElement("form");
+    form.action = ctx + "/bbs/" + bbsNameForURL + "/" + bbsPostNo + "/edit-page";
+    form.method = "post";
+
+    var currentPageInput = document.createElement("input");
+    currentPageInput.type = "hidden";
+    currentPageInput.name = "currentPage";
+    currentPageInput.value = currentPage;
+    form.appendChild(currentPageInput);
+
+    var pageRowsInput = document.createElement("input");
+    pageRowsInput.type = "hidden";
+    pageRowsInput.name = "pageRows";
+    pageRowsInput.value = pageRows;
+    form.appendChild(pageRowsInput);
+
+    var searchTargetInput = document.createElement("input");
+    searchTargetInput.type = "hidden";
+    searchTargetInput.name = "searchTarget";
+    searchTargetInput.value = searchTarget;
+    form.appendChild(searchTargetInput);
+
+    var keyWordInput = document.createElement("input");
+    keyWordInput.type = "hidden";
+    keyWordInput.name = "keyWord";
+    keyWordInput.value = keyWord;
+    form.appendChild(keyWordInput);
+
+    var orderByInput = document.createElement("input");
+    orderByInput.type = "hidden";
+    orderByInput.name = "orderBy";
+    orderByInput.value = orderBy;
+    form.appendChild(orderByInput);
+
+    document.body.appendChild(form);
+    form.submit();
+  }
+}
+
 </script>
 
 

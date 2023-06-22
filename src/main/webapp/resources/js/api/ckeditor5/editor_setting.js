@@ -150,8 +150,10 @@ ClassicEditor
 
 
 
-/*-------------------------------------UploadAdapter------------------------------------*/
 
+
+
+/*-------------------------------------UploadAdapter------------------------------------*/
 /*게시판 옵션 선택시 bbsNameForURL값변경 함수*/
 function sendBbsName(selectElement){return selectElement.value !== '' ? selectElement.value : null;} 
 
@@ -175,22 +177,19 @@ class UploadAdapter {
 
     upload() {
         return this.loader.file.then( file => new Promise(((resolve, reject) => {
-            this._initRequest();
+            this._initRequest(file);
             this._initListeners( resolve, reject, file );
             this._sendRequest( file );
         })))
     }
 
-    _initRequest() {
-	
+    _initRequest(file) {
 
-
-			
-			
 		// URL용 게시판이름값을 요청
         const xhr = this.xhr = new XMLHttpRequest();
         xhr.open('POST', ctx+'/bbs/'+bbsNameForURL+"/writing/upload", true);
         xhr.responseType = 'json';
+
     }
 
     _initListeners(resolve, reject, file) {
@@ -206,9 +205,16 @@ class UploadAdapter {
 			var msg = response.responseMessage;	
 			console.log("msg :"+msg);
 			var filePath = response.filePath;	
+			var fileName = response.fileName;	
 			var fileRealName = response.fileRealName;	
+			var fileFullPath = filePath+fileName;
+			
+			// 이미지 등록해서 경로가 있는경우 이미지 경로도 컨트롤러로 보냄
+			if(fileFullPath != "")
+			{			
 
-
+			}
+	
 
 
             if(!response || response.error) {

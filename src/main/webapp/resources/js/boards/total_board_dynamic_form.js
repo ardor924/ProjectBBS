@@ -29,7 +29,7 @@ function submitFormWithOptionForSearchBar(targetFrmId)
 	      }
   
   var form = document.getElementById(targetFrmId);
-  form.action = ctx + "/bbs/" + bbsNameForURL;
+  form.action = ctx + "/bbs";
   form.submit();
 
   
@@ -45,7 +45,7 @@ function submitFormWithOptionForCommon(targetFrmId)
 console.log("진입성공!")
 
 var form = document.getElementById(targetFrmId);
-form.action = ctx + "/bbs/" + bbsNameForURL;
+form.action = ctx + "/bbs";
 form.submit();
 
 

@@ -29,14 +29,44 @@ public interface PostingMapper {
 	
 	
 	// (Total)모든 게시판의 게시글 조회
-	public List<PostingDTO> getGlobalPostingsFromDB();
-	
+	public List<PostingDTO> getGlobalPostingsFromDB(PostingDTO postingDTO);
 	
 	// 게시글의 갯수 리턴(특정 게시판 PK이용)
 	public int getPostingCountBybbsNo(int bbsNo);
 	
+	// 게시글의 갯수 리턴(특정 게시판 PK이용 + 검색요소와 정렬순서 필터링)
+	public int getPostingCountByPostingDTO(PostingDTO postingDTO);
+	
+	
 	
 	// 게시글 조회수 증가
 	public void addHitUp(PostingDTO postingDTO);
+	
+	
+	
+	
+	
+	
+	// 
+	public int getAllPostingCnt(PostingDTO postingDTO);
+	
+	
+	
+	
+	// 전체게시글 샘플 가져오기
+	public List<PostingDTO> getGlobalPostingSample();
+	
+	
+	// 게시글 삭제
+	public boolean deletePostingByPostNo(int postNo);
+	
+	// 게시글 수정
+	public boolean updatePostingByPostingDTO(PostingDTO postingDTO);
+	
+	// bbsPostNo로 게시글 중복확인
+	public int isBbsPostNoDuplicate(PostingDTO postingDTO);
+	
+	// bbsPostNo 마지막 번호 가져오기
+	public int getLastBbsPostNo(PostingDTO postingDTO);
 	
 }

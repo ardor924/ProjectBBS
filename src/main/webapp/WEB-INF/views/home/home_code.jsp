@@ -36,80 +36,35 @@
             <thead>
                 <tr>
                     <th scope="col" colspan="4">전체글 보기</th>
-                    <th><a href="#" class="fw-light">더보기 ></a></th>
+                    <th><a href="${ctx}/bbs" class="fw-light">더보기 ></a></th>
                 </tr>
             </thead>
             <tbody>
+            	<!-- 반복문 적용 -->
+            	<c:forEach var="li" items="${totalPostingSample}">
                 <tr>
-                    <th scope="row">1</th>
-                    <td>프리뷰1</td>
-                    <td>관리자</td>
-                    <td>23.04.02 14:42</td>
-                    <td>15</td>
+                	<td>${li.postNo}</td>
+                    <c:forEach var="bli" items="${boardList}">
+                    <c:if test="${bli.bbsNo == li.bbsNo}">
+                    <td>
+                    	<form action="${ctx}/bbs/${bli.bbsNameForURL}/${li.bbsPostNo}" id="goViewForm${li.bbsPostNo}" method="POST">
+                        	<a class="post-link" onclick="document.getElementById('goViewForm${li.bbsPostNo}').submit();">${li.postTitle}</a>
+							<input type="hidden" name="currentPage" value="${bp.currentPage ne null ? bp.currentPage : ''}">
+							<input type="hidden" name="pageRows" value="${pageRows ne null ? pageRows : ''}">   
+							<input type="hidden" name="orderBy" value="${orderBy ne null ? orderBy : ''}">
+							<input type="hidden" name="searchTarget" value="${searchTarget ne null ? searchTarget : ''}">
+							<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">                                	
+                    	</form>
+                    </td>      
+                    </c:if>
+                    </c:forEach>              
+                    <td>${li.postWriter}</td>
+                    <td>
+                    	<fmt:formatDate value="${li.postRegdate}" pattern="yyyy.MM.dd" type="date"/>
+					</td>
+                    <td>${li.postHit}</td>
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>프리뷰2</td>
-                    <td>사용자1</td>
-                    <td>23.04.03 10:20</td>
-                    <td>8</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>프리뷰3</td>
-                    <td>사용자1</td>
-                    <td>23.04.03 10:20</td>
-                    <td>8</td>
-                </tr>
-                <tr>
-                    <th scope="row">4</th>
-                    <td>프리뷰4</td>
-                    <td>사용자1</td>
-                    <td>23.04.03 10:20</td>
-                    <td>8</td>
-                </tr>
-                <tr>
-                    <th scope="row">5</th>
-                    <td>프리뷰5</td>
-                    <td>사용자1</td>
-                    <td>23.04.03 10:20</td>
-                    <td>8</td>
-                </tr>
-                <tr>
-                    <th scope="row">6</th>
-                    <td>프리뷰6</td>
-                    <td>관리자</td>
-                    <td>23.04.02 14:42</td>
-                    <td>15</td>
-                </tr>
-                <tr>
-                    <th scope="row">7</th>
-                    <td>프리뷰7</td>
-                    <td>사용자1</td>
-                    <td>23.04.03 10:20</td>
-                    <td>458</td>
-                </tr>
-                <tr>
-                    <th scope="row">8</th>
-                    <td>프리뷰8</td>
-                    <td>사용자1</td>
-                    <td>23.04.03 10:20</td>
-                    <td>28</td>
-                </tr>
-                <tr>
-                    <th scope="row">9</th>
-                    <td>프리뷰9</td>
-                    <td>사용자1</td>
-                    <td>23.04.03 10:20</td>
-                    <td>18</td>
-                </tr>
-                <tr>
-                    <th scope="row">10</th>
-                    <td>프리뷰10</td>
-                    <td>사용자1</td>
-                    <td>23.04.03 10:20</td>
-                    <td>84</td>
-                </tr>
+            	</c:forEach>
             </tbody>
         </table>
         <!-- ./ 게시판 미리보기 1 -->

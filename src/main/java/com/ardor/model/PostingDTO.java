@@ -17,6 +17,7 @@ public class PostingDTO {
 	
 	private int postHit;
 	private Date postRegdate;
+	private String fileFullPath;
 	
 	private int bbsNo;
 	
@@ -77,11 +78,21 @@ public class PostingDTO {
 		this.searchTarget = searchTarget;
 		this.keyWord = keyWord;
 	}
+	
+	
+	// 파라미터 생성자(전체게시판용)
+	public PostingDTO(SortOrder orderBy, SearchTarget searchTarget, String keyWord) {
+		super();
+		this.orderBy = orderBy;
+		this.searchTarget = searchTarget;
+		this.keyWord = keyWord;
+	}
+
 
 	// 인자 생성자
 	public PostingDTO(int postNo, int bbsPostNo, String postWriter, String postTitle, String postContents,
-			isNotice postNotice, int postHit, Date postRegdate, int bbsNo, int pageRows, int pageStartRowNum,
-			int currentPage, SortOrder orderBy, SearchTarget searchTarget, String keyWord) {
+			isNotice postNotice, int postHit, Date postRegdate, String fileFullPath, int bbsNo, int pageRows,
+			int pageStartRowNum, int currentPage, SortOrder orderBy, SearchTarget searchTarget, String keyWord) {
 		super();
 		this.postNo = postNo;
 		this.bbsPostNo = bbsPostNo;
@@ -91,6 +102,7 @@ public class PostingDTO {
 		this.postNotice = postNotice;
 		this.postHit = postHit;
 		this.postRegdate = postRegdate;
+		this.fileFullPath = fileFullPath;
 		this.bbsNo = bbsNo;
 		this.pageRows = pageRows;
 		this.pageStartRowNum = pageStartRowNum;
@@ -181,6 +193,16 @@ public class PostingDTO {
 	}
 
 
+	public String getFileFullPath() {
+		return fileFullPath;
+	}
+
+
+	public void setFileFullPath(String fileFullPath) {
+		this.fileFullPath = fileFullPath;
+	}
+
+
 	public int getBbsNo() {
 		return bbsNo;
 	}
@@ -249,12 +271,11 @@ public class PostingDTO {
 	public void setKeyWord(String keyWord) {
 		this.keyWord = keyWord;
 	}
+	
+	
+	
 
-
-
-
-
-
+	
 
 	
 }
