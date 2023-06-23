@@ -24,12 +24,6 @@ ClassicEditor
       ]
     },
 
-/*	simpleUpload:
-                {
-                    uploadUrl: "/uploadImage",
-                    withCredentials: true,
-    },*/
-
 
 	extraPlugins: [UploadAdapterPlugin],
 
@@ -204,16 +198,10 @@ class UploadAdapter {
 
 			var msg = response.responseMessage;	
 			console.log("msg :"+msg);
-			var filePath = response.filePath;	
-			var fileName = response.fileName;	
-			var fileRealName = response.fileRealName;	
-			var fileFullPath = filePath+fileName;
 			
-			// 이미지 등록해서 경로가 있는경우 이미지 경로도 컨트롤러로 보냄
-			if(fileFullPath != "")
-			{			
+			var sessionToken = response.sessionToken;
+			console.log("sessionToken :"+sessionToken);
 
-			}
 	
 
 

@@ -1,8 +1,14 @@
 package com.ardor.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +19,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ardor.mapper.FileMapper;
+import com.ardor.mapper.PostingMapper;
+import com.ardor.model.FileDTO;
+import com.ardor.model.FileDTO.isTEMP;
 import com.ardor.model.PostingDTO;
 import com.ardor.model.PostingDTO.SearchTarget;
 import com.ardor.model.PostingDTO.SortOrder;
@@ -29,6 +39,16 @@ public class PostingController {
 	@Autowired FileService fileService;
 	@Autowired PostingService postingService;
 	@Autowired BoardService boardService;
+	
+	
+	
+	
+	
+	@Autowired PostingMapper postingMapper;
+	@Autowired FileMapper fileMapper;
+	
+	
+	
 	
 	// ------------------------ 테스트 ------------------------//
 	// !!!!!! 테스트!!!!!! 게시글 보기 화면템플릿(이렇게 만들면 성공)
@@ -53,6 +73,7 @@ public class PostingController {
 		}
 	}
 	
+
 	// ------------------------ 테스트 ------------------------//
 	
 	
@@ -88,11 +109,9 @@ public class PostingController {
 	String submitWriting
 	(
 		PostingDTO postingDTO,
-		@RequestParam List<MultipartFile> selectedImg,
 		@PathVariable String bbsNameForURL,
 		@RequestParam(value="postHit" , defaultValue="0" ) int postHit , 
 		@RequestParam(value="postNotice" , defaultValue="NO" ) String postNoticeStr , 
-		@RequestParam(value="isPostingIMG" , defaultValue="NO" ) String isPostingIMG , 
 		Model model
 	) 
 	
@@ -102,13 +121,7 @@ public class PostingController {
 		 *  JSP를 통해 가져온 bbsNameSelect의 경우 값이 선택되지 않고 파라미터가 컨트롤러에 온다면 에러발생
 		 *  때문에, URL로 넘어온 게시판이름과 비교하는 로직이 필요해서 예외처리코드 작성
 		*/
-		
-		
-		for (MultipartFile file : selectedImg)
-		{
-			System.out.println("file : " + file.getOriginalFilename());
-			
-		}
+	
 		
 		// ================파라미터 생성 및 조합 영역============= //
 		
@@ -126,10 +139,7 @@ public class PostingController {
 		
 		// 게시글번호 생성 및 추가
 		int bbsPostNo = postingService.addBbsPostNo(bbsNo); //(각각의 게시판마다 별도의 게시글 번호를 1부터 순차적으로 생성) 
-		
-		// 게시글 PK값 가져오기
-		int postNo = postingService.getPostNo(bbsNo, bbsPostNo);
-		
+	
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
 				
@@ -138,13 +148,7 @@ public class PostingController {
 		
 		
 		
-		// ===================게시판 이미지파일 업로드 처리============= //
-		// 
-		//boolean uploadPostingImage = isPostingIMG.equals("YES") ? fileService.uploadFile(postNo) : false;
-		//System.out.println(uploadPostingImage ? "이미지등록 성공" : "이미지등록안함");
-		
-		
-		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
+
 		
 		
 		
@@ -172,7 +176,7 @@ public class PostingController {
 		
 		
 
-		// ========================파라미터 전송 영역================== //
+		// ========================DB저장 영역================== //
 				
 
 		
@@ -187,12 +191,123 @@ public class PostingController {
 		boolean success =  postingService.regPosting(postingDTO);
 		
 		
+		
+		
+		
+		
+		// ===================게시판 이미지파일 업로드 처리============= //
+		// 직접 해보자
+		
+		// (1) 파일 이동
+		FileDTO fDto = new FileDTO();
+		fDto.setFileTemp(isTEMP.TRUE);
+		
+		
+		List<FileDTO> files = fileMapper.getAllTempFiles(fDto.getFileTemp());
+		
+		for(FileDTO file : files)
+		{
+			
+			// 필수 파라미터 생성
+			String fileRoot = "C:\\file_repo\\";
+			String folderName = "TextAreaPostContents";
+			Date fileRegdate = utilService.getNowDate();
+			String fileStrRegdate = utilService.getFolderDate();
+			String uuid = UUID.randomUUID().toString();
+			String fileName = file.getFileName();
+			String fileRealName = file.getFileRealName();
+			String filePath = fileRoot +folderName+"\\" + fileStrRegdate + "\\";
+			
+			
+			
+			
+			
+	        String sourceFilePath = file.getFilePath()+file.getFileName();
+	        String destinationFilePath = fileRoot +folderName+"\\" + fileStrRegdate + "\\"+fileName;
+	        
+	        
+	        System.out.println();
+	        
+	        Path sourcePath = Path.of(sourceFilePath);
+	        Path destinationPath = Path.of(destinationFilePath);
+
+			
+			
+			// 폴더생성
+			File folderGenerator = new File(fileRoot + folderName + "\\" +  fileStrRegdate);
+			String message = folderGenerator.exists() ? "폴더가 이미 존재합니다!" : (folderGenerator.mkdirs() ? "폴더가 생성되었습니다!" : "폴더 생성에 실패했습니다!");
+			System.out.println(message);
+			
+			// (2) 파일 DB정보 수정		
+	        FileDTO fileDTO = new FileDTO();      
+	        fileDTO.setFilePath(filePath);
+	        fileDTO.setFileTemp(isTEMP.FALSE);
+	        fileDTO.setFileNo(file.getFileNo());
+	        
+	        
+			// 파일 테이블에 게시글PK세팅
+			int postNo = postingService.getPostNo(bbsNo, bbsPostNo);
+			System.out.println("postNo > : "+postNo);
+			fileDTO.setPostNo(postNo);
+	        
+	        boolean updateSuccess = fileMapper.updateFileInfo(fileDTO);
+			
+			if(!updateSuccess) System.out.println("DB변경실패");
+			
+
+			
+			
+			// 파일이동	
+			try
+			{
+				// 파일 이름 특수 문자 인코팅 에러처리
+				String encodedFileName = URLEncoder.encode(fileName, "UTF-8");				
+				// 파일이동
+				Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+
+			}
+			catch(IOException e)
+			{
+				System.out.println("파일생성실패");
+			}
+			
+
+			
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// ========================파라미터 전송 영역================== //
+		
 		//성공
 		if(success) // (DB등록성공)
 		{	
 			model.addAttribute("resultMSG", goodMsg);
 			return "redirect:/bbs/"+bbsNameForURL ;
-
 		}
 		
 		// 실패
@@ -200,7 +315,6 @@ public class PostingController {
 		{	
 			model.addAttribute("resultMSG", badMsg);
 			return "redirect:/bbs/"+bbsNameForURL+"/writing";
-
 		}
 
 		
@@ -516,8 +630,8 @@ public class PostingController {
 		String badMsg = headerMsg+"요청에 실패했습니다";
 		
 		// 물리폴더 이미지 삭제
-		//String deleteResultMSG = fileService.deletePostContentsIMG(postNo);
-		//if(deleteResultMSG.equals("이미지삭제 성공")) {System.out.println("물리 폴더내의 이미지삭제 성공");};
+		boolean deleteResult = fileService.deleteFiles(postNo,"게시글PK");
+		System.out.println(deleteResult ? "게시글 이미지 삭제 성공" : "");
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
 		

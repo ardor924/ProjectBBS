@@ -1,7 +1,11 @@
 package com.ardor.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -17,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ardor.model.FileDTO;
+import com.ardor.model.FileDTO.isTEMP;
+import com.ardor.model.MemberDTO;
 import com.ardor.service.FileService;
 import com.ardor.service.MemberService;
 import com.ardor.service.UtilityService;
@@ -42,31 +49,31 @@ public class FileController {
 		return ResponseEntity.ok(response);
 	}
 	
-//	
+	
 //	// 회원프로필 이미지 링크 생성 
-//	@GetMapping("/members/profilePhoto/{memberID}")
-//	public void getProfilePhoto(@PathVariable String memberID, HttpServletResponse response,HttpServletRequest request) {
-//		
-//	    // 회원 고유 ID를 기반으로 DB에서 회원 정보 조회
-//	    MemberDTO memberInfo = memberService.getMemberInfoBymemberID(memberID);
-//	    
-//	    if (memberInfo != null) {
-//            try {
-//				fileService.processProfilePhoto(memberInfo, response,request);
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//        } else {
-//            // 회원 정보가 없거나 비밀번호가 일치하지 않는 경우에 대한 처리
-//        }
-//    }	    
-//	    
-//	    
-//	    
-//
-//	
+	@GetMapping("/members/profilePhoto/{memberID}")
+	public void getProfilePhoto(@PathVariable String memberID, HttpServletResponse response,HttpServletRequest request) {
+		
+	    // 회원 고유 ID를 기반으로 DB에서 회원 정보 조회
+	    MemberDTO memberInfo = memberService.getMemberInfoBymemberID(memberID);
+	    
+	    if (memberInfo != null) {
+            try {
+				fileService.processProfilePhoto(memberInfo, response,request);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+        } else {
+            // 회원 정보가 없거나 비밀번호가 일치하지 않는 경우에 대한 처리
+        }
+    }	    
+	    
+	    
+	    
+
+	
 	
 	
 	
@@ -115,19 +122,19 @@ public class FileController {
     
 	
     // 이미지 URL 요청 처리
-    @GetMapping("/images/{folderName}/{date}/{filename:.+}")
-    public ResponseEntity<Resource> getImage(@PathVariable String folderName,@PathVariable String date, @PathVariable String filename) {
+    @GetMapping("/images/{date}/{filename:.+}")
+    public ResponseEntity<Resource> getImage(@PathVariable String date, @PathVariable String filename) {
     	String imagePath;
-    	// 실제 물리폴더에 업로드된경우
-    	if(folderName != "temp") { imagePath = "C:\\file_repo\\" + folderName + "\\"+ date + "\\" + filename;}
+	
+    	List<FileDTO> fileList = fileService.getAllTempFiles(isTEMP.TRUE);
     	
-    	// 임시Temp이미지의 경우
-    	else
-    	{
-    	 imagePath = "C:\\file_temp\\" + date + "\\" + filename;	
-    	}	
-        Resource resource = new FileSystemResource(imagePath);
+    	if(fileList.isEmpty()) imagePath = "C:\\file_repo\\TextAreaPostContents\\" + date + "\\" + filename;
 
+    	else imagePath = "C:\\file_repo\\temp\\" + date + "\\" + filename;
+    	
+    	
+    	
+    	Resource resource = new FileSystemResource(imagePath);
         if (resource.exists()) {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.IMAGE_JPEG); // 이미지 타입에 맞게 설정

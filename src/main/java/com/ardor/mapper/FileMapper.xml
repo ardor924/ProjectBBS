@@ -26,25 +26,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	
-	<!-- Temp 파일경로 DB수정 -->
+	<!-- DB수정 -->
 	<update id="updateFileInfo">
 		UPDATE file
-		SET filePath = #{filePath}, fileTemp = null
+		<include refid="updateColumn"></include>
 		WHERE fileNo = #{fileNo};
 	</update>
 	
 	
 	<!-- postNo에 해당하는 파일 전부 가져오기 -->
-	<select id="getAllFilesByPostNo">
+	<select id="getAllFilesByPostNo" resultType="fileDTO">
 		select * from file where postNo = #{postNo}
 	</select>
 	
 	<!-- 임시 Temp 파일 전부 가져오기 -->
-	<select id="getAllTempFiles">
-		select * from files where fileTemp = #{fileTemp}
+	<select id="getAllTempFiles" resultType="fileDTO">
+		select * from file where fileTemp = #{fileTemp}
 	</select>
 	
 	
+	
+	
+	<!-- 업데이트 필터링 -->
+	<sql id="updateColumn">
+		SET
+	    <choose>
+	        <when test="postNo != null">
+	        	postNo = #{postNo},
+	        </when>
+	        <when test="memberNo != null">
+	        	memberNo = #{memberNo},
+	        </when>
+	        <when test="replyNo != null">
+	        	replyNo = #{replyNo},
+	        </when>
+	    </choose>
+	    filePath = #{filePath}, fileTemp = #{fileTemp}		
+	</sql>
 	
 
 </mapper>
