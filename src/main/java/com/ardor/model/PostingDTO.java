@@ -9,7 +9,8 @@ public class PostingDTO {
 	// 게시판별 게시글번호
 	private int bbsPostNo;
 	
-	private String postWriter;
+	private String postWriterName;
+	private String postWriterID;
 	private String postTitle;
 	private String postContents;
 	
@@ -90,13 +91,15 @@ public class PostingDTO {
 
 
 	// 인자 생성자
-	public PostingDTO(int postNo, int bbsPostNo, String postWriter, String postTitle, String postContents,
-			isNotice postNotice, int postHit, Date postRegdate, String fileFullPath, int bbsNo, int pageRows,
-			int pageStartRowNum, int currentPage, SortOrder orderBy, SearchTarget searchTarget, String keyWord) {
+	public PostingDTO(int postNo, int bbsPostNo, String postWriterName, String postWriterID, String postTitle,
+			String postContents, isNotice postNotice, int postHit, Date postRegdate, String fileFullPath, int bbsNo,
+			int pageRows, int pageStartRowNum, int currentPage, SortOrder orderBy, SearchTarget searchTarget,
+			String keyWord) {
 		super();
 		this.postNo = postNo;
 		this.bbsPostNo = bbsPostNo;
-		this.postWriter = postWriter;
+		this.postWriterName = postWriterName;
+		this.postWriterID = postWriterID;
 		this.postTitle = postTitle;
 		this.postContents = postContents;
 		this.postNotice = postNotice;
@@ -133,13 +136,23 @@ public class PostingDTO {
 	}
 
 
-	public String getPostWriter() {
-		return postWriter;
+	public String getPostWriterName() {
+		return postWriterName;
 	}
 
 
-	public void setPostWriter(String postWriter) {
-		this.postWriter = postWriter;
+	public void setPostWriterName(String postWriterName) {
+		this.postWriterName = postWriterName;
+	}
+
+
+	public String getPostWriterID() {
+		return postWriterID;
+	}
+
+
+	public void setPostWriterID(String postWriterID) {
+		this.postWriterID = postWriterID;
 	}
 
 
@@ -271,10 +284,9 @@ public class PostingDTO {
 	public void setKeyWord(String keyWord) {
 		this.keyWord = keyWord;
 	}
-	
-	
-	
 
+
+	
 	
 
 	

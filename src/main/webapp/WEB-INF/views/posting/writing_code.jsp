@@ -25,7 +25,11 @@
         <!-- 게시글 메인 : START-->
         <fieldset class="bbs-main">
             <form class="writing-form" id="editForm" name="editForm">
-                <input type="hidden" name="postWriter" value="${memberName}">
+                <input type="hidden" name="postWriterName" value="${memberName}">
+                <input type="hidden" name="postWriterID" value="${memberID}">
+                <input type="hidden" name="fileTokenList" id="fileTokenList">
+                <input type="hidden" name="fileNameList" id="fileNameList">
+                <input type="hidden" name="fileRegdateList" id="fileRegdateList">
                 <div class="row-between textarea-wrap form-group border-0">
 					<select class="select-boards" name="bbsNameSelect" id="bbsNameSelect" onchange="sendBbsName(this)">
 					    <option value="">------------------------------------------------게시판선택------------------------------------------------</option>

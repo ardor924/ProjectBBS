@@ -1,7 +1,5 @@
 /* 프로필 사진 업로드 로직*/ 
 
-	console.log("window.ctx : "+window.ctx)
-
     // input typr='file'
     const fileInput = document.getElementById('memberPhoto');
 
@@ -56,33 +54,20 @@
         .then(response => {
           // 응답 처리 로직
           const imageURL = response.data.url; // 응답으로 받은 이미지 URL
-		  const message = response.data.message; // 응답으로 받은 메시지
-          console.log(message, imageURL);
+		  const message = response.data.responseMessage; // 응답으로 받은 메시지
+		  const fileToken = response.data.fileToken; // 응답으로 받은 식별토큰
+          console.log("message :" + message);
+          console.log("imageURL :" + imageURL);
+          console.log("fileToken :" + fileToken);
+
+
+		 // 파일 토큰값 input에 담기
+		  const fileTokenElement = document.getElementById('fileToken');
+		  fileTokenElement.value = fileToken;
+
+
           alert('이미지 업로드가 완료되었습니다.');
 
-
-
-		////////////////
-		  const filePath = response.data.filePath; // 응답으로 받은 메시지
-		  const fileRealName = response.data.fileRealName; // 응답으로 받은 메시지
-
-          const photoRealNameField = document.getElementById('memberPhotoRealName');
-		  photoRealNameField.value = fileRealName;
-
-          const photoNameField = document.getElementById('memberPhotoName');
-		  photoNameField.value = imageURL.substring(imageURL.lastIndexOf('/') + 1);
-
-
-          const photoPathField = document.getElementById('memberPhotoPath');
-		  photoPathField.value = filePath;
-	
-		  const photoRegdateField = document.getElementById('memberPhotoRegdateStr');
-		  photoRegdateField.value = filePath.substring(13,23); // 시작값~마지막값
-
-          console.log("폴더경로 : "+filePath);
-          console.log("파일실제이름 : "+fileRealName);
-          console.log("파일이름 : "+photoNameField.value);
-          console.log("파일등록일 : "+photoRegdateField.value);
 		////////////////////
 		
 

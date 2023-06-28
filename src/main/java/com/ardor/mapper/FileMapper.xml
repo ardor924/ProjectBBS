@@ -11,8 +11,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 파일정보 DB에 저장 -->
 	<insert id="insertFileToDB">
-		insert into file(fileName,fileRealName,filePath,fileRegdate,fileTemp)
-		values(#{fileName},#{fileRealName},#{filePath},#{fileRegdate},#{fileTemp})
+		insert into file(fileName,fileRealName,filePath,fileRegdate,fileTemp,folderRef,fileToken)
+		values(#{fileName},#{fileRealName},#{filePath},#{fileRegdate},#{fileTemp},#{folderRef},#{fileToken})
 	</insert>
 
 	<!-- PK값으로 파일정보가져오기 -->
@@ -34,9 +34,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	
-	<!-- postNo에 해당하는 파일 전부 가져오기 -->
-	<select id="getAllFilesByPostNo" resultType="fileDTO">
-		select * from file where postNo = #{postNo}
+	<!-- Temp파일 DB삭제 -->
+	<delete id="deleteTempFileFromDB">
+		delete from file where fileTemp = #{fileTemp}
+	</delete>
+	
+	<!-- 특정 PK에 해당하는 파일 전부 가져오기 -->
+	<select id="getAllFilesBysomePK" resultType="fileDTO">
+		select * from file				
+		<choose>
+			<when test="memberNo != 0">
+				where memberNo = #{memberNo}	
+			</when>
+			<when test="postNo != 0">
+				where postNo = #{postNo}	
+			</when>
+			<when test="replyNo != 0">
+				where replyNo = #{replyNo}	
+			</when>	
+		</choose>
 	</select>
 	
 	<!-- 임시 Temp 파일 전부 가져오기 -->
@@ -45,23 +61,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	
+	<!-- 이미지 분류에 맞는 리스트 모두 가져오기 -->
+	<select id="getFilesByRef" resultType="fileDTO">
+		select * from file where postNo
+	</select>
 	
-	
+
 	<!-- 업데이트 필터링 -->
 	<sql id="updateColumn">
 		SET
 	    <choose>
-	        <when test="postNo != null">
-	        	postNo = #{postNo},
-	        </when>
-	        <when test="memberNo != null">
+	        <when test="memberNo != 0" >
 	        	memberNo = #{memberNo},
 	        </when>
-	        <when test="replyNo != null">
+	        <when test="postNo != 0">
+	        	postNo = #{postNo},
+	        </when>
+	        <when test="replyNo != 0">
 	        	replyNo = #{replyNo},
 	        </when>
 	    </choose>
-	    filePath = #{filePath}, fileTemp = #{fileTemp}		
+	    filePath = #{filePath}, fileTemp = #{fileTemp},	folderRef =#{folderRef}	
 	</sql>
 	
 

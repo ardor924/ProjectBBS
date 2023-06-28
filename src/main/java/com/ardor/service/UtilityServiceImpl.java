@@ -90,6 +90,17 @@ public class UtilityServiceImpl implements UtilityService{
 	}
 	
 	
+	// 날짜를 문자열로 변환
+	@Override
+	public String getStrDateFromDate(Date inputDate) {
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String strDate = sdf.format(inputDate);		
+			
+		return strDate;
+	}
+	
+	
 	
 	// 생일로 나이구하기 메서드
 	@Override
@@ -278,8 +289,9 @@ public class UtilityServiceImpl implements UtilityService{
 		{			
 			
 		postingDTO.setBbsPostNo(dummy); // 순차적으로 증가시킬 번호
+		postingDTO.setPostWriterName("관리자");	
+		postingDTO.setPostWriterID("admin");	
 		postingDTO.setPostTitle("테스트"+dummy);	
-		postingDTO.setPostWriter("관리자");	
 		postingDTO.setPostContents("더미데이터"+dummy);
 		
 		postingDTO.setPostRegdate(getNowDate());
@@ -308,9 +320,6 @@ public class UtilityServiceImpl implements UtilityService{
 		
 		// -----------------------------------디버깅용--------------------------------------------------//
 		System.out.println("-----------------------------------------------------");
-		System.out.println("프사 파일경로 : "+memberDTO.getMemberPhotoPath());
-		System.out.println("프사 파일이름 : "+memberDTO.getMemberPhotoName());
-		System.out.println("프사 등록일 : "+memberDTO.getMemberPhotoRegdate());
 		
 		System.out.println("아이디 : "+memberDTO.getMemberID());
 		System.out.println("비번 : "+memberDTO.getMemberPW());

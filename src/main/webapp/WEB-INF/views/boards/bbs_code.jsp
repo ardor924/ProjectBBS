@@ -145,7 +145,7 @@
 								<input type="hidden" name="keyWord" value="${keyWord ne null ? keyWord : ''}">                                	
                         	</form>
                         </td>
-                        <td>${li.postWriter}</td>
+                        <td>${li.postWriterName}</td>
                         <td>${li.postHit}</td>
                         <td>
                         <c:choose>

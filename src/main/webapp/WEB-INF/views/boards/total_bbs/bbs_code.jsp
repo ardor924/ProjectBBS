@@ -153,7 +153,7 @@
                         </td>
                         </c:if>
                         </c:forEach>
-                        <td>${li.postWriter}</td>
+                        <td>${li.postWriterName}</td>
                         <td>${li.postHit}</td>
                         <td>
                         <c:choose>

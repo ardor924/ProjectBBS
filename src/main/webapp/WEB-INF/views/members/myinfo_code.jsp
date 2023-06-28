@@ -11,7 +11,7 @@
                     </div>
                 </fieldset>
             </div>
-            <form class="myinfo-form" id="myinfoForm" action="myinfo.do" method="POST" >
+            <form class="myinfo-form" id="myinfoForm" method="POST" >
                 <fieldset class="column-center mt-5 mb-0">
                     <div class="my-photo-frame">
                         <img src="${ctx}/members/profilePhoto/${memberDTO.memberID}" id="my-photo-frame" class="my-photo" type="button" alt="기본이미지">

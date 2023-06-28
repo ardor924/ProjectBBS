@@ -1,9 +1,13 @@
-package com.ardor.controller;
+	package com.ardor.controller;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,54 +45,62 @@ public class FileController {
 	public ResponseEntity<Object> insertFileToDB(@RequestParam("memberPhoto") MultipartFile memberPhoto){
 		
     	// 이미지 타입으로 폴더설정
-    	String photoType = "profilePhotoIMG";
+    	String photoType = "memberProfileIMG";
+    	
+    	System.out.println("312526523546234556243");
 
 		// 파일 업로드 및 이미지 URL생성
-		Map<String, Object> response = fileService.uploadTempFile(photoType,memberPhoto);
+		Map<String, Object> response = fileService.uploadTempFiles(photoType,memberPhoto);
 			        
 		return ResponseEntity.ok(response);
 	}
 	
 	
-//	// 회원프로필 이미지 링크 생성 
+	
+	
+	// 회원프로필 이미지 링크 생성 
 	@GetMapping("/members/profilePhoto/{memberID}")
-	public void getProfilePhoto(@PathVariable String memberID, HttpServletResponse response,HttpServletRequest request) {
-		
-	    // 회원 고유 ID를 기반으로 DB에서 회원 정보 조회
-	    MemberDTO memberInfo = memberService.getMemberInfoBymemberID(memberID);
-	    
-	    if (memberInfo != null) {
-            try {
-				fileService.processProfilePhoto(memberInfo, response,request);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public String getProfilePhoto
+	(
+		@PathVariable String memberID,
+		@RequestParam(value="photoType" , defaultValue="memberProfileIMG" ) String photoType
+	) 
+	{	
+		String url = "";
+		// memberID로 PK값 가져오기
+		MemberDTO memberDTO = memberService.getMemberInfoBymemberID(memberID);
+		int MemberNo = memberDTO.getMemberNo();
+
+		//memberID로 파일정보 가져오기
+		List<FileDTO> files =  fileService.getAllFilesBysomePK(photoType, MemberNo);
+		if(!files.isEmpty())
+		{			
+			for(FileDTO file : files)
+			{
+				Date date = file.getFileRegdate();
+				String strDate = utilService.getStrDateFromDate(date);
+				
+				String fileName = file.getFileName(); 
+				
+				// 리다이렉트
+				url = "redirect:/images/" + photoType+"/" +  strDate+"/"+ fileName;
+				System.out.println("fileName : "+url);
 			}
+		}
+		// 회원프사가 없는경우
+		else
+		{       
+			System.out.println("MemberNo"+MemberNo);
+			photoType = "default-member-photo";
+			url = "redirect:/images/" + photoType+"/" +  "9999-12-31"+"/"+ "defaul-profile.png";
+		}
+		
+		
 
-        } else {
-            // 회원 정보가 없거나 비밀번호가 일치하지 않는 경우에 대한 처리
-        }
+		
+		return url;
     }	    
-	    
-	    
-	    
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
     
     
@@ -98,22 +110,21 @@ public class FileController {
     
     @ResponseBody
     @PostMapping("/bbs/{bbsNameForURL}/writing/upload")
-    //public ResponseEntity<Object> insertBbsImgToDB(@PathVariable String bbsNameForURL, @PathVariable("bbsIMG") MultipartFile bbsIMG) {
-    public ResponseEntity<Object> insertBbsImgToDB(@RequestParam("bbsIMG") MultipartFile bbsIMG) {
+    public ResponseEntity<Object> insertBbsImgToDB
+    (
+    	@RequestParam(value="photoType" , defaultValue="postingIMG" ) String photoType , 	
+    	@RequestParam("bbsIMG") MultipartFile bbsIMG
+    )
+    { 	    	
+    	Map<String, Object> response = new HashMap<String, Object>();
+    	System.out.println("------------------------CKeditor5경로-------------------------------");
     	
-    	
-    	System.out.println("------------------------CKeditor5 테스트 진입성공------------------------------");
-    	System.out.println("bbsIMG 파라미터 확인용 : "+bbsIMG.getOriginalFilename());
+    	response = fileService.uploadTempFiles(photoType,bbsIMG);		
     	    	
-    	
-    	// 이미지 타입으로 폴더설정
-    	String photoType = "postContentsIMG";
-    	
-    	// 파일 업로드 및 이미지 URL생성
-    	Map<String, Object> response = fileService.uploadTempFile(photoType,bbsIMG);
-    	
+    	System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     	
     	return ResponseEntity.ok(response);
+
     }
     
     
@@ -122,17 +133,22 @@ public class FileController {
     
 	
     // 이미지 URL 요청 처리
-    @GetMapping("/images/{date}/{filename:.+}")
-    public ResponseEntity<Resource> getImage(@PathVariable String date, @PathVariable String filename) {
+    @GetMapping("/images/{photoType}/{date}/{filename:.+}")
+    public ResponseEntity<Resource> getImage(HttpServletRequest request, @PathVariable String photoType, @PathVariable String date, @PathVariable String filename) {
     	String imagePath;
-	
-    	List<FileDTO> fileList = fileService.getAllTempFiles(isTEMP.TRUE);
     	
-    	if(fileList.isEmpty()) imagePath = "C:\\file_repo\\TextAreaPostContents\\" + date + "\\" + filename;
+    	// 이미지 경로 세팅
+    	if(photoType.equals("default-member-photo")) // 회원기본이미지인경우
+    	{
+    		ServletContext servletContext = request.getServletContext();
+    		String contextPath = "/resources/img/default-member-photo.png";
+            imagePath = servletContext.getRealPath(contextPath);
 
-    	else imagePath = "C:\\file_repo\\temp\\" + date + "\\" + filename;
-    	
-    	
+    	}
+    	else
+    	{
+    		imagePath = fileService.setImagePath(photoType,date,filename);
+    	}
     	
     	Resource resource = new FileSystemResource(imagePath);
         if (resource.exists()) {
@@ -151,10 +167,15 @@ public class FileController {
     
     
     
-    
-    
-    
-    
+    // 페이지 새로고침 혹은 이동시 Temp파일 및 DB에서 정보 삭제
+    @GetMapping("/removeTempFile")
+    public ResponseEntity<Resource> removeTempFile() {
+        isTEMP fileTemp = isTEMP.TRUE;
+        fileService.deleteTempFileFromDB(fileTemp); // DB에서 삭제
+        fileService.deleteAllTempFiles(); // 잔류 temp 파일 삭제
+        return ResponseEntity.ok().build(); // 작업이 완료되었음을 응답으로 전달
+    }
+
     
 	
 	

@@ -18,11 +18,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ardor.mapper.MemberMapper;
+import com.ardor.model.FileDTO;
+import com.ardor.model.FileDTO.folderRef;
+import com.ardor.model.FileDTO.isTEMP;
 import com.ardor.model.MemberDTO;
 import com.ardor.model.MemberDTO.AgreementStatus;
 import com.ardor.model.MemberDTO.MemberGrant;
+import com.ardor.service.FileService;
 import com.ardor.service.MemberService;
 import com.ardor.service.UtilityService;
 
@@ -35,6 +40,8 @@ public class MemberController {
 	MemberMapper memberMapper;
 	@Autowired
 	UtilityService utilService;
+	@Autowired
+	FileService fileService;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -52,10 +59,9 @@ public class MemberController {
 	@PostMapping("/members/join/submit")
 	public String joinSubmit(					
 		MemberDTO memberDTO,
+		@RequestParam(value = "photoType", defaultValue = "memberProfileIMG") String photoType, 
+		@RequestParam("fileToken") String fileToken, 
 		@RequestParam("memberID") String memberID, 
-		@RequestParam(value = "memberPhotoPath", defaultValue = "${ctx}/resources/img/") String memberPhotoPath, 
-		@RequestParam(value = "memberPhotoName", defaultValue = "default-member-photo.png") String memberPhotoName, 
-		@RequestParam("memberPhotoRegdateStr") String memberPhotoRegdateStr, 
 		@RequestParam("memberBirthYear") String memberBirthYear, 
 		@RequestParam("memberBirthMonth") String memberBirthMonth,
 		@RequestParam("memberBirthDay") String memberBirthDay,
@@ -66,7 +72,7 @@ public class MemberController {
 		@RequestParam("memberTel_3") String memberTel_3
 	)
 	{
-		
+		System.out.println("fileToken :"+fileToken);
 		
 		// 스프링 시큐리티 비밀번호 암호화
 	    String password = memberDTO.getMemberPW();
@@ -79,8 +85,6 @@ public class MemberController {
 	    if(isDuplicate ) return "redirect:/member/join/page?error=duplicate";
 		
 		// 파라미터 생성 및 조합
-		// 회원프로필사진 등록일자 타입변환
-		Date memberPhotoRegdate = utilService.stringToDate(memberPhotoRegdateStr);
 		
 		// 파라미터조합 및 회원나이 추가
 		Date memberBirth = utilService.mergeBirth(memberBirthYear, memberBirthMonth, memberBirthDay);
@@ -103,9 +107,6 @@ public class MemberController {
 		
 		
 		// DTO에 파라미터 세팅
-		memberDTO.setMemberPhotoPath(memberPhotoPath);
-		memberDTO.setMemberPhotoName(memberPhotoName);
-		memberDTO.setMemberPhotoRegdate(memberPhotoRegdate);
 		memberDTO.setMemberBirth(memberBirth);
 		memberDTO.setMemberAge(memberAge);
 		memberDTO.setMemberEmail(memberEmail);
@@ -124,6 +125,22 @@ public class MemberController {
 		// DB에 회원정보 저장
 		memberService.joinMembers(memberDTO);
 		
+		// 프사를 file테이블에 저장
+		// 회원아이디로 memberNo PK값 가져오기
+		memberDTO = memberService.getMemberInfoBymemberID(memberID);
+		int memberNo = memberDTO.getMemberNo();
+		boolean imgUploadsucces = fileService.uploadFiles(photoType,fileToken, memberNo);
+		// 이미지 업로드 성공시 temp폴더 내 파일 이동후 temp파일삭제
+		if(imgUploadsucces)
+		{
+			fileService.uploadFiles(photoType, fileToken, memberNo);
+		};
+
+		isTEMP fileTemp = isTEMP.TRUE;
+		fileService.deleteTempFileFromDB(fileTemp); // DB에서 삭제
+		// 잔류 temp파일 삭제
+		fileService.deleteAllTempFiles();
+
 		
 		return "members/login_page";
 	}
@@ -158,8 +175,6 @@ public class MemberController {
 			session.setAttribute("memberPW", activeMember.getMemberPW());
 			session.setAttribute("memberName", activeMember.getMemberName());
 			session.setAttribute("memberRegdate", activeMember.getMemberRegdate());
-			session.setAttribute("memberPhotoPath", activeMember.getMemberPhotoPath());
-			session.setAttribute("memberPhotoName", activeMember.getMemberPhotoName());
 			
 			// 회원 권한식별 (조건문 삼항연산자처리)
 			session.setAttribute("memberGrant", (activeMember.getMemberGrant() == MemberGrant.ADMIN) ? "ADMIN" : "USER");
@@ -195,6 +210,12 @@ public class MemberController {
 		
 		return "members/myinfo_page";
 	}
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -239,8 +260,6 @@ public class MemberController {
 		session.removeAttribute("memberPW");
 		session.removeAttribute("memberName");
 		session.removeAttribute("memberRegdate");
-		session.removeAttribute("memberPhotoPath");
-		session.removeAttribute("memberPhotoName");
 		
 		session.removeAttribute("isLogin");
 		
@@ -279,10 +298,7 @@ public class MemberController {
 														@RequestParam("memberBirthDay") String memberBirthDay
 	) {
 		
-		// 파라미터 가져오기
-		String memberPhotoName = memberDTO.getMemberPhotoName();
-		String memberPhotoPath = memberDTO.getMemberPhotoPath();
-		
+		// 파라미터 가져오기		
 		String memberID = memberDTO.getMemberID();
 		String memberPW = memberDTO.getMemberPW();
 		String memberName = memberDTO.getMemberName();
@@ -302,8 +318,6 @@ public class MemberController {
 		MemberGrant memberGrant = utilService.setAdminPermission();
 		
 		System.out.println("------------------------디버깅용-------------------------------");
-		System.out.println("프사 파일이름 : "+memberPhotoName);
-		System.out.println("프사 파일경로 : "+memberPhotoPath);
 		
 		System.out.println("아이디 : "+memberID);
 		System.out.println("비번 : "+memberPW);

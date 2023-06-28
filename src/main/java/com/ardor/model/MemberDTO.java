@@ -5,9 +5,6 @@ import java.util.Date;
 public class MemberDTO {
 	
     private int memberNo;
-    private String memberPhotoName;
-    private String memberPhotoPath;
-    private Date memberPhotoRegdate;
     
     private String memberID;
     private String memberPW;
@@ -40,16 +37,12 @@ public class MemberDTO {
     // 기본 생성자
      public MemberDTO() {}
 
-	public MemberDTO(int memberNo, String memberPhotoName, String memberPhotoPath, Date memberPhotoRegdate,
-			String memberID, String memberPW, String memberName, Integer memberAge, Date memberBirth,
-			String memberEmail, String memberTel, AgreementStatus memberPolicyAgreement,
+	public MemberDTO(int memberNo, String memberID, String memberPW, String memberName, Integer memberAge,
+			Date memberBirth, String memberEmail, String memberTel, AgreementStatus memberPolicyAgreement,
 			AgreementStatus memberTermsAgreement, AgreementStatus memberEventAgreement, Date memberRegdate,
 			MemberGrant memberGrant) {
 		super();
 		this.memberNo = memberNo;
-		this.memberPhotoName = memberPhotoName;
-		this.memberPhotoPath = memberPhotoPath;
-		this.memberPhotoRegdate = memberPhotoRegdate;
 		this.memberID = memberID;
 		this.memberPW = memberPW;
 		this.memberName = memberName;
@@ -70,30 +63,6 @@ public class MemberDTO {
 
 	public void setMemberNo(int memberNo) {
 		this.memberNo = memberNo;
-	}
-
-	public String getMemberPhotoName() {
-		return memberPhotoName;
-	}
-
-	public void setMemberPhotoName(String memberPhotoName) {
-		this.memberPhotoName = memberPhotoName;
-	}
-
-	public String getMemberPhotoPath() {
-		return memberPhotoPath;
-	}
-
-	public void setMemberPhotoPath(String memberPhotoPath) {
-		this.memberPhotoPath = memberPhotoPath;
-	}
-
-	public Date getMemberPhotoRegdate() {
-		return memberPhotoRegdate;
-	}
-
-	public void setMemberPhotoRegdate(Date memberPhotoRegdate) {
-		this.memberPhotoRegdate = memberPhotoRegdate;
 	}
 
 	public String getMemberID() {
@@ -192,7 +161,8 @@ public class MemberDTO {
 		this.memberGrant = memberGrant;
 	}
 
-
-
+     
+     
+     
 
 }

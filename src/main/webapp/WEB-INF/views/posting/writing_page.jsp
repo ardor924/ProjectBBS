@@ -69,6 +69,7 @@
 
 <script src="${ctx}/resources/js/posting/writing_submit.js"></script><!-- 게시글 폼 제출-->
 
+<script src="${ctx}/resources/js/common/removeTemp.js"></script> <!-- 새로고침 페이지 이동시 temp삭제 -->
 
 
 <!-- ---------------------------------- 자바스크립트 :END ---------------------------------- -->

@@ -110,6 +110,7 @@ public class PostingController {
 	(
 		PostingDTO postingDTO,
 		@PathVariable String bbsNameForURL,
+		@RequestParam("fileNameList") List<String> fileNameList, 
 		@RequestParam(value="postHit" , defaultValue="0" ) int postHit , 
 		@RequestParam(value="postNotice" , defaultValue="NO" ) String postNoticeStr , 
 		Model model
@@ -142,38 +143,7 @@ public class PostingController {
 	
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
-				
-		
-		
-		
-		
-		
 
-		
-		
-		
-		
-		// ========================유틸기능 영역================== //
-		
-
-
-		
-		// 응답메세지
-		String headerMsg = "게시글 등록";
-		String goodMsg = headerMsg+"요청에 성공했습니다";
-		String badMsg = headerMsg+"요청에 실패했습니다";
-	
-		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
-		
-		
-		
-		
-		
-		
-		
-
-
-		
 		
 
 		// ========================DB저장 영역================== //
@@ -193,111 +163,32 @@ public class PostingController {
 		
 		
 		
+		// ========================유틸기능 영역================== //
+	
+		// 응답메세지
+		String headerMsg = "게시글 등록";
+		String goodMsg = headerMsg+"요청에 성공했습니다";
+		String badMsg = headerMsg+"요청에 실패했습니다";
 		
+		// 이미지폴더 분류
+		String photoType = "postingIMG";
 		
-		// ===================게시판 이미지파일 업로드 처리============= //
-		// 직접 해보자
-		
-		// (1) 파일 이동
-		FileDTO fDto = new FileDTO();
-		fDto.setFileTemp(isTEMP.TRUE);
-		
-		
-		List<FileDTO> files = fileMapper.getAllTempFiles(fDto.getFileTemp());
-		
-		for(FileDTO file : files)
-		{
-			
-			// 필수 파라미터 생성
-			String fileRoot = "C:\\file_repo\\";
-			String folderName = "TextAreaPostContents";
-			Date fileRegdate = utilService.getNowDate();
-			String fileStrRegdate = utilService.getFolderDate();
-			String uuid = UUID.randomUUID().toString();
-			String fileName = file.getFileName();
-			String fileRealName = file.getFileRealName();
-			String filePath = fileRoot +folderName+"\\" + fileStrRegdate + "\\";
-			
-			
-			
-			
-			
-	        String sourceFilePath = file.getFilePath()+file.getFileName();
-	        String destinationFilePath = fileRoot +folderName+"\\" + fileStrRegdate + "\\"+fileName;
-	        
-	        
-	        System.out.println();
-	        
-	        Path sourcePath = Path.of(sourceFilePath);
-	        Path destinationPath = Path.of(destinationFilePath);
-
-			
-			
-			// 폴더생성
-			File folderGenerator = new File(fileRoot + folderName + "\\" +  fileStrRegdate);
-			String message = folderGenerator.exists() ? "폴더가 이미 존재합니다!" : (folderGenerator.mkdirs() ? "폴더가 생성되었습니다!" : "폴더 생성에 실패했습니다!");
-			System.out.println(message);
-			
-			// (2) 파일 DB정보 수정		
-	        FileDTO fileDTO = new FileDTO();      
-	        fileDTO.setFilePath(filePath);
-	        fileDTO.setFileTemp(isTEMP.FALSE);
-	        fileDTO.setFileNo(file.getFileNo());
-	        
-	        
-			// 파일 테이블에 게시글PK세팅
-			int postNo = postingService.getPostNo(bbsNo, bbsPostNo);
-			System.out.println("postNo > : "+postNo);
-			fileDTO.setPostNo(postNo);
-	        
-	        boolean updateSuccess = fileMapper.updateFileInfo(fileDTO);
-			
-			if(!updateSuccess) System.out.println("DB변경실패");
-			
-
-			
-			
-			// 파일이동	
-			try
-			{
-				// 파일 이름 특수 문자 인코팅 에러처리
-				String encodedFileName = URLEncoder.encode(fileName, "UTF-8");				
-				// 파일이동
-				Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
-
-			}
-			catch(IOException e)
-			{
-				System.out.println("파일생성실패");
-			}
-			
-
-			
-			
-			
-			
+		// 게시판 이미지 파일 업로드처리
+		int postNo = postingService.getPostNo(bbsNo, bbsPostNo);
+		for(String fileName : fileNameList)
+		{	
+			boolean uploadSuccess = fileService.uploadFiles(photoType,fileName, postNo);			
 		}
-		
-		
-		
-		
-		
+	
+		isTEMP fileTemp = isTEMP.TRUE;
+		// 잔류 temp파일 삭제
+		fileService.deleteAllTempFiles();
+		fileService.deleteTempFileFromDB(fileTemp); // DB에서 삭제
 		
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		
 		
 		
@@ -630,7 +521,7 @@ public class PostingController {
 		String badMsg = headerMsg+"요청에 실패했습니다";
 		
 		// 물리폴더 이미지 삭제
-		boolean deleteResult = fileService.deleteFiles(postNo,"게시글PK");
+		boolean deleteResult = fileService.deleteFiles(postNo,"postingIMG");
 		System.out.println(deleteResult ? "게시글 이미지 삭제 성공" : "");
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		

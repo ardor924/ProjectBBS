@@ -58,7 +58,7 @@
                     </td>      
                     </c:if>
                     </c:forEach>              
-                    <td>${li.postWriter}</td>
+                    <td>${li.postWriterName}</td>
                     <td>
                     	<fmt:formatDate value="${li.postRegdate}" pattern="yyyy.MM.dd" type="date"/>
 					</td>

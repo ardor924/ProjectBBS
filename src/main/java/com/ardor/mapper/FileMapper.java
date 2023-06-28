@@ -23,11 +23,17 @@ public interface FileMapper {
 	public List<FileDTO> getAllTempFiles(isTEMP TRUE);	
 	
 	// postNo에 해당하는 파일 전부 가져오기
-	public List<FileDTO> getAllFilesByPostNo(int postNo);
+	public List<FileDTO> getAllFilesBysomePK(FileDTO fileDTO);
 	
 	
 	//Temp 파일경로 DB수정
 	public boolean updateFileInfo(FileDTO fileDTO);
 	
+	
+	// temp내의 파일정보 DB에서 삭제
+	public boolean deleteTempFileFromDB(isTEMP TRUE);
+	
+	// 이미지가 posting 인것 모두 가져오기
+	public List<FileDTO>getFilesByRef();
 	
 }

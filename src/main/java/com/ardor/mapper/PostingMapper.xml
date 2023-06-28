@@ -28,8 +28,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 게시글 등록 -->
 	<insert id="insertPostingToDB">
-		insert into posting(bbsPostNo,postWriter,postTitle,postContents,postNotice,postHit,postRegdate,bbsNo)
-		values(#{bbsPostNo},#{postWriter},#{postTitle},#{postContents},#{postNotice},#{postHit},#{postRegdate},#{bbsNo})
+		insert into posting(bbsPostNo,postWriterName,postWriterID,postTitle,postContents,postNotice,postHit,postRegdate,bbsNo)
+		values(#{bbsPostNo},#{postWriterName},#{postWriterID},#{postTitle},#{postContents},#{postNotice},#{postHit},#{postRegdate},#{bbsNo})
 	</insert>
 
 
@@ -143,7 +143,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<sql id="searchResult">
 	    <choose>
 	        <when test="searchTarget.name() == 'WRITER'">
-	           	and postWriter like CONCAT('%', #{keyWord}, '%')
+	           	and postWriterName like CONCAT('%', #{keyWord}, '%')
 	        </when>
 	        <when test="searchTarget.name() == 'TITLE'">
 	          	and postTitle like CONCAT('%', #{keyWord}, '%')
@@ -188,7 +188,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<sql id="searchResultTotal">
 	    <choose>
 	        <when test="searchTarget.name() == 'WRITER'">
-	           	postWriter like CONCAT('%', #{keyWord}, '%')
+	           	postWriterName like CONCAT('%', #{keyWord}, '%')
 	        </when>
 	        <when test="searchTarget.name() == 'TITLE'">
 	          	postTitle like CONCAT('%', #{keyWord}, '%')

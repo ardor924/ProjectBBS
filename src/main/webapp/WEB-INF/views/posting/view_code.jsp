@@ -29,10 +29,10 @@
             <div class="row-between mt-4">
                 <div class="row-left">
                     <div class="row-item profile-photo-frame">
-                        <img src="${ctx}/members/profilePhoto/${postingDTO.postWriter}" class="profile-photo">
+                        <img src="${ctx}/members/profilePhoto/${postingDTO.postWriterID}" class="profile-photo">
                     </div>
                     <div class="row-item">
-                        <h6 class="writer-name">${postingDTO.postWriter}</h6>  
+                        <h6 class="writer-name">${postingDTO.postWriterName}</h6>  
                         <p class="posting-regdate">
                         <c:choose>
 	                        <c:when test="${regDateIsToday}">

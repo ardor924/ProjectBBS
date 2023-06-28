@@ -21,25 +21,37 @@ public class FileDTO {
     
     private isTEMP fileTemp;
     
+    private folderRef folderRef;
+    private String fileToken;
+    
     
     private int postNo;
     private int memberNo;
+    private int replyNo;
    
 	// 임시 저장용 캐시파일 체크
 	public enum isTEMP{
         TRUE,
         FALSE
 	} 
+	
+	// 참조폴더
+	public enum folderRef{
+		TEMP,
+		MEMBER,
+		POSTING,
+		REPLY
+	}
     
     
     //기본생성자
     public FileDTO(){}
 
 
-
     // 생성자
 	public FileDTO(int fileNo, String fileName, String filePath, String fileRealName, int fileSize, String fileType,
-			String fileExtension, String fileDescription, Date fileRegdate, isTEMP fileTemp, int postNo, int memberNo) {
+			String fileExtension, String fileDescription, Date fileRegdate, isTEMP fileTemp,
+			com.ardor.model.FileDTO.folderRef folderRef, String fileToken, int postNo, int memberNo, int replyNo) {
 		super();
 		this.fileNo = fileNo;
 		this.fileName = fileName;
@@ -51,10 +63,12 @@ public class FileDTO {
 		this.fileDescription = fileDescription;
 		this.fileRegdate = fileRegdate;
 		this.fileTemp = fileTemp;
+		this.folderRef = folderRef;
+		this.fileToken = fileToken;
 		this.postNo = postNo;
 		this.memberNo = memberNo;
+		this.replyNo = replyNo;
 	}
-
 
 
 	public int getFileNo() {
@@ -62,11 +76,9 @@ public class FileDTO {
 	}
 
 
-
 	public void setFileNo(int fileNo) {
 		this.fileNo = fileNo;
 	}
-
 
 
 	public String getFileName() {
@@ -74,11 +86,9 @@ public class FileDTO {
 	}
 
 
-
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-
 
 
 	public String getFilePath() {
@@ -86,11 +96,9 @@ public class FileDTO {
 	}
 
 
-
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
 	}
-
 
 
 	public String getFileRealName() {
@@ -98,11 +106,9 @@ public class FileDTO {
 	}
 
 
-
 	public void setFileRealName(String fileRealName) {
 		this.fileRealName = fileRealName;
 	}
-
 
 
 	public int getFileSize() {
@@ -110,11 +116,9 @@ public class FileDTO {
 	}
 
 
-
 	public void setFileSize(int fileSize) {
 		this.fileSize = fileSize;
 	}
-
 
 
 	public String getFileType() {
@@ -122,11 +126,9 @@ public class FileDTO {
 	}
 
 
-
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
 	}
-
 
 
 	public String getFileExtension() {
@@ -134,11 +136,9 @@ public class FileDTO {
 	}
 
 
-
 	public void setFileExtension(String fileExtension) {
 		this.fileExtension = fileExtension;
 	}
-
 
 
 	public String getFileDescription() {
@@ -146,11 +146,9 @@ public class FileDTO {
 	}
 
 
-
 	public void setFileDescription(String fileDescription) {
 		this.fileDescription = fileDescription;
 	}
-
 
 
 	public Date getFileRegdate() {
@@ -158,11 +156,9 @@ public class FileDTO {
 	}
 
 
-
 	public void setFileRegdate(Date fileRegdate) {
 		this.fileRegdate = fileRegdate;
 	}
-
 
 
 	public isTEMP getFileTemp() {
@@ -170,11 +166,29 @@ public class FileDTO {
 	}
 
 
-
 	public void setFileTemp(isTEMP fileTemp) {
 		this.fileTemp = fileTemp;
 	}
 
+
+	public folderRef getFolderRef() {
+		return folderRef;
+	}
+
+
+	public void setFolderRef(folderRef folderRef) {
+		this.folderRef = folderRef;
+	}
+
+
+	public String getFileToken() {
+		return fileToken;
+	}
+
+
+	public void setFileToken(String fileToken) {
+		this.fileToken = fileToken;
+	}
 
 
 	public int getPostNo() {
@@ -182,11 +196,9 @@ public class FileDTO {
 	}
 
 
-
 	public void setPostNo(int postNo) {
 		this.postNo = postNo;
 	}
-
 
 
 	public int getMemberNo() {
@@ -194,23 +206,23 @@ public class FileDTO {
 	}
 
 
-
 	public void setMemberNo(int memberNo) {
 		this.memberNo = memberNo;
 	}
 
 
+	public int getReplyNo() {
+		return replyNo;
+	}
 
-	@Override
-	public String toString() {
-		return "FileDTO [fileNo=" + fileNo + ", fileName=" + fileName + ", filePath=" + filePath + ", fileRealName="
-				+ fileRealName + ", fileSize=" + fileSize + ", fileType=" + fileType + ", fileExtension="
-				+ fileExtension + ", fileDescription=" + fileDescription + ", fileRegdate=" + fileRegdate
-				+ ", fileTemp=" + fileTemp + ", postNo=" + postNo + ", memberNo=" + memberNo + "]";
-	};
-    
-    
-    
+
+	public void setReplyNo(int replyNo) {
+		this.replyNo = replyNo;
+	}
+
+
 	
+
+
 
 }

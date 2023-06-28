@@ -162,7 +162,7 @@ bbsNameSelectElement.addEventListener("change", function(){
 });
 
 	
-
+const fileTokenList = [];
 
 class UploadAdapter {
     constructor(loader) {
@@ -170,12 +170,37 @@ class UploadAdapter {
     }
 
     upload() {
-        return this.loader.file.then( file => new Promise(((resolve, reject) => {
+        return this.loader.file.then( file => new Promise((resolve, reject) => {
+	
+	        // 확장자 제한 (jpg, gif, png, bmp, webp)
+	        const allowedExtensions = /(\.jpg|\.jpeg|\.gif|\.png|\.bmp|\.webp)$/i;
+	        if (!allowedExtensions.test(file.name)) {
+	          alert('.jpg, .jpeg, .gif, .png, .bmp, .webp 등의\n이미지 파일만 선택할 수 있습니다.');
+			  reject("지원하지 않는 확장자");
+	          return;
+	        }
+
+
+	
+
+		    // 파일 크기 체크
+            if (file.size > 2 * 1024 * 1024) {
+                alert("파일 1개는 최대 2MB까지 업로드 가능합니다.");
+                reject("파일 크기 초과");
+                return;
+            }
+	
+	
             this._initRequest(file);
             this._initListeners( resolve, reject, file );
             this._sendRequest( file );
-        })))
+        }))
     }
+	abort() {
+        if ( this.xhr ) {
+            this.xhr.abort();
+        }
+	}
 
     _initRequest(file) {
 
@@ -199,10 +224,18 @@ class UploadAdapter {
 			var msg = response.responseMessage;	
 			console.log("msg :"+msg);
 			
-			var sessionToken = response.sessionToken;
-			console.log("sessionToken :"+sessionToken);
+			var url = response.url
+			
+			var fileToken = response.fileToken;
+			console.log("fileToken :"+fileToken);
 
-	
+			// 파일 토큰값 input에 담기
+			fileTokenList.push(fileToken);
+			const fileTokenElement = document.getElementById('fileTokenList');
+			fileTokenElement.value = fileTokenList.join(',');
+
+			console.log("fileTokenList :"+fileTokenList);
+			console.log("파일토큰 갯수 :"+fileTokenList.length);
 
 
             if(!response || response.error) {

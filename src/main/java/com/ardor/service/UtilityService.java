@@ -28,6 +28,9 @@ public interface UtilityService {
 	// 폴더용 날짜 포맷
 	public String getFolderDate();
 	
+	// 날짜를 문자열로 변환
+	public String getStrDateFromDate(Date inputDate);
+	
 	// 생일로 나이구하기 메서드
 	public Integer calculateAgeFromBirth(Date memberBirth);
 	
