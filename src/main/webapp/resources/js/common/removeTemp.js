@@ -1,23 +1,28 @@
-window.onbeforeunload = function() {
-  return "페이지를 새로 고침하시겠습니까?";
-};
+let refreshFlag = false;
 
-function executeRemoveTempFile() {
+function removeTempFile() {
   axios.get(ctx + '/removeTempFile')
     .then(response => {
-      // 요청에 대한 성공 처리
-      console.log(response.data);
+      // 작업 완료
+	
+		var resultMSG = response.resultMSG;
+
+      	console.log(resultMSG);
+		alert(resultMSG);
     })
     .catch(error => {
-      // 요청에 대한 실패 처리
-      console.error(error);
+      // 에러 처리
+      console.error('Temp 파일 삭제 중 오류가 발생했습니다.', error);
     });
 }
 
-window.addEventListener('unload', function() {
-  var confirmation = confirm("페이지를 새로 고침하시겠습니까?");
-  if (confirmation) {
-    executeRemoveTempFile();
+window.addEventListener('beforeunload', function(event) {
+  if (!refreshFlag) {
+    if (confirm("페이지를 새로고침 하시겠습니까?")) {
+      refreshFlag = true;
+      removeTempFile();
+    } else {
+      // 페이지를 새로고침하지 않을 경우에 대한 처리
+    }
   }
 });
-

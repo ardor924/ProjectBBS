@@ -3,7 +3,7 @@ const submitButton = document.getElementById('writingSubmitBtn');
 
 submitButton.addEventListener('click', function(event) {
     event.preventDefault(); // 폼 제출 방지
- 	window.onbeforeunload = null;
+ 	let refreshFlag = true; // 게시글 폼 제출시 나가기 메세지 방지
 
     /* 유효성 검사 */
 
@@ -69,15 +69,6 @@ submitButton.addEventListener('click', function(event) {
         return;
     }
 
-
-	    // 파일 개수 체크
-    if (fileNameList.length >= 10) {
-        alert("최대 10개까지 파일을 업로드할 수 있습니다.");
-        reject("파일 개수 초과");
-        return;
-    }
-
-	
 
 
 

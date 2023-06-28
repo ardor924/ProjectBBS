@@ -179,10 +179,9 @@ public class PostingController {
 		{	
 			boolean uploadSuccess = fileService.uploadFiles(photoType,fileName, postNo);			
 		}
-	
-		isTEMP fileTemp = isTEMP.TRUE;
-		// 잔류 temp파일 삭제
-		fileService.deleteAllTempFiles();
+
+		isTEMP fileTemp = isTEMP.TRUE;		
+		fileService.deleteAllTempFiles();// 물리폴더의 잔류 temp파일 삭제
 		fileService.deleteTempFileFromDB(fileTemp); // DB에서 삭제
 		
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
@@ -368,6 +367,7 @@ public class PostingController {
 	(
 		PostingDTO postingDTO,
 		@PathVariable String bbsNameForURL,
+		@RequestParam("fileNameList") List<String> fileNameList, 
 		@PathVariable("bbsPostNo") int bbsPostNo,
 		@RequestParam(value="postHit" , defaultValue="0" ) int postHit , 
 		@RequestParam(value="postNotice" , defaultValue="NO" ) String postNoticeStr , 
@@ -416,7 +416,26 @@ public class PostingController {
 		String headerMsg = "게시글 수정";
 		String goodMsg = headerMsg+"요청에 성공했습니다";
 		String badMsg = headerMsg+"요청에 실패했습니다";
-	
+		
+		
+		
+		// 이미지폴더 분류
+		String photoType = "postingIMG";
+		
+		// 기존의파일제거(물리+DB)
+		fileService.deleteUnmodifiedFiles(fileNameList, postNo);
+		
+		// 게시판 이미지 파일 업로드처리
+		for(String fileName : fileNameList)
+		{
+			fileService.uploadFiles(photoType, fileName, postNo);
+		}
+		
+		
+		isTEMP fileTemp = isTEMP.TRUE;		
+		fileService.deleteAllTempFiles();// 물리폴더의 잔류 temp파일 삭제
+		fileService.deleteTempFileFromDB(fileTemp); // DB에서 삭제
+
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
 		
@@ -438,7 +457,7 @@ public class PostingController {
 		postingDTO.setPostNo(postNo);
 		postingDTO.setPostNotice(postNotice);
 		postingDTO.setPostRegdate(postRegdate);
-		
+		System.out.println("postNo : "+postNo);
 		// DB에 게시글정보 업데이트
 		boolean success =  postingService.updatePostingByPostingDTO(postingDTO);
 		

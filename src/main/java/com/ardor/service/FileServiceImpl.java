@@ -9,8 +9,10 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -22,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ardor.mapper.FileMapper;
@@ -125,6 +128,7 @@ public class FileServiceImpl implements FileService{
 	public boolean uploadFiles(String photoType,String fileToken, int pkNo) {
 		
 		boolean uploadSuccess = true;
+				
 		
 		// 물리폴더 파일 이동 (임시폴더에서 물리폴더로)
 		FileDTO fDto = new FileDTO();
@@ -137,7 +141,8 @@ public class FileServiceImpl implements FileService{
 		
 		for(FileDTO file : files)
 		{	
-			System.out.println("-------------------------------------");
+			System.out.println("----------------회원프로필---------------------");
+			// fileToken == memberIMG의 fileToken
 			if(fileToken.equals(file.getFileToken()))
 			{				
 				{				
@@ -209,7 +214,10 @@ public class FileServiceImpl implements FileService{
 				}
 			}
 			else if(fileToken.equals(file.getFileName()))
-			{
+			{	
+				
+				System.out.println("---------포스팅----------------");
+				// fileToken == postingIMG의 fileName
 				System.out.println("fileToken : "+fileToken);
 				// 필수 파라미터 생성
 				String fileRoot = "C:\\file_repo\\";
@@ -308,9 +316,73 @@ public class FileServiceImpl implements FileService{
 	
 	
 	
+	// 게시글 수정할때 이미지를 수정하면 삭제전의 기존파일을 지움
+	@Override
+	@Transactional
+	public boolean deleteUnmodifiedFiles(List<String> fileNames, int somePK) {
+	    boolean success = true;
+	    String photoType = "postingIMG";
+
+	    System.out.println("---------------------deleteUnmodifiedFiles--------------------------------------");
+	    // 게시글 PK로 포토타입으로 기존 파일 모두 가져오기
+	    List<FileDTO> existingFiles = getAllFilesBysomePK(photoType, somePK);
+
+	    try {
+	        // 삭제 대상 파일 식별을 위한 Set 생성
+	        Set<String> fileNamesToDelete = new HashSet<>();
+
+	        // 기존 파일 목록 순회
+	        for (FileDTO existingFile : existingFiles) {
+	            fileNamesToDelete.add(existingFile.getFileName());
+	        }
+
+	        // 현재 업데이트한 파일 목록 순회하여 삭제 대상 파일 식별
+	        for (String fileName : fileNames) {
+	            fileNamesToDelete.remove(fileName);
+	        }
+
+	        // 삭제 대상 파일 목록 순회하여 삭제
+	        for (FileDTO existingFile : existingFiles) {
+	            if (fileNamesToDelete.contains(existingFile.getFileName())) {
+	                System.out.println("삭제할 파일: " + existingFile.getFileName());
+	                // 파일 삭제
+	                deleteFile(existingFile);
+	                // DB 정보 삭제
+	                deleteFileInfo(existingFile);
+	            }
+	        }
+	    } catch (Exception e) {
+	        System.out.println("파일 삭제 실패");
+	        success = false;
+	    }
+	    System.out.println("---------------------deleteUnmodifiedFiles--------------------------------------");
+	    return success;
+	}
 	
 	
+
+	// 파일 삭제 (게시글수정시 기존파일삭제로직)
+	private void deleteFile(FileDTO file) {
+	    String filePath = file.getFilePath() + file.getFileName();
+	    File deleteFile = new File(filePath);
+	    if (deleteFile.exists()) {
+	        if (deleteFile.delete()) {
+	            System.out.println("파일 삭제 성공: " + filePath);
+	        } else {
+	            throw new RuntimeException("파일 삭제 실패: " + filePath);
+	        }
+	    } else {
+	        System.out.println("파일이 존재하지 않습니다: " + filePath);
+	    }
+	}
+
+	// DB 정보 삭제 (게시글수정시 기존파일 DB 삭제로직)
+	private void deleteFileInfo(FileDTO file) {
+	    fileMapper.deleteFileInfoByFileNo(file.getFileNo());
+	}
 	
+	
+
 	
 	
 	// 임시폴더내의 파일 제거

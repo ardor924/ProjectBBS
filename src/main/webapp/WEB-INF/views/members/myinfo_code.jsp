@@ -17,10 +17,7 @@
                         <img src="${ctx}/members/profilePhoto/${memberDTO.memberID}" id="my-photo-frame" class="my-photo" type="button" alt="기본이미지">
                         <button class="btn btn-secondary" id="profile-image-upload-btn" type="button">등록하기</button>
                         <input type="file" id="memberPhoto" name="memberPhoto" accept=".jpg, .jpeg, .gif, .png, .bmp, .webp" style="display: none;" multiple="multiple">    
-                       	<input type="hidden" id="memberPhotoPath" name="memberPhotoPath">
-						<input type="hidden" id="memberPhotoName" name="memberPhotoName">   
-						<input type="hidden" id="memberPhotoRealName" name="memberPhotoRealName">   
-						<input type="hidden" id="memberPhotoRegdateStr" name="memberPhotoRegdateStr">    
+                       	<input type="hidden" id="fileToken" name="fileToken">
                     </div>
                 </fieldset>
                 <fieldset class="row-none mt-3 mb-0">

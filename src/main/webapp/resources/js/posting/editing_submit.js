@@ -3,12 +3,60 @@ const submitButton = document.getElementById('editSubmitBtn');
 
 submitButton.addEventListener('click', function(event) {
     event.preventDefault(); // 폼 제출 방지
+ 	let refreshFlag = true; // 게시글 폼 제출시 나가기 메세지 방지
 
     /* 유효성 검사 */
 
     var bbsNameForURL = document.getElementById('bbsNameSelect').value; // 게시판 선택 값 가져오기
     var postTitle = document.editForm.elements.postTitle.value; // 제목 값 가져오기
     var bbsPostNo = document.editForm.elements.bbsPostNo.value; // bbsPostNo 번호 값 가져오기
+
+
+	const fileNameList = [];
+	const fileRegDateList = [];
+
+
+
+
+
+
+
+
+	// 게시글 리턴 + 이미지 업로드 파라미터 세팅 
+	const editorData = editor.getData(); // 에디터 컨텐츠를 가져오기
+	const tempElement = document.createElement('div'); // 임시 요소를 생성
+	tempElement.innerHTML = editorData; // 에디터 컨텐츠를 임시 요소에 할당
+	
+	
+	const imgElements = tempElement.querySelectorAll('img'); // 임시 요소 내의 모든 img 태그를 가져오기
+	
+	const imgSrcList = Array.from(imgElements).map(img => {
+	  const src = img.src;
+	  const startIndex = src.indexOf('postingIMG/') + 11; // "postingIMG/" 이후 문자열의 시작 인덱스
+	  const endIndex = src.indexOf('/', startIndex); // 다음 "/" 문자의 인덱스
+	
+	  const fileRegDate = src.substring(startIndex, endIndex); // fileRegDate 추출
+	  const fileName = src.substring(endIndex + 1); // fileName 추출
+	
+	  fileRegDateList.push(fileRegDate); // fileRegDateList에 추가
+	  fileNameList.push(fileName); // fileNameList에 추가
+	
+	  return src; // img 태그의 src 속성 값 반환
+	});
+	
+	console.log("File Name List:", fileNameList);
+
+
+
+	// fileNameList에 파일이름 추가 + 디코딩 하여 한글로 넘기기
+	const fileNameListElement = document.getElementById('fileNameList');
+	fileNameListElement.value = fileNameList.map(fileName => decodeURIComponent(fileName)).join(',');
+	
+	console.log("fileNameListElement.value : "+fileNameListElement.value)
+	
+	
+
+
 
 
     /* 게시판이름 없을시 리턴 */
@@ -22,8 +70,6 @@ submitButton.addEventListener('click', function(event) {
         document.editForm.elements.postTitle.focus();
         return;
     }
-
-
 
 
 

@@ -69,8 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		set postTitle = #{postTitle},
 		    postContents = #{postContents},
 		    postNotice = #{postNotice},
-		    postRegdate = #{postRegdate},
-		    fileFullPath = #{fileFullPath}
+		    postRegdate = #{postRegdate}
 		where postNo = #{postNo}
 	</update>
 	

@@ -1,4 +1,7 @@
 /* 프로필 사진 업로드 로직*/ 
+	 	
+	let refreshFlag = true; // 게시글 폼 제출시 나가기 메세지 방지
+
 
     // input typr='file'
     const fileInput = document.getElementById('memberPhoto');

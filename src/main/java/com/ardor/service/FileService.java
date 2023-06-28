@@ -37,7 +37,9 @@ public interface FileService {
 	public List<FileDTO> getAllFilesBysomePK(String photoType, int somePK);
 	
 	
-	
+	// 게시글 수정할때 이미지를 수정하면 삭제전의 기존파일을 지움
+	public boolean deleteUnmodifiedFiles(List<String> fileNames, int somePK);
+
 	
 	// 임시폴더내의 파일 제거
 	public void deleteAllTempFiles();
@@ -53,6 +55,8 @@ public interface FileService {
 	
 	//  temp내의 파일정보 DB에서 삭제
 	public boolean deleteTempFileFromDB(isTEMP TRUE);
+	
+	
 	
 	
 	// ------------------------ 현재 필요없는 메서드 ---------------------------------------------------------------------------------

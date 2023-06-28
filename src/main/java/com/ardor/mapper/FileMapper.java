@@ -29,6 +29,8 @@ public interface FileMapper {
 	//Temp 파일경로 DB수정
 	public boolean updateFileInfo(FileDTO fileDTO);
 	
+	// 파일번호(fileNo)로 파일정보 삭제
+	public boolean deleteFileInfoByFileNo(int fileNo);
 	
 	// temp내의 파일정보 DB에서 삭제
 	public boolean deleteTempFileFromDB(isTEMP TRUE);

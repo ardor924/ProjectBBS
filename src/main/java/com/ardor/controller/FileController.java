@@ -169,11 +169,16 @@ public class FileController {
     
     // 페이지 새로고침 혹은 이동시 Temp파일 및 DB에서 정보 삭제
     @GetMapping("/removeTempFile")
-    public ResponseEntity<Resource> removeTempFile() {
+    public ResponseEntity<Object> removeTempFile() {
+    	System.out.println("START---------------새로고침시 temp삭제 메서드----------------------");
+    	Map<String, Object> response = new HashMap<String, Object>();	
         isTEMP fileTemp = isTEMP.TRUE;
         fileService.deleteTempFileFromDB(fileTemp); // DB에서 삭제
-        fileService.deleteAllTempFiles(); // 잔류 temp 파일 삭제
-        return ResponseEntity.ok().build(); // 작업이 완료되었음을 응답으로 전달
+        fileService.deleteAllTempFiles(); // 잔류 temp 파일 삭제     
+        response.put("resultMSG", "temp파일삭제와 DB삭제가 완료되었습니다");
+        System.out.println("---------------새로고침시 temp삭제 메서드----------------------END");
+        
+    	return ResponseEntity.ok(response);
     }
 
     

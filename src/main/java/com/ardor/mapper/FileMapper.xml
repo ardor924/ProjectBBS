@@ -39,6 +39,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from file where fileTemp = #{fileTemp}
 	</delete>
 	
+	<!-- 파일번호로 DB삭제 -->
+	<delete id="deleteFileInfoByFileNo">
+		delete from file where fileNo = #{fileNo}
+	</delete>
+	
 	<!-- 특정 PK에 해당하는 파일 전부 가져오기 -->
 	<select id="getAllFilesBysomePK" resultType="fileDTO">
 		select * from file				
