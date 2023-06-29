@@ -22,7 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ardor.mapper.FileMapper;
 import com.ardor.mapper.PostingMapper;
 import com.ardor.model.FileDTO;
-import com.ardor.model.FileDTO.isTEMP;
+import com.ardor.model.FileDTO.EntityType;
+import com.ardor.model.FileDTO.IsTemp;
 import com.ardor.model.PostingDTO;
 import com.ardor.model.PostingDTO.SearchTarget;
 import com.ardor.model.PostingDTO.SortOrder;
@@ -140,7 +141,10 @@ public class PostingController {
 		
 		// 게시글번호 생성 및 추가
 		int bbsPostNo = postingService.addBbsPostNo(bbsNo); //(각각의 게시판마다 별도의 게시글 번호를 1부터 순차적으로 생성) 
-	
+		
+		// 엔티티타입 설정 
+		EntityType entityType = EntityType.POSTING;
+		
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
 
@@ -177,13 +181,11 @@ public class PostingController {
 		int postNo = postingService.getPostNo(bbsNo, bbsPostNo);
 		for(String fileName : fileNameList)
 		{	
-			boolean uploadSuccess = fileService.uploadFiles(photoType,fileName, postNo);			
+			boolean uploadSuccess = fileService.uploadFiles(entityType, photoType, postNo);
 		}
 
-		isTEMP fileTemp = isTEMP.TRUE;		
 		fileService.deleteAllTempFiles();// 물리폴더의 잔류 temp파일 삭제
-		fileService.deleteTempFileFromDB(fileTemp); // DB에서 삭제
-		
+		fileService.deleteAllTempFilesFromDB(); // DB에서 삭제		
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
 		
@@ -400,7 +402,8 @@ public class PostingController {
 		// 게시글 등록일자 처리
 		Date postRegdate = utilService.getNowDate();
 				
-	
+		// 엔티티 타입 설정
+		EntityType entityType = EntityType.POSTING;
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
 				
@@ -428,13 +431,12 @@ public class PostingController {
 		// 게시판 이미지 파일 업로드처리
 		for(String fileName : fileNameList)
 		{
-			fileService.uploadFiles(photoType, fileName, postNo);
+			fileService.uploadFiles(entityType, fileName, postNo);
 		}
 		
 		
-		isTEMP fileTemp = isTEMP.TRUE;		
 		fileService.deleteAllTempFiles();// 물리폴더의 잔류 temp파일 삭제
-		fileService.deleteTempFileFromDB(fileTemp); // DB에서 삭제
+		fileService.deleteAllTempFilesFromDB(); // DB에서 삭제
 
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		
@@ -540,7 +542,7 @@ public class PostingController {
 		String badMsg = headerMsg+"요청에 실패했습니다";
 		
 		// 물리폴더 이미지 삭제
-		boolean deleteResult = fileService.deleteFiles(postNo,"postingIMG");
+		boolean deleteResult = fileService.deleteFilesByEntityPK(postNo);
 		System.out.println(deleteResult ? "게시글 이미지 삭제 성공" : "");
 		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx//
 		

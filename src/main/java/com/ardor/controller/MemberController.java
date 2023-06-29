@@ -22,8 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ardor.mapper.MemberMapper;
 import com.ardor.model.FileDTO;
-import com.ardor.model.FileDTO.folderRef;
-import com.ardor.model.FileDTO.isTEMP;
+import com.ardor.model.FileDTO.EntityType;
+import com.ardor.model.FileDTO.IsTemp;
 import com.ardor.model.MemberDTO;
 import com.ardor.model.MemberDTO.AgreementStatus;
 import com.ardor.model.MemberDTO.MemberGrant;
@@ -59,7 +59,6 @@ public class MemberController {
 	@PostMapping("/members/join/submit")
 	public String joinSubmit(					
 		MemberDTO memberDTO,
-		@RequestParam(value = "photoType", defaultValue = "memberProfileIMG") String photoType, 
 		@RequestParam("fileToken") String fileToken, 
 		@RequestParam("memberID") String memberID, 
 		@RequestParam("memberBirthYear") String memberBirthYear, 
@@ -129,18 +128,11 @@ public class MemberController {
 		// 회원아이디로 memberNo PK값 가져오기
 		memberDTO = memberService.getMemberInfoBymemberID(memberID);
 		int memberNo = memberDTO.getMemberNo();
-		boolean imgUploadsucces = fileService.uploadFiles(photoType,fileToken, memberNo);
-		// 이미지 업로드 성공시 temp폴더 내 파일 이동후 temp파일삭제
-		if(imgUploadsucces)
-		{
-			fileService.uploadFiles(photoType, fileToken, memberNo);
-		};
+		fileService.uploadFiles(EntityType.MEMBER,fileToken, memberNo);
 
-		isTEMP fileTemp = isTEMP.TRUE;
-		fileService.deleteTempFileFromDB(fileTemp); // DB에서 삭제
-		// 잔류 temp파일 삭제
-		fileService.deleteAllTempFiles();
 
+		fileService.deleteAllTempFiles();// 물리폴더의 잔류 temp파일 삭제
+		fileService.deleteAllTempFilesFromDB(); // DB에서 삭제		
 		
 		return "members/login_page";
 	}

@@ -1,69 +1,64 @@
 package com.ardor.service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ardor.model.FileDTO;
-import com.ardor.model.FileDTO.isTEMP;
-import com.ardor.model.MemberDTO;
+import com.ardor.model.FileDTO.EntityType;
 
 public interface FileService {
 	
-	// 임시 파일 업로드
-	public Map<String, Object> uploadTempFiles(String photoType,MultipartFile file); 
+	//======================= 등록 =======================
 	
-	// 파일 업로드
-	public boolean uploadFiles(String photoType,String fileToken,int pkNo);
-	
-	
-	// 파일정보 수정
-	public boolean updateFiles(FileDTO fileDTO);
+	// [Temp] 파일업로드
+	public Map<String, Object> uploadTempFiles(EntityType entityType, MultipartFile file);
 	
 	
-	// 파일 삭제 (게시글 컨텐츠 이미지 파일삭제)
-	public boolean deleteFiles(int PK,String whatPK);
+	// [실제폴더] 파일 업로드
+	public boolean uploadFiles(EntityType entityType,String fileIdentifier,int entityPK);
 	
 	
-	// 임시 Temp파일 전부 가져오기
-	public List<FileDTO> getAllTempFiles(isTEMP TEMP);
-	
-	// postNo에 해당하는 파일 전부 가져오기
-	public List<FileDTO> getAllFilesBysomePK(String photoType, int somePK);
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	
 	
-	// 게시글 수정할때 이미지를 수정하면 삭제전의 기존파일을 지움
-	public boolean deleteUnmodifiedFiles(List<String> fileNames, int somePK);
+	//======================= 삭제 =======================
+	
+	// [1개] 파일삭제
+	public boolean deleteFileByFileNo(int fileNo); // (fileNo사용)
+	
+	// [특정엔티티] 파일삭제
+	public boolean deleteFilesByEntityType(EntityType entityType); // (entityType사용)
+	
+	// [특정엔티티] 파일삭제
+	public boolean deleteFilesByEntityPK(int entityPK); // (entityPK사용)
+	
+	// [Temp] 파일삭제 (DB삭제)
+	public boolean deleteAllTempFilesFromDB();
+	
+	// [Temp] 파일삭제 (실제폴더)
+	public boolean deleteAllTempFiles();
+	
+	// [업데이트] 파일삭제 (Temp파일)
+	public boolean deleteUnmodifiedFiles(List<String> fileNames,int entityPK);
+	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 	
-	// 임시폴더내의 파일 제거
-	public void deleteAllTempFiles();
-	
-	
-	// 폴더이름 필터링
-	public String getFolderName(String photoType);
-	
-	
-	// 이미지 파일 가져와서 폴더 분류
-	public String setImagePath(String photoType, String date, String filename);
-	
-	
-	//  temp내의 파일정보 DB에서 삭제
-	public boolean deleteTempFileFromDB(isTEMP TRUE);
 	
 	
 	
+	//======================= 유틸 =======================
 	
-	// ------------------------ 현재 필요없는 메서드 ---------------------------------------------------------------------------------
-	// 이미지 다운로드
-	public void processProfilePhoto(MemberDTO memberInfo, HttpServletResponse response,HttpServletRequest request) throws IOException;
-
-	// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
+	// [엔티티타입]	폴더이름 세팅
+	public String setFolderName(EntityType entityType);
+	
+	// [엔티티타입]	이미지폴더 경로 세팅
+	public String setImagePath(String entityType, String date,String fileName);
+	
+	// [회원프사] URL생성 및 가져오기
+	public String getMemberProfileImgUrlByMemberID(String memberID);
+	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	
 }

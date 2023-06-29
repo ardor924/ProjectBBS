@@ -5,37 +5,77 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ardor.model.FileDTO;
-import com.ardor.model.FileDTO.isTEMP;
+import com.ardor.model.FileDTO.EntityType;
+import com.ardor.model.FileDTO.IsTemp;
 
 @Mapper
 public interface FileMapper {
+	
+	//======================= 등록 =======================
+	
+	// 파일등록
+	public boolean insertFileInfoToDB(FileDTO fileDTO);
+	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	
+	
+	
+	
+	//======================= 조회 =======================
+	
+	// [전체] 파일조회
+	public List<FileDTO> getAllFiles();
+	
+	// [1개] 파일조회 
+	public FileDTO getFileByFileNo(int fileNo); // (fileNo사용)
+	
+	// [특정엔티티] 파일조회 
+	public List<FileDTO> getFilesByEntityType(EntityType entityType); // (entityType사용)
+	
+	// [특정엔티티] 파일조회 
+	public List<FileDTO> getFilesByEntityPK(int entityPK); // (entityPK사용)
+	
+	// [Temp] 파일조회
+	public List<FileDTO> getAllTempFiles(); 
+	
+	// [Temp] 파일조회
+	public List<FileDTO> getFilesFromTempBeforeThreeMonths();
+	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	
+	
+	
+	
+	//======================= 수정 =======================
+	
+	// 파일수정
+	public boolean updateFileInfoToDB(FileDTO fileDTO);
+	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	
+	
+	
+	
+	
+	//======================= 삭제 =======================
+	
+	// [1개] 파일삭제
+	public boolean deleteFileByFileNo(int fileNo); // (fileNo사용)
+	
+	// [특정엔티티] 파일삭제
+	public boolean deleteFilesByEntityType(EntityType entityType); // (entityType사용)
+	
+	// [특정엔티티] 파일삭제
+	public boolean deleteFilesByEntityPK(int entityPK); // (entityPK사용)
+	
+	// [Temp] 파일삭제
+	public boolean deleteAllTempFilesFromDB(); 
+	
+	// [Temp] 파일삭제
+	public boolean deleteFilesFromTempBeforeThreeMonths();
+	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	
 
-	// 파일등록(DB등록)
-	public boolean insertFileToDB(FileDTO fileDTO);
-	
-	//파일 PK로 파일정보 가져오기
-	public FileDTO getFileInfoByFileNo(int FileNo);
-	
-	//파일이름으로 파일정보 가져오기
-	public FileDTO getFileInfoFromDB(String fileName);
-	
-	// 임시 Temp 파일 전부 가져오기
-	public List<FileDTO> getAllTempFiles(isTEMP TRUE);	
-	
-	// postNo에 해당하는 파일 전부 가져오기
-	public List<FileDTO> getAllFilesBysomePK(FileDTO fileDTO);
 	
 	
-	//Temp 파일경로 DB수정
-	public boolean updateFileInfo(FileDTO fileDTO);
-	
-	// 파일번호(fileNo)로 파일정보 삭제
-	public boolean deleteFileInfoByFileNo(int fileNo);
-	
-	// temp내의 파일정보 DB에서 삭제
-	public boolean deleteTempFileFromDB(isTEMP TRUE);
-	
-	// 이미지가 posting 인것 모두 가져오기
-	public List<FileDTO>getFilesByRef();
 	
 }

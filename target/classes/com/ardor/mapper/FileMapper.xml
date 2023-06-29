@@ -8,73 +8,154 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.ardor.mapper.FileMapper">
 
-
-	<!-- 파일정보 DB에 저장 -->
-	<insert id="insertFileToDB">
-		insert into file(fileName,fileRealName,filePath,fileRegdate,fileTemp,folderRef,fileToken)
-		values(#{fileName},#{fileRealName},#{filePath},#{fileRegdate},#{fileTemp},#{folderRef},#{fileToken})
+	<!-- ========================================== 등록 ========================================== -->
+		
+	<!-- 파일정보 DB에 등록 -->
+	<insert id="insertFileInfoToDB">
+		insert into files(fileName,fileRealName,filePath,fileRegdate,isTemp,entityType,fileToken)
+		values(#{fileName},#{fileRealName},#{filePath},#{fileRegdate},#{isTemp},#{entityType},#{fileToken})
 	</insert>
-
-	<!-- PK값으로 파일정보가져오기 -->
-	<select id="getFileInfoByFileNo">
-		select * from file where fileNo = #{fileNo}	
+		
+	<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+		
+		
+		
+		
+		
+		
+	<!-- ========================================== 조회 ========================================== -->	
+	<!-- 전체파일 가져오기 -->
+	<select id="getAllFiles">
+		select * from files
 	</select>
-
-	<!-- 파일이름으로 파일정보 가져오기 -->	
-	<select id="getFileInfoFromDB" parameterType="String" resultType="fileDTO">
-		select * from file where fileName = #{fileName}
+		
+	<!-- PK값(파일)으로 파일 1개정보가져오기 -->
+	<select id="getFileByFileNo">
+		select * from files where fileNo = #{fileNo}	
 	</select>
-	
-	
-	<!-- DB수정 -->
-	<update id="updateFileInfo">
-		UPDATE file
-		<include refid="updateColumn"></include>
-		WHERE fileNo = #{fileNo};
-	</update>
-	
-	
-	<!-- Temp파일 DB삭제 -->
-	<delete id="deleteTempFileFromDB">
-		delete from file where fileTemp = #{fileTemp}
-	</delete>
-	
-	<!-- 파일번호로 DB삭제 -->
-	<delete id="deleteFileInfoByFileNo">
-		delete from file where fileNo = #{fileNo}
-	</delete>
-	
-	<!-- 특정 PK에 해당하는 파일 전부 가져오기 -->
-	<select id="getAllFilesBysomePK" resultType="fileDTO">
-		select * from file				
-		<choose>
-			<when test="memberNo != 0">
-				where memberNo = #{memberNo}	
-			</when>
-			<when test="postNo != 0">
-				where postNo = #{postNo}	
-			</when>
-			<when test="replyNo != 0">
-				where replyNo = #{replyNo}	
-			</when>	
-		</choose>
+		
+	<!-- 특정 개체(엔티티)타입에 속한 파일들을 조회 -->
+	<select id="getFilesByEntityType" resultType="fileDTO">
+		select * from files			
+		<include refid="Filter_ByEntityType"></include>
 	</select>
-	
+		
+	<!-- 특정 개체(엔티티)의 PK번호에 해당하는 파일들을 조회 -->
+	<select id="getFilesByEntityPK" resultType="fileDTO">
+		select * from files				
+		<include refid="Filter_ByEntityPK"></include>
+	</select>
+		
 	<!-- 임시 Temp 파일 전부 가져오기 -->
 	<select id="getAllTempFiles" resultType="fileDTO">
-		select * from file where fileTemp = #{fileTemp}
+		select * from files where isTemp = 'TRUE'
 	</select>
 	
-	
-	<!-- 이미지 분류에 맞는 리스트 모두 가져오기 -->
-	<select id="getFilesByRef" resultType="fileDTO">
-		select * from file where postNo
+	<!-- (Temp파일조회) 현재로부터 3달 이전에 등록된 임시폴더의 파일들을 조회 (&lt;는 '=')-->
+	<select id="getFilesFromTempBeforeThreeMonths" resultType="fileDTO">
+	  SELECT * FROM files
+	  WHERE fileRegdate &lt;= DATE_SUB(NOW(), INTERVAL 3 MONTH) AND isTemp = 'TRUE'
 	</select>
-	
 
-	<!-- 업데이트 필터링 -->
-	<sql id="updateColumn">
-		SET
+	<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
+
+
+
+	<!-- ========================================== 수정 ========================================== -->		
+	
+	<!-- 파일 정보 DB수정 -->
+	<update id="updateFileInfoToDB">
+		UPDATE files set
+		<include refid="Filter_ByEntityPK_OnlyUpdate"></include>
+		filePath = #{filePath}, isTemp = #{isTemp}, entityType = #{entityType}	
+		WHERE fileNo = #{fileNo};
+	</update>
+		
+	<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->	
+	
+	
+	
+	
+	<!-- ========================================== 삭제 ==========================================  -->		
+	
+	<!-- PK값(파일)으로 파일 1개정보 삭제 (DB에서삭제) -->
+	<delete id="deleteFileByFileNo">
+		DELETE FROM files where fileNo = #{fileNo}
+	</delete>
+		
+	<!-- 특정 개체(엔티티)타입에 속한 파일들을 모두 삭제 (DB에서삭제)-->
+	<select id="deleteFilesByEntityType" resultType="fileDTO">
+		DELETE FROM files			
+		<include refid="Filter_ByEntityType"></include>
+	</select>
+		
+	<!-- 특정 개체(엔티티)의 PK번호에 해당하는 파일들을 삭제 (DB에서삭제) -->
+	<delete id="deleteFilesByEntityPK">
+    	DELETE FROM files
+		<include refid="Filter_ByEntityPK"></include>
+	</delete>	
+	
+	<!-- 모든 Temp파일 DB에서 삭제 (DB에서삭제) -->
+	<delete id="deleteAllTempFilesFromDB">
+		delete from files where isTemp = 'TRUE'
+	</delete>
+	
+	<!-- (Temp파일삭제) 현재로부터 3달 이전에 등록된 임시폴더의 파일들을 삭제 (DB에서삭제)  -->
+	<select id="deleteFilesFromTempBeforeThreeMonths" resultType="fileDTO">
+	  	SELECT * FROM files
+	  	WHERE fileRegdate &lt;= DATE_SUB(NOW(), INTERVAL 3 MONTH) AND isTemp = 'TRUE' <!-- ` &lt; 기호는 '<=' 와 같음  `  -->
+	</select>
+		
+	<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->	
+	
+	
+	
+	
+	
+	<!-- ========================================= 필터링 ========================================= -->		
+
+	<!--!!!!!!!!! 인식불가 결론적으로 들어올때 entityPK로 들어오기때문에 뭐가 뭔지 모름 -->
+	<!-- 엔티티타입 필터링 (엔티티PK로 필터)-->
+	<sql id="Filter_ByEntityPK">
+	    <where>
+	        <choose>
+	            <when test="memberNo != 0">
+	                AND memberNo = #{memberNo}
+	            </when>
+	            <when test="postNo != 0">
+	                AND postNo = #{postNo}
+	            </when>
+	            <when test="replyNo != 0">
+	                AND replyNo = #{replyNo}
+	            </when>
+	        </choose>
+	    </where>
+	</sql>
+		
+	<!-- 엔티티타입 필터링 (엔티티타입으로 필터)-->
+	<sql id="Filter_ByEntityType">
+	    <where>
+		    <choose>
+		        <when test="entityType.name() == 'MEMBER'" >
+		            AND entityType = 'MEMBER'
+		        </when>
+		        <when test="entityType.name() == 'POSTING'" >
+		            AND entityType = 'POSTING'
+		        </when>
+		        <when test="entityType.name() == 'REPLY'" >
+		            AND entityType = 'REPLY'
+		        </when>
+		        <when test="entityType.name() == 'TEMP'" >
+		            AND entityType = 'TEMP'
+		        </when>
+		    </choose>
+	    </where>
+	</sql>
+	
+	
+	<!-- (업데이트용) 엔티티타입 필터링 (엔티티PK로 필터)-->
+	<sql id="Filter_ByEntityPK_OnlyUpdate">
 	    <choose>
 	        <when test="memberNo != 0" >
 	        	memberNo = #{memberNo},
@@ -86,8 +167,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        	replyNo = #{replyNo},
 	        </when>
 	    </choose>
-	    filePath = #{filePath}, fileTemp = #{fileTemp},	folderRef =#{folderRef}	
 	</sql>
-	
+		
+	<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->	
 
 </mapper>

@@ -50,10 +50,10 @@
       // 선택한 파일 처리 또는 미리보기 등 추가 동작 수행
       if (selectedFiles.length > 0) {
         const formData = new FormData();
-        formData.append('memberPhoto', selectedFiles[0]); // 파일 추가
+        formData.append('memberProfileIMG', selectedFiles[0]); // 파일 추가
 
       // Axios를 사용하여 Ajax 요청 생성
-       axios.post(window.ctx+'/images', formData)
+       axios.post(ctx+'/members/temp/upload', formData)
         .then(response => {
           // 응답 처리 로직
           const imageURL = response.data.url; // 응답으로 받은 이미지 URL

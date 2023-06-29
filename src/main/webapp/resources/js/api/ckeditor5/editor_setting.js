@@ -206,7 +206,7 @@ class UploadAdapter {
 
 		// URL용 게시판이름값을 요청
         const xhr = this.xhr = new XMLHttpRequest();
-        xhr.open('POST', ctx+'/bbs/'+bbsNameForURL+"/writing/upload", true);
+        xhr.open('POST', ctx+'/postings/temp/upload', true);
         xhr.responseType = 'json';
 
     }

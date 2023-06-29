@@ -1,11 +1,12 @@
 package com.ardor.service;
 
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,50 +16,55 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ardor.mapper.FileMapper;
 import com.ardor.model.FileDTO;
-import com.ardor.model.FileDTO.folderRef;
-import com.ardor.model.FileDTO.isTEMP;
+import com.ardor.model.FileDTO.EntityType;
+import com.ardor.model.FileDTO.IsTemp;
 import com.ardor.model.MemberDTO;
+
 
 @Service
 public class FileServiceImpl implements FileService{
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileServiceImpl.class);
-
-
+	
+	//================================= 의존성추가 =================================
+	
 	@Autowired UtilityService utilService;
 	@Autowired FileMapper fileMapper;
 	@Autowired PostingService postingService;
-	
-	@Autowired
-	private ServletContext servletContext;
+	@Autowired MemberService memberService;
 
-	String errorMessage = "이미지 업로드 중 오류가 발생했습니다.";
-	FileInputStream in = null;  // 설명 : 다운로드시 FileInputStream과 ServletOutputStream를 사용하여 구현
-	ServletOutputStream out = null; // HttpServletResponse 필요  -> 다운시 setContentType과 setContentLength ,setHeader 로 받기위함
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	
 	
-	// 임시 파일 업로드
+	//================================ 전역변수설정 ================================
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileServiceImpl.class);
+	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+	
+	
+	
+	//===================================== 등록 =====================================
+	
+	// [Temp] 파일업로드
+	@Transactional
 	@Override
-	public Map<String, Object> uploadTempFiles(String photoType,MultipartFile file) {		
+	public Map<String, Object> uploadTempFiles(EntityType entityType, MultipartFile file) {
+		// 로컬변수설정
 		Map<String, Object> response = new HashMap<>();
 		
-		// 임시 이미지 업로드 로직 수행
-		try 
+		try
 		{
-			// 필수 파라미터 생성
+			// --------------- 필수 파라미터 생성 -------------- 
 			String fileRoot = "C:\\file_repo\\temp\\";
 			Date fileRegdate = utilService.getNowDate();
 			String fileStrRegdate = utilService.getFolderDate();
@@ -66,89 +72,94 @@ public class FileServiceImpl implements FileService{
 			String fileRealName = file.getOriginalFilename();
 			String fileName = uuid+fileRealName;
 			String filePath = fileRoot + fileStrRegdate + "\\";
-        	String fileToken = UUID.randomUUID().toString(); // 세션토큰 생성
-
-			
+        	String fileToken = UUID.randomUUID().toString(); // 파일고유의 세션토큰 생성
+        	
+            // --------------- 파일 업로드 로직 --------------- 
+        	
 			// 폴더생성
 			File folderGenerator = new File(fileRoot + fileStrRegdate);
 			String message = folderGenerator.exists() ? "폴더가 이미 존재합니다!" : (folderGenerator.mkdirs() ? "폴더가 생성되었습니다!" : "폴더 생성에 실패했습니다!");
-			System.out.println(message);
-
-			
+			System.out.println("------------파일 업로드 로직-----------------");
+			System.out.println("폴더생성결과 : "+message);
+			System.out.println("---------------------------------------------");
+        	
 	        // 물리 폴더에 파일 저장
 	        File saveFile = new File(filePath, fileName);
 	        file.transferTo(saveFile);
-			
+        	
+	        // ----------------- DB 등록 로직 ----------------- 
+	        
 	        // 파일정보를 DB에 등록
 	        FileDTO fileDTO = new FileDTO();      
 	        fileDTO.setFileName(fileName);
 	        fileDTO.setFileRealName(fileRealName);
 	        fileDTO.setFilePath(filePath);
 	        fileDTO.setFileRegdate(fileRegdate);
-	        fileDTO.setFileTemp(isTEMP.TRUE);
-	        fileDTO.setFolderRef(folderRef.TEMP);
+	        fileDTO.setIsTemp(IsTemp.TRUE);
+	        fileDTO.setEntityType(entityType); // entityType =>  회원 : MEMBER , 게시글 : POSTING , 댓글 : REPLY  , (V) 임시파일 : TEMP
 	        fileDTO.setFileToken(fileToken);
 	        
+	        
 	        // DB등록 성공시 실행
-	        boolean success = fileMapper.insertFileToDB(fileDTO);
+	        boolean success = fileMapper.insertFileInfoToDB(fileDTO);
 	        if(!success) new RuntimeException("DB등록 실패");
 	        
-	        // 이미지 업로드 성공 응답 데이터 생성
-	        String responseMessage = "이미지가 업로드되었습니다.";
+	        // ----------------- 응답생성 및 응답전송 -----------------
 	        
+	        // DB등록 성공 응답 데이터 생성
+	        String responseMessage = "이미지가 업로드되었습니다.";
+	        // 폴더이름 생성
+	        String folderName = setFolderName(entityType);
 	        // 파일 이름 특수 문자 인코팅 에러처리
         	String encodedFileName = URLEncoder.encode(fileName, "UTF-8");
         	// 이미지 url생성
-        	String imageUrl = "http://localhost:8080"+"/myapp"+"/images/" +photoType+"/" + fileStrRegdate+"/"  + encodedFileName; 
-        	
+        	String imageUrl = "http://localhost:8080"+"/myapp"+"/images/" +folderName+"/" + fileStrRegdate+"/"  + encodedFileName; 
 
-
-        	
-        	
         	// 응답 보내기      	
         	response.put("fileToken", fileToken);
 	        response.put("url", imageUrl);
 	        response.put("responseMessage", responseMessage);
 	        response.put("filePath", filePath);
 	        response.put("fileName", fileName);
-	        return response;
+	        
+	        return response; // 파일업로드 & DB등록 성공후 응답메세지 송출
 		}
 		
-		catch (Exception e)
+		catch(IOException e)
 		{
-			return response;
+	        LOGGER.error("파일 업로드 중 예외가 발생했습니다.", e);
+	        response.put("error", "파일 업로드 중 예외가 발생했습니다.");
 		}
-	
+		catch(DataAccessException e)
+		{
+	        LOGGER.error("DB 등록 중 예외가 발생했습니다.", e);
+	        response.put("error", "DB 등록 중 예외가 발생했습니다.");
+		}
+
+		
+		return response; // 파일업로드 혹은 DB등록 실패로 catch블록에서 에러가 생길시 응답메세지 송출
 	}
-
 	
 	
-	// 파일 업로드 로직
+	// [실제폴더] 파일 업로드
+	@Transactional
 	@Override
-	public boolean uploadFiles(String photoType,String fileToken, int pkNo) {
-		
+	public boolean uploadFiles(EntityType entityType,String fileIdentifier,int entityPK) {
+		// 로컬변수설정
 		boolean uploadSuccess = true;
-				
+		// temp파일 리스트 가져오기
+		List<FileDTO> tempFileList = fileMapper.getAllTempFiles();
 		
-		// 물리폴더 파일 이동 (임시폴더에서 물리폴더로)
-		FileDTO fDto = new FileDTO();
-		fDto.setFileTemp(isTEMP.TRUE);
-
-		List<FileDTO> files = fileMapper.getAllTempFiles(fDto.getFileTemp());
-		
-		System.out.println("fileToken : "+fileToken);
-
-		
-		for(FileDTO file : files)
-		{	
-			System.out.println("----------------회원프로필---------------------");
-			// fileToken == memberIMG의 fileToken
-			if(fileToken.equals(file.getFileToken()))
-			{				
-				{				
-					// 필수 파라미터 생성
+		try
+		{
+			for(FileDTO file : tempFileList)
+			{	
+				// fileIdentifier == memberIMG의 fileToken
+				if(fileIdentifier.equals(file.getFileToken()))
+				{
+					// --------------- 필수 파라미터 생성 -------------- 
 					String fileRoot = "C:\\file_repo\\";
-					String folderName = getFolderName(photoType);
+					String folderName = setFolderName(entityType);
 					Date fileRegdate = utilService.getNowDate();
 					String fileStrRegdate = utilService.getFolderDate();
 					String uuid = UUID.randomUUID().toString();
@@ -156,426 +167,322 @@ public class FileServiceImpl implements FileService{
 					String fileRealName = file.getFileRealName();
 					String filePath = fileRoot +folderName+"\\" + fileStrRegdate + "\\";
 					
-					
+					// --------------- 파일 업로드 로직 -------------- 
+					// 폴더경로 재설정
 					String sourceFilePath = file.getFilePath()+file.getFileName();
-					String destinationFilePath = fileRoot +folderName+"\\" + fileStrRegdate + "\\"+fileName;
-					
+					String destinationFilePath = fileRoot +folderName+"\\" + fileStrRegdate + "\\"+fileName;			
 					Path sourcePath = Path.of(sourceFilePath);
 					Path destinationPath = Path.of(destinationFilePath);
-					
-					
 					
 					// 폴더생성
 					File folderGenerator = new File(fileRoot + folderName + "\\" +  fileStrRegdate);
 					String message = folderGenerator.exists() ? "폴더가 이미 존재합니다!" : (folderGenerator.mkdirs() ? "폴더가 생성되었습니다!" : "폴더 생성에 실패했습니다!");
 					System.out.println(message);
 					
-					// (2) 파일 DB정보 수정		
-					FileDTO fileDTO = new FileDTO();      
-					fileDTO.setFilePath(filePath);
-					fileDTO.setFileTemp(isTEMP.FALSE);
-					if(folderName == "memberProfileIMG")fileDTO.setFolderRef(folderRef.MEMBER);
-					if(folderName == "postingIMG")fileDTO.setFolderRef(folderRef.POSTING);
-					if(folderName == "replyIMG")fileDTO.setFolderRef(folderRef.REPLY);
-					
-					fileDTO.setFileNo(file.getFileNo());
-					
-					
-					// 파일 테이블에 게시글 PK 세팅
-					fileDTO.setMemberNo(folderName.equals("memberProfileIMG") ? pkNo : 0);
-					fileDTO.setPostNo(folderName.equals("postingIMG") ? pkNo : 0);
-					fileDTO.setReplyNo(folderName.equals("replyIMG") ? pkNo : 0);		
-					
-					System.out.println("folderName"+folderName);
-					System.out.println("pkNo :"+pkNo);
-					System.out.println("filePath :"+filePath);
-					System.out.println("fileTemp :"+fileDTO.getFileTemp());
-					System.out.println("fileRef :"+fileDTO.getFolderRef());
-					
-					boolean updateSuccess = fileMapper.updateFileInfo(fileDTO);
-					
-					
-					if(!updateSuccess) System.out.println("DB변경실패"); uploadSuccess = false;
-					
-					
-					// 파일이동	
-					try
-					{
-						// 파일 이름 특수 문자 인코팅 에러처리
-						String encodedFileName = URLEncoder.encode(fileName, "UTF-8");				
-						// 파일이동
-						Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
-						
-					}
-					catch(IOException e)
-					{
-						System.out.println("파일생성실패");
-					}
-				}
-			}
-			else if(fileToken.equals(file.getFileName()))
-			{	
-				
-				System.out.println("---------포스팅----------------");
-				// fileToken == postingIMG의 fileName
-				System.out.println("fileToken : "+fileToken);
-				// 필수 파라미터 생성
-				String fileRoot = "C:\\file_repo\\";
-				String folderName = getFolderName(photoType);
-				Date fileRegdate = utilService.getNowDate();
-				String fileStrRegdate = utilService.getFolderDate();
-				String uuid = UUID.randomUUID().toString();
-				String fileName = file.getFileName();
-				String fileRealName = file.getFileRealName();
-				String filePath = fileRoot +folderName+"\\" + fileStrRegdate + "\\";
-				
-				
-				String sourceFilePath = file.getFilePath()+file.getFileName();
-				String destinationFilePath = fileRoot +folderName+"\\" + fileStrRegdate + "\\"+fileName;
-				
-				Path sourcePath = Path.of(sourceFilePath);
-				Path destinationPath = Path.of(destinationFilePath);
-				
-				
-				
-				// 폴더생성
-				File folderGenerator = new File(fileRoot + folderName + "\\" +  fileStrRegdate);
-				String message = folderGenerator.exists() ? "폴더가 이미 존재합니다!" : (folderGenerator.mkdirs() ? "폴더가 생성되었습니다!" : "폴더 생성에 실패했습니다!");
-				System.out.println(message);
-				
-				// (2) 파일 DB정보 수정		
-				FileDTO fileDTO = new FileDTO();      
-				fileDTO.setFilePath(filePath);
-				fileDTO.setFileTemp(isTEMP.FALSE);
-				if(folderName == "memberProfileIMG")fileDTO.setFolderRef(folderRef.MEMBER);
-				if(folderName == "postingIMG")fileDTO.setFolderRef(folderRef.POSTING);
-				if(folderName == "replyIMG")fileDTO.setFolderRef(folderRef.REPLY);
-				
-				fileDTO.setFileNo(file.getFileNo());
-				
-				
-				// 파일 테이블에 게시글 PK 세팅
-				fileDTO.setMemberNo(folderName.equals("memberProfileIMG") ? pkNo : 0);
-				fileDTO.setPostNo(folderName.equals("postingIMG") ? pkNo : 0);
-				fileDTO.setReplyNo(folderName.equals("replyIMG") ? pkNo : 0);		
-				
-				System.out.println("folderName"+folderName);
-				System.out.println("pkNo :"+pkNo);
-				System.out.println("filePath :"+filePath);
-				System.out.println("fileTemp :"+fileDTO.getFileTemp());
-				System.out.println("fileRef :"+fileDTO.getFolderRef());
-				
-				boolean updateSuccess = fileMapper.updateFileInfo(fileDTO);
-				
-				
-				if(!updateSuccess) System.out.println("DB변경실패"); uploadSuccess = false;
-				
-				
-				// 파일이동	
-				try
-				{
+					// ------------------- 파일 이동 ------------------
 					// 파일 이름 특수 문자 인코팅 에러처리
 					String encodedFileName = URLEncoder.encode(fileName, "UTF-8");				
 					// 파일이동
 					Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
 					
+					// ----------------- DB 등록 로직 ----------------- 
+					
+					// 파일 DB정보 수정		
+					FileDTO fileDTO = new FileDTO();      
+					fileDTO.setFilePath(filePath);
+					fileDTO.setIsTemp(IsTemp.FALSE);
+					fileDTO.setEntityType(entityType);
+					fileDTO.setFileNo(file.getFileNo());
+					fileDTO.setMemberNo(entityType.equals(EntityType.MEMBER) ? entityPK : 0);
+					fileDTO.setPostNo(entityType.equals(EntityType.POSTING) ? entityPK : 0);
+					fileDTO.setReplyNo(entityType.equals(EntityType.REPLY) ? entityPK : 0);
+					
+					boolean updateDBSuccess = fileMapper.updateFileInfoToDB(fileDTO);
+					if(!updateDBSuccess) System.out.println("DB수정실패"); uploadSuccess = false;
 				}
-				catch(IOException e)
+				// fileIdentifier == postingIMG의 fileName
+				else if(fileIdentifier.equals(file.getFileName()))
 				{
-					System.out.println("파일생성실패");
+					// --------------- 필수 파라미터 생성 -------------- 
+					String fileRoot = "C:\\file_repo\\";
+					String folderName = setFolderName(entityType);
+					Date fileRegdate = utilService.getNowDate();
+					String fileStrRegdate = utilService.getFolderDate();
+					String uuid = UUID.randomUUID().toString();
+					String fileName = file.getFileName();
+					String fileRealName = file.getFileRealName();
+					String filePath = fileRoot +folderName+"\\" + fileStrRegdate + "\\";
+					
+					// --------------- 파일 업로드 로직 -------------- 
+					// 폴더경로 재설정
+					String sourceFilePath = file.getFilePath()+file.getFileName();
+					String destinationFilePath = fileRoot +folderName+"\\" + fileStrRegdate + "\\"+fileName;			
+					Path sourcePath = Path.of(sourceFilePath);
+					Path destinationPath = Path.of(destinationFilePath);
+					
+					// 폴더생성
+					File folderGenerator = new File(fileRoot + folderName + "\\" +  fileStrRegdate);
+					String message = folderGenerator.exists() ? "폴더가 이미 존재합니다!" : (folderGenerator.mkdirs() ? "폴더가 생성되었습니다!" : "폴더 생성에 실패했습니다!");
+					System.out.println(message);
+					
+					// ------------------- 파일 이동 ------------------
+					// 파일 이름 특수 문자 인코팅 에러처리
+					String encodedFileName = URLEncoder.encode(fileName, "UTF-8");				
+					// 파일이동
+					Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+					
+					// ----------------- DB 등록 로직 ----------------- 
+					
+					// 파일 DB정보 수정		
+					FileDTO fileDTO = new FileDTO();      
+					fileDTO.setFilePath(filePath);
+					fileDTO.setIsTemp(IsTemp.FALSE);
+					fileDTO.setEntityType(entityType);
+					fileDTO.setFileNo(file.getFileNo());
+					fileDTO.setMemberNo(entityType.equals(EntityType.MEMBER) ? entityPK : 0);
+					fileDTO.setPostNo(entityType.equals(EntityType.POSTING) ? entityPK : 0);
+					fileDTO.setReplyNo(entityType.equals(EntityType.REPLY) ? entityPK : 0);
+					
+					boolean updateDBSuccess = fileMapper.updateFileInfoToDB(fileDTO);
+					if(!updateDBSuccess) System.out.println("DB수정실패"); uploadSuccess = false;
 				}
-			}
-			
-			
-		}
 
-			
+			}
+
+		}
+		catch(IOException e)
+		{
+	        LOGGER.error("파일 업로드 중 예외가 발생했습니다.", e);
+		}
+		catch(DataAccessException e)
+		{
+	        LOGGER.error("DB 등록 중 예외가 발생했습니다.", e);
+		}
+		
+
+		
 		return uploadSuccess;
 	}
+	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	
+	
 
+	//===================================== 삭제 =====================================
 	
-	
-	// 프로필 이미지 출력
+	// [1개] 파일삭제
 	@Override
-	public void processProfilePhoto(MemberDTO memberInfo, HttpServletResponse response, HttpServletRequest request) throws IOException
-	{
-
-		// 삭제함
+	public boolean deleteFileByFileNo(int fileNo) {
+		return fileMapper.deleteFileByFileNo(fileNo);
+	}
+	
+	// [특정엔티티] 파일삭제  (entityType사용)
+	@Override
+	public boolean deleteFilesByEntityType(EntityType entityType) {
+		return fileMapper.deleteFilesByEntityType(entityType);
 	}
 	
 	
-	
-	
-	
-	
-	// 파일정보 수정
+	// [특정엔티티] 파일삭제  (entityPK사용)
 	@Override
-	public boolean updateFiles(FileDTO fileDTO) {
-		return fileMapper.updateFileInfo(fileDTO);
+	public boolean deleteFilesByEntityPK(int entityPK) {
+		return fileMapper.deleteFilesByEntityPK(entityPK);
 	}
 	
-	
-	
-	// 게시글 수정할때 이미지를 수정하면 삭제전의 기존파일을 지움
+	// [Temp] 파일삭제 (DB삭제)
 	@Override
-	@Transactional
-	public boolean deleteUnmodifiedFiles(List<String> fileNames, int somePK) {
+	public boolean deleteAllTempFilesFromDB() {
+		return fileMapper.deleteAllTempFilesFromDB();
+	}
+
+	// [Temp] 파일삭제 (실제폴더)
+	@Override
+	public boolean deleteAllTempFiles() {
+
+		List<FileDTO> tempFiles = fileMapper.getAllTempFiles();
+		
+		for(FileDTO file : tempFiles)
+		{
+            String filePath = file.getFilePath() + file.getFileName();
+            File deleteFile = new File(filePath);
+
+            if (deleteFile.exists())
+            {
+                try
+                {
+                    if (deleteFile.delete()){LOGGER.info("이미지 삭제 성공: {}", filePath);} 
+                    else {LOGGER.error("이미지 삭제 실패: {}", filePath);}
+                } 
+                catch (SecurityException e)
+                {LOGGER.error("이미지 삭제 중 예외 발생: {}", filePath, e);}
+            } 
+            else
+            {LOGGER.warn("삭제할 이미지가 존재하지 않습니다: {}", filePath);}
+		}
+		
+		
+		return false;
+	}
+	
+	// [업데이트] 파일삭제 (Temp파일)
+	@Transactional // 게시글 수정할때 이미지를 수정하면 삭제전의 기존파일을 지움
+	@Override 
+	public boolean deleteUnmodifiedFiles(List<String> fileNames,int entityPK)
+	{ 
+		// 로컬변수 설정
 	    boolean success = true;
-	    String photoType = "postingIMG";
+	    
+	    
+	    // [특정엔티티] 파일조회 
+	    List<FileDTO> existingFiles = fileMapper.getFilesByEntityPK(entityPK);
+	    
 
-	    System.out.println("---------------------deleteUnmodifiedFiles--------------------------------------");
-	    // 게시글 PK로 포토타입으로 기존 파일 모두 가져오기
-	    List<FileDTO> existingFiles = getAllFilesBysomePK(photoType, somePK);
-
-	    try {
-	        // 삭제 대상 파일 식별을 위한 Set 생성
-	        Set<String> fileNamesToDelete = new HashSet<>();
-
-	        // 기존 파일 목록 순회
-	        for (FileDTO existingFile : existingFiles) {
-	            fileNamesToDelete.add(existingFile.getFileName());
-	        }
-
-	        // 현재 업데이트한 파일 목록 순회하여 삭제 대상 파일 식별
-	        for (String fileName : fileNames) {
-	            fileNamesToDelete.remove(fileName);
-	        }
-
-	        // 삭제 대상 파일 목록 순회하여 삭제
-	        for (FileDTO existingFile : existingFiles) {
-	            if (fileNamesToDelete.contains(existingFile.getFileName())) {
-	                System.out.println("삭제할 파일: " + existingFile.getFileName());
-	                // 파일 삭제
-	                deleteFile(existingFile);
-	                // DB 정보 삭제
-	                deleteFileInfo(existingFile);
-	            }
-	        }
-	    } catch (Exception e) {
-	        System.out.println("파일 삭제 실패");
-	        success = false;
+	    // 삭제 대상 파일 식별을 위한 Set 생성
+	    Set<String> fileNamesToDelete = new HashSet<>();
+	    
+	    // 기존 파일 목록 순회
+	    for(FileDTO existingFile : existingFiles)
+	    {
+	        fileNamesToDelete.add(existingFile.getFileName());	// set에 모든 삭제대상 추가(일단 모든파일담기)
 	    }
-	    System.out.println("---------------------deleteUnmodifiedFiles--------------------------------------");
+	    // 현재 업데이트한 파일 목록 순회하여 삭제 대상 파일 식별
+	    for (String fileName : fileNames)
+	    {
+	        fileNamesToDelete.remove(fileName); // set의 삭제대상에서 이름이 같은파일 set에서 제거
+	    }
+	    // 삭제 대상 파일 목록 순회하여 삭제
+	    for (FileDTO existingFile : existingFiles)
+	    {
+	    	if (fileNamesToDelete.contains(existingFile.getFileName())) // 기존파일에서 이름이 포함되는지 식별
+	    	{
+	            System.out.println("삭제할 파일: " + existingFile.getFileName());
+	            // 파일 삭제
+	            deleteFile(existingFile);
+	            // DB 정보 삭제
+	            deleteFileInfo(existingFile);
+	    	}
+
+	    }
+	        
+
 	    return success;
 	}
 	
-	
-
-	// 파일 삭제 (게시글수정시 기존파일삭제로직)
-	private void deleteFile(FileDTO file) {
-	    String filePath = file.getFilePath() + file.getFileName();
-	    File deleteFile = new File(filePath);
-	    if (deleteFile.exists()) {
-	        if (deleteFile.delete()) {
-	            System.out.println("파일 삭제 성공: " + filePath);
-	        } else {
-	            throw new RuntimeException("파일 삭제 실패: " + filePath);
-	        }
-	    } else {
-	        System.out.println("파일이 존재하지 않습니다: " + filePath);
+	// 파일 삭제 로직 구현
+	private boolean deleteFile(FileDTO file)
+	{
+	    try
+	    {
+	        Files.delete(Paths.get(file.getFilePath()));
+	        return true;
+	    }
+	    catch (IOException e)
+	    {
+	        LOGGER.error("파일 삭제 중 예외가 발생했습니다.", e);
+	        return false;
 	    }
 	}
-
-	// DB 정보 삭제 (게시글수정시 기존파일 DB 삭제로직)
-	private void deleteFileInfo(FileDTO file) {
-	    fileMapper.deleteFileInfoByFileNo(file.getFileNo());
+	// DB 정보 삭제 로직 구현
+	private void deleteFileInfo(FileDTO file)
+	{
+	    try
+	    {
+	    	fileMapper.deleteFileByFileNo(file.getFileNo());
+	    }
+	    catch (DataAccessException e)
+	    {
+	    	LOGGER.error("DB 삭제 중 예외가 발생했습니다.", e);
+	    }
 	}
 	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	
-
 	
 	
-	// 임시폴더내의 파일 제거
+	//===================================== 유틸 =====================================
+	
+	// [엔티티타입]	폴더이름 세팅
 	@Override
-	public void deleteAllTempFiles() {
+	public String setFolderName(EntityType entityType) {
+		String folderName= "";
+
+		folderName = entityType.equals(EntityType.MEMBER) ?  "memberProfileIMG" :	// if
+            		 entityType.equals(EntityType.POSTING) ? "postingIMG" :			// else if
+                     entityType.equals(EntityType.REPLY) ?   "replyIMG" :			// else if
+                             							     "temp";				// else
 		
-		List<FileDTO> tempFiles = fileMapper.getAllTempFiles(isTEMP.TRUE); 
+		return folderName;
+	}
 		
-		for(FileDTO file : tempFiles)
-        {
-            String filePath = file.getFilePath() + file.getFileName();
-            File deleteFile = new File(filePath);
-
-            if (deleteFile.exists())
-            {
-                try {
-                    if (deleteFile.delete())
-                    {
-                        LOGGER.info("이미지 삭제 성공: {}", filePath);
-                    } 
-                    else 
-                    {
-                        LOGGER.error("이미지 삭제 실패: {}", filePath);
-                    }
-                } 
-                catch (SecurityException e)
-                {
-                    LOGGER.error("이미지 삭제 중 예외 발생: {}", filePath, e);
-                }
-            } 
-            else 
-            {
-                LOGGER.warn("삭제할 이미지가 존재하지 않습니다: {}", filePath);
-            }
-        }
-	}
-	
-	
-	
-	
-
-	
-	// 파일 삭제 로직
+	// [엔티티타입]	이미지폴더 경로 세팅 세팅
 	@Override
-    public boolean deleteFiles(int PK, String photoType) {
-        boolean allDeleted = true;
-        FileDTO somePk = new FileDTO();
-        String folderName = getFolderName(photoType);
-        
-        // 파일 테이블에 게시글 PK 세팅
-        FileDTO fileDTO = new FileDTO();
-        fileDTO.setMemberNo(folderName.equals("memberProfileIMG") ? PK : 0);
-        fileDTO.setPostNo(folderName.equals("postingIMG") ? PK : 0);
-        fileDTO.setReplyNo(folderName.equals("replyIMG") ? PK : 0);		
-        List<FileDTO> files = fileMapper.getAllFilesBysomePK(fileDTO);
-        
-        
-        
-        for (FileDTO file : files)
-        {
-            String filePath = file.getFilePath() + file.getFileName();
-            File deleteFile = new File(filePath);
-
-            if (deleteFile.exists())
-            {
-                try {
-                    if (deleteFile.delete())
-                    {
-                        LOGGER.info("이미지 삭제 성공: {}", filePath);
-                    } 
-                    else 
-                    {
-                        allDeleted = false;
-                        LOGGER.error("이미지 삭제 실패: {}", filePath);
-                    }
-                } 
-                catch (SecurityException e)
-                {
-                    allDeleted = false;
-                    LOGGER.error("이미지 삭제 중 예외 발생: {}", filePath, e);
-                }
-            } 
-            else 
-            {
-                LOGGER.warn("삭제할 이미지가 존재하지 않습니다: {}", filePath);
-            }
-        }
-
-        return allDeleted;
-    }
-	
-	
-	//  temp내의 파일정보 DB에서 삭제
-	@Override
-	public boolean deleteTempFileFromDB(isTEMP TRUE) {
-		System.out.println("----------deleteTempFileFromDB-----------------");
-		System.out.println("isTemp:"+TRUE);
-		System.out.println("----------deleteTempFileFromDB-----------------");
-		return fileMapper.deleteTempFileFromDB(TRUE);
-	}
-	
-	
-	
-	
-	
-	
-	// 임시 Temp파일 전부 가져오기
-	@Override
-	public List<FileDTO> getAllTempFiles(isTEMP TEMP) {
-		return fileMapper.getAllTempFiles(TEMP);
-	}
-	
-	// postNo에 해당하는 파일 전부 가져오기
-	@Override
-	public List<FileDTO> getAllFilesBysomePK(String photoType, int somePK) {
-		FileDTO fileDTO = new FileDTO();
-		
-        fileDTO.setMemberNo(photoType.equals("memberProfileIMG") ? somePK : 0);
-        fileDTO.setPostNo(photoType.equals("postingIMG") ? somePK : 0);
-        fileDTO.setReplyNo(photoType.equals("replyIMG") ? somePK : 0);	
-			
-		return fileMapper.getAllFilesBysomePK(fileDTO);
-	}
-	
-	// 폴더이름 필터링
-	@Override
-	public String getFolderName(String photoType) {
-		
-		if((photoType.equals("replyIMG")))
-		{
-			photoType = "replyIMG";
-		}
-		else if((photoType.equals("postingIMG")))
-		{
-			photoType = "postingIMG";
-		}
-		else if((photoType.equals("memberProfileIMG")))
-		{
-			photoType = "memberProfileIMG";
-		}
-		
-		return photoType;
-	}
-	
-	
-
-	
-	
-	
-	// 이미지 파일 가져와서 폴더 분류
-	@Override
-	public String setImagePath(String photoType, String date, String filename) {
+	public String setImagePath(String entityType, String date, String fileName) {
 	    String imagePath = "";
-	    String folderName = "";
-	    String basePath = "";
+	    String basePath = "C:\\file_repo\\";
 
-	    List<FileDTO> tempList = fileMapper.getAllTempFiles(isTEMP.TRUE);
-
-	    System.out.println("photoType : "+photoType);
-	    
-	    if (!tempList.isEmpty()) 
+	    // entityType가 MEMBER일때
+	    if(entityType.equals("MEMBER"))
 	    {
-	        basePath = "C:\\file_repo\\temp\\";
-	        imagePath = basePath + date + "\\" + filename;  System.out.println(-1);
-	    } 
-	    else
-	    {
-	        basePath = "C:\\file_repo\\";
-	        System.out.println(0);
-	        if(photoType.equals("memberProfileIMG"))
-	        {
-	        	imagePath = basePath + "\\"+photoType+"\\" + date + "\\" + filename; System.out.println(1);
-	        }
-	        
-	        
-	        else if(photoType.equals("postingIMG"))
-	        {
-	        	imagePath = basePath + "\\"+photoType+"\\" + date + "\\" + filename; System.out.println(2);
-	        }
-	        
-	        else if(photoType.equals("replyIMG"))
-	        {
-	        	imagePath = basePath + "\\"+photoType+"\\" + date + "\\" + filename; System.out.println(3);
-	        }
-	        
-	        
-	        
+	        imagePath = basePath + "memberProfileIMG\\" + date + "\\" + fileName;	    	
 	    }
+	    // entityType가 POSTING일때
+	    else if(entityType.equals("POSTING"))
+	    {
+	        imagePath = basePath + "postingIMG\\" + date + "\\" + fileName;	    	
+	    }
+	    // entityType가 REPLY일때
+	    else if(entityType.equals("REPLY"))
+	    {
+	        imagePath = basePath + "replyIMG\\" + date + "\\" + fileName;
+	    }
+	    // entityType가 Temp거나 해당사항에 없을때
+	    else
+	    {	
+	        basePath += "temp\\";
+	        imagePath = basePath + date + "\\" + fileName;
+	    }
+		
+		return imagePath;
+	}
 
-	    
+	// [회원프사] URL생성 및 가져오기
+	@Override
+	public String getMemberProfileImgUrlByMemberID(String memberID) {
+		// 로컬변수선언
+		String url = "";
+		
+		// memberID로 PK값 가져오기
+		MemberDTO memberDTO = memberService.getMemberInfoBymemberID(memberID);
+		int memberNo = memberDTO.getMemberNo();
+		System.out.println("memberNo : "+memberNo);
+		
+		//memberNo로 파일정보 가져오기
+		List<FileDTO> files =  fileMapper.getFilesByEntityPK(memberNo);
+		
+		//등록된 프사가 있다면 실행
+		if(!files.isEmpty())
+		{			
+			for(FileDTO file : files)
+			{	System.out.println("fileName : "+file.getFileName());
+				Date date = file.getFileRegdate();
+				String strDate = utilService.getStrDateFromDate(date);				
+				String fileName = file.getFileName(); 				
+				url = "redirect:/images/" + "MEMBER/" +  strDate+"/"+ fileName;
+			}
+		}
+		
+		//등록된 프사가 없다면 실행
+		else
+		{       
+			url = "redirect:/images/" + "default-member-photo/" +  "9999-12-31"+"/"+ "defaul-profile.png"; // 프사 기본값 URL생성
+		}
 
-	    return imagePath;
+		return url;
 	}
 	
+	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	
+
 	
 }

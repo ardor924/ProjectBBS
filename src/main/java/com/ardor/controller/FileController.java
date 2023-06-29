@@ -1,15 +1,9 @@
 	package com.ardor.controller;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -25,132 +19,126 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ardor.model.FileDTO;
-import com.ardor.model.FileDTO.isTEMP;
-import com.ardor.model.MemberDTO;
+import com.ardor.model.FileDTO.EntityType;
 import com.ardor.service.FileService;
 import com.ardor.service.MemberService;
 import com.ardor.service.UtilityService;
+
 @Controller
 public class FileController {
+	
+	//========================== 의존성추가 ==========================
 
 	@Autowired FileService fileService;
 	@Autowired UtilityService utilService;
 	@Autowired MemberService memberService;
 	
-	
-	// 파일업로드 및 주소가져오기
-	@ResponseBody
-	@PostMapping("/images")
-	public ResponseEntity<Object> insertFileToDB(@RequestParam("memberPhoto") MultipartFile memberPhoto){
-		
-    	// 이미지 타입으로 폴더설정
-    	String photoType = "memberProfileIMG";
-    	
-    	System.out.println("312526523546234556243");
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-		// 파일 업로드 및 이미지 URL생성
-		Map<String, Object> response = fileService.uploadTempFiles(photoType,memberPhoto);
-			        
+	
+	//============================== 회원 ============================
+		
+	// [Temp] 파일업로드 & DB등록
+	@ResponseBody
+	@PostMapping("/members/temp/upload")
+	public ResponseEntity<Object> uploadMemberProfileImgToTemp
+	(
+		@RequestParam("memberProfileIMG") MultipartFile memberProfileIMG)
+	{	
+		// 파일업로드 & DB등록 (임시폴더)
+		Map<String, Object> response = fileService.uploadTempFiles(EntityType.TEMP, memberProfileIMG);
+
 		return ResponseEntity.ok(response);
 	}
 	
 	
-	
-	
-	// 회원프로필 이미지 링크 생성 
+	// 회원프사 URL생성 (snb와 myInfo에출력)
 	@GetMapping("/members/profilePhoto/{memberID}")
-	public String getProfilePhoto
+	public String getMemberProfilePhoto
 	(
-		@PathVariable String memberID,
-		@RequestParam(value="photoType" , defaultValue="memberProfileIMG" ) String photoType
-	) 
-	{	
-		String url = "";
-		// memberID로 PK값 가져오기
-		MemberDTO memberDTO = memberService.getMemberInfoBymemberID(memberID);
-		int MemberNo = memberDTO.getMemberNo();
-
-		//memberID로 파일정보 가져오기
-		List<FileDTO> files =  fileService.getAllFilesBysomePK(photoType, MemberNo);
-		if(!files.isEmpty())
-		{			
-			for(FileDTO file : files)
-			{
-				Date date = file.getFileRegdate();
-				String strDate = utilService.getStrDateFromDate(date);
-				
-				String fileName = file.getFileName(); 
-				
-				// 리다이렉트
-				url = "redirect:/images/" + photoType+"/" +  strDate+"/"+ fileName;
-				System.out.println("fileName : "+url);
-			}
-		}
-		// 회원프사가 없는경우
-		else
-		{       
-			System.out.println("MemberNo"+MemberNo);
-			photoType = "default-member-photo";
-			url = "redirect:/images/" + photoType+"/" +  "9999-12-31"+"/"+ "defaul-profile.png";
-		}
-		
-		
-
+		@PathVariable String memberID
+	)
+	{		
+		// 프사URL 가져오기 (memberID사용)
+		String url = fileService.getMemberProfileImgUrlByMemberID(memberID); // 프사있다면 => DB정보로 링크생성	, 프사없다면 =>	기본값설정으로 링크생성
 		
 		return url;
-    }	    
+	}
 
-
-    
-    
-    
-//	-----------------------------------CKeditor5업로드로직--------------------------------------------------------------------    
-    
-    
-    @ResponseBody
-    @PostMapping("/bbs/{bbsNameForURL}/writing/upload")
-    public ResponseEntity<Object> insertBbsImgToDB
-    (
-    	@RequestParam(value="photoType" , defaultValue="postingIMG" ) String photoType , 	
-    	@RequestParam("bbsIMG") MultipartFile bbsIMG
-    )
-    { 	    	
-    	Map<String, Object> response = new HashMap<String, Object>();
-    	System.out.println("------------------------CKeditor5경로-------------------------------");
-    	
-    	response = fileService.uploadTempFiles(photoType,bbsIMG);		
-    	    	
-    	System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-    	
-    	return ResponseEntity.ok(response);
-
-    }
-    
-    
-    
-    
-    
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	
+	
+	//============================ 게시글 ============================
+	
+	// [Temp] 파일업로드 & DB등록
+	@ResponseBody
+	@PostMapping("/postings/temp/upload")
+	public ResponseEntity<Object> uploadPostingImgToTemp
+	(
+		@RequestParam("postingIMG") MultipartFile postingIMG
+	)
+	{	
+		// 파일업로드 & DB등록 (임시폴더)
+		Map<String, Object> response = fileService.uploadTempFiles(EntityType.TEMP,postingIMG);
+		
+		return ResponseEntity.ok(response);
+	}
+	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	
+	
+	//============================== 댓글 ============================
+	
+	// [Temp] 파일업로드 & DB등록
+	@ResponseBody
+	@PostMapping("/replies/temp/upload")
+	public ResponseEntity<Object> uploadReplyImgToTemp
+	(
+		@RequestParam("replyIMG") MultipartFile replyIMG
+	)
+	{	
+		// 파일업로드 & DB등록 (임시폴더)
+		Map<String, Object> response = fileService.uploadTempFiles(EntityType.TEMP,replyIMG);
+		
+		return ResponseEntity.ok(response);
+	}
+	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+	
+	
+	
+	//============================== 유틸 ============================
+
     // 이미지 URL 요청 처리
-    @GetMapping("/images/{photoType}/{date}/{filename:.+}")
-    public ResponseEntity<Resource> getImage(HttpServletRequest request, @PathVariable String photoType, @PathVariable String date, @PathVariable String filename) {
-    	String imagePath;
+    @GetMapping("/images/{folderName}/{date}/{fileName:.+}")
+    public ResponseEntity<Resource> getImagePath
+    (
+    	HttpServletRequest request,
+    	@PathVariable String folderName,
+    	@PathVariable String date,
+    	@PathVariable String fileName
+    )
+    {
+    	// 로컬변수
+    	String imagePath = "";
     	
-    	// 이미지 경로 세팅
-    	if(photoType.equals("default-member-photo")) // 회원기본이미지인경우
+    	// -----------------이미지 경로 세팅-----------------
+    	
+    	 // 경로세팅 (회원프사 기본이미지로)
+    	if(folderName.equals("default-member-photo"))
     	{
     		ServletContext servletContext = request.getServletContext();
-    		String contextPath = "/resources/img/default-member-photo.png";
+    		String contextPath = "/resources/img/default-member-photo.png"; // 프로젝트내부 img폴더의 이미지파일 경로에 접근
             imagePath = servletContext.getRealPath(contextPath);
-
     	}
+    	// 경로세팅 (폴더명에 따라 : 폴더명은 EntityType에 따라 배치함)
     	else
     	{
-    		imagePath = fileService.setImagePath(photoType,date,filename);
+    		imagePath = fileService.setImagePath(folderName,date,fileName);
     	}
     	
-    	Resource resource = new FileSystemResource(imagePath);
+    	Resource resource = new FileSystemResource(imagePath); // 물리경로로 파일 리소스생성
+    	
         if (resource.exists()) {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.IMAGE_JPEG); // 이미지 타입에 맞게 설정
@@ -160,29 +148,11 @@ public class FileController {
                     .body(resource);
         } else {
             return ResponseEntity.notFound().build();
-        }
-    }
-    
-    
-    
-    
-    
-    // 페이지 새로고침 혹은 이동시 Temp파일 및 DB에서 정보 삭제
-    @GetMapping("/removeTempFile")
-    public ResponseEntity<Object> removeTempFile() {
-    	System.out.println("START---------------새로고침시 temp삭제 메서드----------------------");
-    	Map<String, Object> response = new HashMap<String, Object>();	
-        isTEMP fileTemp = isTEMP.TRUE;
-        fileService.deleteTempFileFromDB(fileTemp); // DB에서 삭제
-        fileService.deleteAllTempFiles(); // 잔류 temp 파일 삭제     
-        response.put("resultMSG", "temp파일삭제와 DB삭제가 완료되었습니다");
-        System.out.println("---------------새로고침시 temp삭제 메서드----------------------END");
-        
-    	return ResponseEntity.ok(response);
+        }    	
     }
 
     
-	
+	//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 	
 	
 	

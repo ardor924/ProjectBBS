@@ -12,31 +12,30 @@ public class FileDTO {
     private String fileRealName;
     
     private int fileSize;
-    private String fileType;
     private String fileExtension;
     private String fileDescription;
+    private String mediaType;
     
     private Date fileRegdate;
     
     
-    private isTEMP fileTemp;
-    
-    private folderRef folderRef;
+    private IsTemp isTemp;
+    private EntityType entityType;
     private String fileToken;
     
     
-    private int postNo;
     private int memberNo;
+    private int postNo;
     private int replyNo;
    
 	// 임시 저장용 캐시파일 체크
-	public enum isTEMP{
+	public enum IsTemp{
         TRUE,
         FALSE
 	} 
 	
 	// 참조폴더
-	public enum folderRef{
+	public enum EntityType{
 		TEMP,
 		MEMBER,
 		POSTING,
@@ -48,25 +47,25 @@ public class FileDTO {
     public FileDTO(){}
 
 
-    // 생성자
-	public FileDTO(int fileNo, String fileName, String filePath, String fileRealName, int fileSize, String fileType,
-			String fileExtension, String fileDescription, Date fileRegdate, isTEMP fileTemp,
-			com.ardor.model.FileDTO.folderRef folderRef, String fileToken, int postNo, int memberNo, int replyNo) {
+    // 인자생성자
+	public FileDTO(int fileNo, String fileName, String filePath, String fileRealName, int fileSize,
+			String fileExtension, String fileDescription, String mediaType, Date fileRegdate, IsTemp isTemp,
+			EntityType entityType, String fileToken, int memberNo, int postNo, int replyNo) {
 		super();
 		this.fileNo = fileNo;
 		this.fileName = fileName;
 		this.filePath = filePath;
 		this.fileRealName = fileRealName;
 		this.fileSize = fileSize;
-		this.fileType = fileType;
 		this.fileExtension = fileExtension;
 		this.fileDescription = fileDescription;
+		this.mediaType = mediaType;
 		this.fileRegdate = fileRegdate;
-		this.fileTemp = fileTemp;
-		this.folderRef = folderRef;
+		this.isTemp = isTemp;
+		this.entityType = entityType;
 		this.fileToken = fileToken;
-		this.postNo = postNo;
 		this.memberNo = memberNo;
+		this.postNo = postNo;
 		this.replyNo = replyNo;
 	}
 
@@ -121,16 +120,6 @@ public class FileDTO {
 	}
 
 
-	public String getFileType() {
-		return fileType;
-	}
-
-
-	public void setFileType(String fileType) {
-		this.fileType = fileType;
-	}
-
-
 	public String getFileExtension() {
 		return fileExtension;
 	}
@@ -151,6 +140,16 @@ public class FileDTO {
 	}
 
 
+	public String getMediaType() {
+		return mediaType;
+	}
+
+
+	public void setMediaType(String mediaType) {
+		this.mediaType = mediaType;
+	}
+
+
 	public Date getFileRegdate() {
 		return fileRegdate;
 	}
@@ -161,23 +160,23 @@ public class FileDTO {
 	}
 
 
-	public isTEMP getFileTemp() {
-		return fileTemp;
+	public IsTemp getIsTemp() {
+		return isTemp;
 	}
 
 
-	public void setFileTemp(isTEMP fileTemp) {
-		this.fileTemp = fileTemp;
+	public void setIsTemp(IsTemp isTemp) {
+		this.isTemp = isTemp;
 	}
 
 
-	public folderRef getFolderRef() {
-		return folderRef;
+	public EntityType getEntityType() {
+		return entityType;
 	}
 
 
-	public void setFolderRef(folderRef folderRef) {
-		this.folderRef = folderRef;
+	public void setEntityType(EntityType entityType) {
+		this.entityType = entityType;
 	}
 
 
@@ -191,16 +190,6 @@ public class FileDTO {
 	}
 
 
-	public int getPostNo() {
-		return postNo;
-	}
-
-
-	public void setPostNo(int postNo) {
-		this.postNo = postNo;
-	}
-
-
 	public int getMemberNo() {
 		return memberNo;
 	}
@@ -208,6 +197,16 @@ public class FileDTO {
 
 	public void setMemberNo(int memberNo) {
 		this.memberNo = memberNo;
+	}
+
+
+	public int getPostNo() {
+		return postNo;
+	}
+
+
+	public void setPostNo(int postNo) {
+		this.postNo = postNo;
 	}
 
 
@@ -221,8 +220,15 @@ public class FileDTO {
 	}
 
 
-	
+	@Override
+	public String toString() {
+		return "FileDTO [fileNo=" + fileNo + ", fileName=" + fileName + ", filePath=" + filePath + ", fileRealName="
+				+ fileRealName + ", fileSize=" + fileSize + ", fileExtension=" + fileExtension + ", fileDescription="
+				+ fileDescription + ", mediaType=" + mediaType + ", fileRegdate=" + fileRegdate + ", isTemp=" + isTemp
+				+ ", entityType=" + entityType + ", fileToken=" + fileToken + ", memberNo=" + memberNo + ", postNo="
+				+ postNo + ", replyNo=" + replyNo + "]";
+	}
 
 
-
+    
 }
